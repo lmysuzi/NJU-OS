@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <assert.h>
 #include <sys/types.h>
@@ -8,6 +9,7 @@
 #define PROC_NAME_LEN 50
 #define PATH_NAME_LEN 40
 #define MAX_PROC_NUM 4096
+#define MAX_SUBPROC 40
 #define TAB "       "
 #define PRINT_TABS(X) for(int i=0;i<X;i++)printf(TAB)
 #define PRINT_PID(X) printf("(%d)",X)
@@ -32,6 +34,11 @@ typedef struct proc{
   pid_t pid,ppid;
   char pname[PROC_NAME_LEN];
 }proc;
+
+typedef struct proOrder{
+  int order,pid;
+}proOrder;
+bool comp(proOrder a,proOrder b){return a.pid<b.pid;}
 
 proc procs[MAX_PROC_NUM];
 char path[PATH_NAME_LEN];
@@ -73,6 +80,21 @@ void printTree(int ppid,int level,int now){
   printf("%s",procs[now].pname);
   if(_show_pids)PRINT_PID(procs[now].pid);
   printf("\n");
+  if(_numeric_sort){
+    int subnum=0;
+    proOrder temp[MAX_SUBPROC];
+    for(now=0;now<procNum;now++){
+      if(procs[now].ppid==ppid){
+        temp[subnum].order=now;
+        temp[subnum++].pid=procs[now].pid;
+      }
+      qsort(temp,subnum,sizeof(proOrder),comp);
+      for(int i=0;i<subnum;i++){
+        printTree(temp[i].pid,level+1,i);
+      }
+      return;
+    }
+  }
   for(now=0;now<procNum;now++){
     if(procs[now].ppid==ppid){
       printTree(procs[now].pid,level+1,now);
@@ -89,19 +111,13 @@ int main(int argc, char *argv[]) {
     else if(strcmp(argv[i],"-V")==0||strcmp(argv[i],version)==0)_version=1;
     else printf("Unknown arg: %s\n",argv[i]);
   }
-  if(_version){
-    PRINT_VERSION;
-    return 0;
-  }
+  if(_version){PRINT_VERSION;return 0;}
   assert(!argv[argc]);
   dir=opendir(originPath);
   assert(dir!=NULL);
   dirent=readdir(dir);
-  while (dirent!=NULL)
-  {
-    if(isNumber(dirent->d_name)){
-      fileHandle();
-    }
+  while (dirent!=NULL){
+    if(isNumber(dirent->d_name))fileHandle();
     dirent=readdir(dir);
   }
   printTree(1,0,0);
