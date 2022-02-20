@@ -8,7 +8,7 @@
 #define PROC_NAME_LEN 50
 #define PATH_NAME_LEN 40
 #define MAX_PROC_NUM 1000
-#define TAB "   "
+#define TAB "       "
 #define PRINT_TABS(X) for(int i=0;i<X;i++)printf(TAB)
 
 typedef struct proc{
