@@ -12,6 +12,9 @@
 #define PRINT_TABS(X) for(int i=0;i<X;i++)printf(TAB)
 #define originPath "/proc/"
 #define targetFileName "/stat"
+#define showPids "--show-pids"
+#define numericSort "--numeric-sort"
+#define version "--version"
 
 typedef struct proc{
   pid_t pid,ppid;
@@ -24,7 +27,7 @@ struct dirent *dirent=NULL;
 DIR *dir=NULL;
 FILE *fp=NULL;
 int procNum=0;
-bool show_pids,numeric_sort,version;
+bool _show_pids,_numeric_sort,_version;
 
 bool inline isNumber(char* s){
   while(*s!='\0'){
@@ -67,6 +70,10 @@ int main(int argc, char *argv[]) {
   for (int i = 0; i < argc; i++) {
     assert(argv[i]);
     //printf("argv[%d] = %s\n", i, argv[i]);
+    if(strcmp(argv[i],"-p")==0||strcmp(argv[i],showPids)==0)_show_pids=1;
+    else if(strcmp(argv[i],"-n")==0||strcmp(argv[i],numericSort)==0)_numeric_sort=1;
+    else if(strcmp(argv[i],"-V")==0||strcmp(argv[i],version)==0)_version=1;
+    else printf("Unknown arg: %s\n",argv[i]);
   }
   assert(!argv[argc]);
   dir=opendir(originPath);
