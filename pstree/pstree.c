@@ -68,8 +68,8 @@ void printTree(int ppid,int level,int now){
 
 int main(int argc, char *argv[]) {
   for (int i = 0; i < argc; i++) {
+    if(argc==1)break;
     assert(argv[i]);
-    //printf("argv[%d] = %s\n", i, argv[i]);
     if(strcmp(argv[i],"-p")==0||strcmp(argv[i],showPids)==0)_show_pids=1;
     else if(strcmp(argv[i],"-n")==0||strcmp(argv[i],numericSort)==0)_numeric_sort=1;
     else if(strcmp(argv[i],"-V")==0||strcmp(argv[i],version)==0)_version=1;
