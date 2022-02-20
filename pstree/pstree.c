@@ -47,7 +47,7 @@ void fileHandle(){
   fclose(fp);
   procs[procNum].pid=pid;
   procs[procNum].ppid=ppid;
-  strcpy(procs[procNum].pname,pname);
+  strcpy(procs[procNum].pname,pname+1);
   procNum++;
 }
 
