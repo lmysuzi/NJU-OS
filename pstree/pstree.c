@@ -10,7 +10,6 @@ const char targetFileName[5]="/stat";
 DIR *dir=NULL;
 struct dirent *dirent=NULL;
 FILE *fp=NULL;
-char path[40]="";
 
 bool inline isNumber(char* s){
   while(*s!='\0'){
@@ -32,7 +31,7 @@ int main(int argc, char *argv[]) {
   while (dirent!=NULL)
   {
     if(isNumber(dirent->d_name)){
-      memset(path,0,sizeof(path));
+      char path[40];
       strcpy(path,originPath);
       strcat(path,dirent->d_name);
       strcat(path,targetFileName);
