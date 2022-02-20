@@ -88,12 +88,12 @@ void printTree(int ppid,int level,int now){
         temp[subnum].order=now;
         temp[subnum++].pid=procs[now].pid;
       }
-      qsort(temp,subnum,sizeof(proOrder),comp);
-      for(int i=0;i<subnum;i++){
-        printTree(temp[i].pid,level+1,temp[i].order);
-      }
-      return;
     }
+    qsort(temp,subnum,sizeof(proOrder),comp);
+    for(int i=0;i<subnum;i++){
+      printTree(temp[i].pid,level+1,temp[i].order);
+    }
+    return;
   }
   for(now=0;now<procNum;now++){
     if(procs[now].ppid==ppid){
