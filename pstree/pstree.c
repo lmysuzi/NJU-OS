@@ -25,7 +25,8 @@ void fileHandle(){
   strcpy(path,originPath);
   strcat(path,dirent->d_name);
   strcat(path,targetFileName);
-  printf("%s\n",path);
+  fp=fopen(path,"r");
+  assert(fp!=NULL);
 }
 
 int main(int argc, char *argv[]) {
