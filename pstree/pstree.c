@@ -18,6 +18,7 @@
 #define print_version printf(Version);
 #define Version "\
 This is a pstree devoted by Li Mingyang in 2022\n\
+\n\
 pstree (PSmisc) UNKNOWN\n\
 Copyright (C) 1993-2019 Werner Almesberger and Craig Small\n\
 \n\
