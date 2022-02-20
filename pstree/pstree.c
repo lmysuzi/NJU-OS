@@ -5,6 +5,11 @@
 #include <dirent.h>
 #include <stdbool.h>
 
+typedef struct proc{
+  pid_t pid,ppid;
+  char pname[30];
+}proc;
+
 const char originPath[7]="/proc/";
 const char targetFileName[6]="/stat";
 DIR *dir=NULL;
@@ -27,6 +32,13 @@ void fileHandle(){
   strcat(path,targetFileName);
   fp=fopen(path,"r");
   assert(fp!=NULL);
+  int pid,ppid;
+  char pname[20];
+  char temp[3];
+  fscanf(fp,"%d %s %s %d",&pid,pname,temp,&ppid);
+  if(pid==3){
+    printf("%s\n%d\n",pname,ppid);
+  }
 }
 
 int main(int argc, char *argv[]) {
