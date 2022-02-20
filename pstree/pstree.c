@@ -9,7 +9,7 @@
 #define PROC_NAME_LEN 50
 #define PATH_NAME_LEN 40
 #define MAX_PROC_NUM 4096
-#define MAX_SUBPROC 40
+#define MAX_SUBPROC 90
 #define TAB "       "
 #define PRINT_TABS(X) for(int i=0;i<X;i++)printf(TAB)
 #define PRINT_PID(X) printf("(%d)",X)
