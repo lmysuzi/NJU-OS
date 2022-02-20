@@ -20,6 +20,14 @@ bool inline isNumber(char* s){
   return true;
 }
 
+void fileHandle(){
+  memset(path,0,sizeof(path));
+  strcpy(path,originPath);
+  strcat(path,dirent->d_name);
+  strcat(path,targetFileName);
+  printf("%s\n",path);
+}
+
 int main(int argc, char *argv[]) {
   for (int i = 0; i < argc; i++) {
     assert(argv[i]);
@@ -32,11 +40,7 @@ int main(int argc, char *argv[]) {
   while (dirent!=NULL)
   {
     if(isNumber(dirent->d_name)){
-      memset(path,0,sizeof(path));
-      strcpy(path,originPath);
-      strcat(path,dirent->d_name);
-      strcat(path,targetFileName);
-      printf("%s\n",path);
+      fileHandle();
     }
     dirent=readdir(dir);
   }
