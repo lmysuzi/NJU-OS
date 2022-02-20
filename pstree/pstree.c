@@ -74,8 +74,8 @@ void printTree(int ppid,int level,int now){
   if(_show_pids)PRINT_PID(procs[now].pid);
   printf("\n");
   for(int i=0;i<procNum;i++){
-    if(procs[now].ppid==ppid){
-      printTree(procs[now].pid,level+1,now);
+    if(procs[i].ppid==ppid){
+      printTree(procs[i].pid,level+1,i);
     }
   }
 }
