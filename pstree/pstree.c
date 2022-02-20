@@ -53,7 +53,7 @@ void fileHandle(){
 
 void printTree(int ppid,int level,int now){
   PRINT_TABS(level);
-  printf("%s\n",procs[now]);
+  printf("%s\n",procs[now].pname);
   for(;now<procNum;now++){
     if(procs[now].ppid==ppid){
       printTree(procs[now].pid,level+1,now);
