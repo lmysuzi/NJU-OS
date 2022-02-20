@@ -10,7 +10,7 @@ const char targetFileName[5]="/stat";
 DIR *dir=NULL;
 struct dirent *dirent=NULL;
 FILE *fp=NULL;
-char path[40];
+char path[40]="";
 
 bool inline isNumber(char* s){
   while(*s!='\0'){
