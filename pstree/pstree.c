@@ -18,7 +18,7 @@
 #define showPids "--show-pids"
 #define numericSort "--numeric-sort"
 #define version "--version"
-#define PRINT_VERSION printf(Version)
+#define PRINT_VERSION fprintf(stderr,Version)
 #define FPRINT_VERSION fprintf(redirectFp,Version)
 #define Version "\
 This is a pstree devoted by Li Mingyang in 2022\n\
