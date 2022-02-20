@@ -15,7 +15,8 @@
 #define showPids "--show-pids"
 #define numericSort "--numeric-sort"
 #define version "--version"
-#define Version "pstree (PSmisc) UNKNOWN\n\
+#define Version "This is a pstree devoted by Li Mingyang in 2022\
+pstree (PSmisc) UNKNOWN\n\
 Copyright (C) 1993-2019 Werner Almesberger and Craig Small\n\
 \n\
 PSmisc comes with ABSOLUTELY NO WARRANTY.\n\
@@ -83,6 +84,10 @@ int main(int argc, char *argv[]) {
     else if(strcmp(argv[i],"-V")==0||strcmp(argv[i],version)==0)_version=1;
     else printf("Unknown arg: %s\n",argv[i]);
   }
+  if(_version){
+    print_version;
+    return 0;
+  }
   assert(!argv[argc]);
   dir=opendir(originPath);
   assert(dir!=NULL);
@@ -95,6 +100,5 @@ int main(int argc, char *argv[]) {
     dirent=readdir(dir);
   }
   printTree(1,0,0);
-  print_version;
   return 0;
 }
