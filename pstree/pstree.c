@@ -5,7 +5,7 @@
 #include <dirent.h>
 #include <stdbool.h>
 
-#define PROC_NAME_LEN 30
+#define PROC_NAME_LEN 40
 #define PATH_NAME_LEN 40
 #define MAX_PROC_NUM 1000
 
