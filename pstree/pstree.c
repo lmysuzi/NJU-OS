@@ -5,9 +5,12 @@
 #include <dirent.h>
 #include <stdbool.h>
 
+#define PRO_NAME_LEN 30
+#define PATH_NAME_LEN 40
+
 typedef struct proc{
   pid_t pid,ppid;
-  char pname[30];
+  char pname[PRO_NAME_LEN];
 }proc;
 
 const char originPath[7]="/proc/";
@@ -15,7 +18,7 @@ const char targetFileName[6]="/stat";
 DIR *dir=NULL;
 struct dirent *dirent=NULL;
 FILE *fp=NULL;
-char path[40];
+char path[PATH_NAME_LEN];
 
 bool inline isNumber(char* s){
   while(*s!='\0'){
@@ -33,10 +36,11 @@ void fileHandle(){
   fp=fopen(path,"r");
   assert(fp!=NULL);
   int pid,ppid;
-  char pname[30];
+  char pname[PRO_NAME_LEN];
   char temp[9];
   fscanf(fp,"%d %s %s %d",&pid,pname,temp,&ppid);
   fclose(fp);
+  printf("%d\n",pid);
 }
 
 int main(int argc, char *argv[]) {
