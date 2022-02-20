@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
     //printf("argv[%d] = %s\n", i, argv[i]);
   }
   assert(!argv[argc]);
-  dir=opendir("~");
+  dir=opendir(".");
   assert(dir!=NULL);
   fuck=readdir(dir);
   while (fuck!=NULL)
