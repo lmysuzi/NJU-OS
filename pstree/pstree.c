@@ -5,8 +5,8 @@
 #include <dirent.h>
 #include <stdbool.h>
 
-const char originPath[6]="/proc";
-const char targetFileName[5]="stat";
+const char originPath[6]="/proc/";
+const char targetFileName[5]="/stat";
 DIR *dir=NULL;
 struct dirent *dirent=NULL;
 FILE *fp=NULL;
