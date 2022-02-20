@@ -15,6 +15,14 @@
 #define showPids "--show-pids"
 #define numericSort "--numeric-sort"
 #define version "--version"
+#define Version "pstree (PSmisc) UNKNOWN\
+Copyright (C) 1993-2019 Werner Almesberger and Craig Small\
+\
+PSmisc comes with ABSOLUTELY NO WARRANTY.\
+This is free software, and you are welcome to redistribute it under\
+the terms of the GNU General Public License.\
+For more information about these matters, see the files named COPYING."
+#define print_version printf(Version);
 
 typedef struct proc{
   pid_t pid,ppid;
@@ -87,5 +95,6 @@ int main(int argc, char *argv[]) {
     dirent=readdir(dir);
   }
   printTree(1,0,0);
+  print_version;
   return 0;
 }
