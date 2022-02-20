@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
   fuck=readdir(dir);
   while (fuck!=NULL)
   {
-    if(isdigit(fuck->d_name))
+    if(isdigit("2"))
     printf("%s\n",fuck->d_name);
     fuck=readdir(dir);
   }
