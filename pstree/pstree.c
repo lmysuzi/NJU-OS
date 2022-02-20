@@ -61,7 +61,7 @@ void printTree(int ppid,int level,int now){
 }
 
 int main(int argc, char *argv[]) {
-  PRINT_TABS(2);
+  PRINT_TABS(3);
   printf("fuck\n");
   for (int i = 0; i < argc; i++) {
     assert(argv[i]);
