@@ -1,13 +1,15 @@
 #include <stdio.h>
+#include <string.h>
 #include <assert.h>
 #include <sys/types.h>
 #include <dirent.h>
-#include <ctype.h>
 #include <stdbool.h>
 
-const char path[1000]="/proc";
-DIR *dir;
-struct dirent *fuck;
+const char originPath[6]="/proc";
+const char targetFileName[5]="stat";
+DIR *dir=NULL;
+struct dirent *dirent=NULL;
+FILE *fp=NULL;
 
 bool inline isNumber(char* s){
   while(*s!='\0'){
@@ -23,14 +25,19 @@ int main(int argc, char *argv[]) {
     //printf("argv[%d] = %s\n", i, argv[i]);
   }
   assert(!argv[argc]);
-  dir=opendir("/proc");
+  dir=opendir(originPath);
   assert(dir!=NULL);
-  fuck=readdir(dir);
-  while (fuck!=NULL)
+  dirent=readdir(dir);
+  while (dirent!=NULL)
   {
-    if(isNumber(fuck->d_name))
-    printf("%s\n",fuck->d_name);
-    fuck=readdir(dir);
+    if(isNumber(dirent->d_name)){
+      char path[20];
+      strcpy(path,originPath);
+      strcat(path,dirent->d_name);
+      strcat(path,targetFileName);
+      printf("%s\n",path);
+    }
+    dirent=readdir(dir);
   }
   
   return 0;
