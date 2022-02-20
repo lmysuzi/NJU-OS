@@ -10,6 +10,8 @@
 #define MAX_PROC_NUM 1000
 #define TAB "       "
 #define PRINT_TABS(X) for(int i=0;i<X;i++)printf(TAB)
+#define originPath "/proc/"
+#define targetFileName "/stat"
 
 typedef struct proc{
   pid_t pid,ppid;
@@ -17,13 +19,12 @@ typedef struct proc{
 }proc;
 
 proc procs[MAX_PROC_NUM];
-int procNum=0;
-const char originPath[7]="/proc/";
-const char targetFileName[6]="/stat";
-DIR *dir=NULL;
-struct dirent *dirent=NULL;
-FILE *fp=NULL;
 char path[PATH_NAME_LEN];
+struct dirent *dirent=NULL;
+DIR *dir=NULL;
+FILE *fp=NULL;
+int procNum=0;
+bool show_pids,numeric_sort,version;
 
 bool inline isNumber(char* s){
   while(*s!='\0'){
