@@ -54,7 +54,7 @@ void printTree(int ppid,int level,int now){
 }
 
 int main(int argc, char *argv[]) {
-  printf("fuck""shit\n");
+  printf("fuck%d""shit\n",100);
   for (int i = 0; i < argc; i++) {
     assert(argv[i]);
     //printf("argv[%d] = %s\n", i, argv[i]);
