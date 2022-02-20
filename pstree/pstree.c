@@ -16,7 +16,7 @@
 #define showPids "--show-pids"
 #define numericSort "--numeric-sort"
 #define version "--version"
-#define print_version printf(Version);
+#define PRINT_VERSION printf(Version);
 #define Version "\
 This is a pstree devoted by Li Mingyang in 2022\n\
 \n\
@@ -70,8 +70,9 @@ void fileHandle(){
 
 void printTree(int ppid,int level,int now){
   PRINT_TABS(level);
-  printf("%s\n",procs[now].pname);
+  printf("%s",procs[now].pname);
   if(_show_pids)PRINT_PID(procs[now].pid);
+  printf("\n");
   for(;now<procNum;now++){
     if(procs[now].ppid==ppid){
       printTree(procs[now].pid,level+1,now);
@@ -89,7 +90,7 @@ int main(int argc, char *argv[]) {
     else printf("Unknown arg: %s\n",argv[i]);
   }
   if(_version){
-    print_version;
+    PRINT_VERSION;
     return 0;
   }
   assert(!argv[argc]);
