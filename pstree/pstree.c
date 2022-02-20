@@ -5,14 +5,17 @@
 #include <dirent.h>
 #include <stdbool.h>
 
-#define PRO_NAME_LEN 30
+#define PROC_NAME_LEN 30
 #define PATH_NAME_LEN 40
+#define MAX_PROC_NUM 1000
 
 typedef struct proc{
   pid_t pid,ppid;
-  char pname[PRO_NAME_LEN];
+  char pname[PROC_NAME_LEN];
 }proc;
 
+proc procs[MAX_PROC_NUM];
+int procNum=0;
 const char originPath[7]="/proc/";
 const char targetFileName[6]="/stat";
 DIR *dir=NULL;
@@ -36,11 +39,14 @@ void fileHandle(){
   fp=fopen(path,"r");
   assert(fp!=NULL);
   int pid,ppid;
-  char pname[PRO_NAME_LEN];
+  char pname[PROC_NAME_LEN];
   char temp[9];
   fscanf(fp,"%d %s %s %d",&pid,pname,temp,&ppid);
   fclose(fp);
-  printf("%d\n",pid);
+  procs[procNum].pid=pid;
+  procs[procNum].ppid=ppid;
+  strcpy(procs[procNum].pname,pname);
+  procNum++;
 }
 
 int main(int argc, char *argv[]) {
