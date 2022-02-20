@@ -18,8 +18,8 @@
 #define showPids "--show-pids"
 #define numericSort "--numeric-sort"
 #define version "--version"
-#define PRINT_VERSION printf(Version);
-#define FPRINT_VERSION sprintf(redirectFp,Version);
+#define PRINT_VERSION printf(Version)
+#define FPRINT_VERSION sprintf(redirectFp,Version)
 #define Version "\
 This is a pstree devoted by Li Mingyang in 2022\n\
 \n\
@@ -123,7 +123,7 @@ int main(int argc, char *argv[]) {
     else printf("Unknown arg: %s\n",argv[i]);
   }
   if(_version){
-    if(redirect){FPRINT_VERSION;return;}
+    if(redirect){FPRINT_VERSION;return 0;}
     else {PRINT_VERSION;return 0;}
   }
   assert(!argv[argc]);
