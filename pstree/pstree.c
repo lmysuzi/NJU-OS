@@ -10,7 +10,6 @@
 #define MAX_PROC_NUM 1000
 #define TAB "   "
 #define PRINT_TABS(X) for(int i=0;i<X;i++)printf(TAB)
-#define PRINT_NAME(X) printf("X\n");
 
 typedef struct proc{
   pid_t pid,ppid;
@@ -54,6 +53,7 @@ void fileHandle(){
 
 void printTree(int ppid,int level,int now){
   PRINT_TABS(level);
+  printf("%s\n",procs[now]);
   for(;now<procNum;now++){
     if(procs[now].ppid==ppid){
       printTree(procs[now].pid,level+1,now);
@@ -62,7 +62,6 @@ void printTree(int ppid,int level,int now){
 }
 
 int main(int argc, char *argv[]) {
-  PRINT_NAME(fuck);
   for (int i = 0; i < argc; i++) {
     assert(argv[i]);
     //printf("argv[%d] = %s\n", i, argv[i]);
@@ -78,6 +77,6 @@ int main(int argc, char *argv[]) {
     }
     dirent=readdir(dir);
   }
-  
+  printTree(1,0,0);
   return 0;
 }
