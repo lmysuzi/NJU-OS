@@ -10,6 +10,7 @@
 #define MAX_PROC_NUM 1000
 #define TAB "       "
 #define PRINT_TABS(X) for(int i=0;i<X;i++)printf(TAB)
+#define PRINT_PID(X) printf("(%d)",X)
 #define originPath "/proc/"
 #define targetFileName "/stat"
 #define showPids "--show-pids"
@@ -70,6 +71,7 @@ void fileHandle(){
 void printTree(int ppid,int level,int now){
   PRINT_TABS(level);
   printf("%s\n",procs[now].pname);
+  if(_show_pids)PRINT_PID(procs[now].pid);
   for(;now<procNum;now++){
     if(procs[now].ppid==ppid){
       printTree(procs[now].pid,level+1,now);
