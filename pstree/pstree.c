@@ -3,10 +3,19 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <ctype.h>
+#include <stdbool.h>
 
 const char path[1000]="/proc";
 DIR *dir;
 struct dirent *fuck;
+
+bool inline isNumber(char* s){
+  while(*s!='\0'){
+    if(*s<'0'||*s>'9')return false;
+    s++;
+  }
+  return true;
+}
 
 int main(int argc, char *argv[]) {
   for (int i = 0; i < argc; i++) {
@@ -19,7 +28,7 @@ int main(int argc, char *argv[]) {
   fuck=readdir(dir);
   while (fuck!=NULL)
   {
-    if(isdigit('2'))
+    if(isNumber(fuck->d_name))
     printf("%s\n",fuck->d_name);
     fuck=readdir(dir);
   }
