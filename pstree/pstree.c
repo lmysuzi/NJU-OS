@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <sys/types.h>
 #include <dirent.h>
+#include <ctype.h>
 
 const char path[1000]="/proc";
 DIR *dir;
@@ -13,11 +14,12 @@ int main(int argc, char *argv[]) {
     //printf("argv[%d] = %s\n", i, argv[i]);
   }
   assert(!argv[argc]);
-  dir=opendir(path);
+  dir=opendir("/proc");
   assert(dir!=NULL);
   fuck=readdir(dir);
   while (fuck!=NULL)
   {
+    if(isdigit(fuck->d_name))
     printf("%s\n",fuck->d_name);
     fuck=readdir(dir);
   }
