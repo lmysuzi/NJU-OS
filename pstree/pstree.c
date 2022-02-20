@@ -90,7 +90,7 @@ void printTree(int ppid,int level,int now){
       }
       qsort(temp,subnum,sizeof(proOrder),comp);
       for(int i=0;i<subnum;i++){
-        printTree(temp[i].pid,level+1,i);
+        printTree(temp[i].pid,level+1,temp[i].order);
       }
       return;
     }
