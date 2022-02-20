@@ -4,6 +4,7 @@
 #include <dirent.h>
 
 DIR *dir;
+struct dirent *fuck;
 
 int main(int argc, char *argv[]) {
   for (int i = 0; i < argc; i++) {
@@ -13,5 +14,12 @@ int main(int argc, char *argv[]) {
   assert(!argv[argc]);
   opendir("~");
   assert(dir!=NULL);
+  fuck=readdir(dir);
+  while (fuck!=NULL)
+  {
+    printf("%s\n",fuck->d_name);
+    fuck=readdir(dir);
+  }
+  
   return 0;
 }
