@@ -19,6 +19,7 @@
 #define numericSort "--numeric-sort"
 #define version "--version"
 #define PRINT_VERSION printf(Version);
+#define FPRINT_VERSION sprintf(redirectFp,Version);
 #define Version "\
 This is a pstree devoted by Li Mingyang in 2022\n\
 \n\
@@ -45,8 +46,9 @@ char path[PATH_NAME_LEN];
 struct dirent *dirent=NULL;
 DIR *dir=NULL;
 FILE *fp=NULL;
+FILE *redirectFp=NULL;
 int procNum=0;
-bool _show_pids,_numeric_sort,_version;
+bool _show_pids,_numeric_sort,_version,redirect;
 
 bool inline isNumber(char* s){
   while(*s!='\0'){
@@ -109,9 +111,21 @@ int main(int argc, char *argv[]) {
     if(strcmp(argv[i],"-p")==0||strcmp(argv[i],showPids)==0)_show_pids=1;
     else if(strcmp(argv[i],"-n")==0||strcmp(argv[i],numericSort)==0)_numeric_sort=1;
     else if(strcmp(argv[i],"-V")==0||strcmp(argv[i],version)==0)_version=1;
+    else if(strcmp(argv[i],">")==0){
+      if(i+1==argc){
+        printf("Syntax error\n");
+        return -1;
+      }
+      redirect=1;
+      redirectFp=fopen(argv[i+1],"w");
+      i++;
+    }
     else printf("Unknown arg: %s\n",argv[i]);
   }
-  if(_version){PRINT_VERSION;return 0;}
+  if(_version){
+    if(redirect){FPRINT_VERSION;return;}
+    else {PRINT_VERSION;return 0;}
+  }
   assert(!argv[argc]);
   dir=opendir(originPath);
   assert(dir!=NULL);
