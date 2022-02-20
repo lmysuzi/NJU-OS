@@ -33,12 +33,10 @@ void fileHandle(){
   fp=fopen(path,"r");
   assert(fp!=NULL);
   int pid,ppid;
-  char pname[50];
+  char pname[30];
   char temp[9];
   fscanf(fp,"%d %s %s %d",&pid,pname,temp,&ppid);
-  if(pid==3){
-    printf("%s\n%d\n",pname,ppid);
-  }
+  fclose(fp);
 }
 
 int main(int argc, char *argv[]) {
