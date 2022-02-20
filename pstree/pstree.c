@@ -38,7 +38,7 @@ typedef struct proc{
 typedef struct proOrder{
   int order,pid;
 }proOrder;
-bool comp(proOrder a,proOrder b){return a.pid<b.pid;}
+int comp(proOrder a,proOrder b){return a.pid<b.pid;}
 
 proc procs[MAX_PROC_NUM];
 char path[PATH_NAME_LEN];
