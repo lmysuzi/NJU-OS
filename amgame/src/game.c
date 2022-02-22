@@ -16,6 +16,7 @@ int main(const char *args) {
   puts("Press any key to see its key code...\n");
   while (1) {
     int code=print_key();
+    if(code==1)halt(0);
     move_ball(code);
     update();
   }
