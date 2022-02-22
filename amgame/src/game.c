@@ -3,7 +3,6 @@
 // Operating system is a C program!
 
 
-Ball ball;
 
 int main(const char *args) {
   ioe_init();
@@ -18,6 +17,7 @@ int main(const char *args) {
   while (1) {
     int code=print_key();
     move_ball(code);
+    update();
   }
   return 0;
 }
