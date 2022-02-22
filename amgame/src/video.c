@@ -74,8 +74,8 @@ void move_ball(int direction){
 }
 
 void update(){
-  if(oldX==ball.x&&oldY==ball.y)return;
   printf("qiguai\n");
+  if(oldX==ball.x&&oldY==ball.y)return;
   draw_ball(oldX,oldY,BALL_SIZE,BALL_SIZE,COL_GREEN);
   draw_ball(ball.x,ball.y,BALL_SIZE,BALL_SIZE,COL_RED);
 }
