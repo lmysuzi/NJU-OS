@@ -13,7 +13,7 @@
 #define COL_PURPLE   0x2a0a29
 static int w, h;
 static int oldX,oldY;
-extern Ball ball;
+Ball ball;
 
 static void init() {
   AM_GPU_CONFIG_T info = {0};
