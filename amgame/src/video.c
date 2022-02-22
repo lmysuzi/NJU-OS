@@ -1,6 +1,10 @@
 #include <game.h>
 
 #define SIDE 16
+#define COL_WHITE    0xeeeeee
+#define COL_RED      0xff0033
+#define COL_GREEN    0x00cc33
+#define COL_PURPLE   0x2a0a29
 static int w, h;
 
 static void init() {
