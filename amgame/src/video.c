@@ -57,9 +57,7 @@ void move_ball(int direction){
   switch (direction)
   {
   case UP:
-    if(ball.y-STEP_SIZE>=0){oldY=ball.y;ball.y-=STEP_SIZE;}
-    if(oldY==ball.y)printf("no\n");
-    else printf("yes\n");
+    if(ball.y-STEP_SIZE>=0)oldY=ball.y,ball.y-=STEP_SIZE;
     break;
   case DOWN:
     if(ball.y+STEP_SIZE<h)oldY=ball.y,ball.y+=STEP_SIZE;
@@ -77,6 +75,7 @@ void move_ball(int direction){
 
 void update(){
   if(oldX==ball.x&&oldY==ball.y)return;
+  printf("qiguai\n");
   draw_ball(oldX,oldY,BALL_SIZE,BALL_SIZE,COL_GREEN);
   draw_ball(ball.x,ball.y,BALL_SIZE,BALL_SIZE,COL_RED);
 }
