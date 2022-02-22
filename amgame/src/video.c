@@ -34,10 +34,6 @@ static void init() {
   ioe_write(AM_GPU_FBDRAW, &event);
 }*/
 
-static void ball_init(){
-  oldX=ball.x=(w-BALL_SIZE)/2;
-  oldY=ball.y=(h-BALL_SIZE)/2;
-}
 
 static void draw_ball(int x,int y,int w,int h,uint32_t color){
   uint32_t pixels[w * h]; // WARNING: large stack-allocated memory
@@ -49,6 +45,12 @@ static void draw_ball(int x,int y,int w,int h,uint32_t color){
     pixels[i] = color;
   }
   ioe_write(AM_GPU_FBDRAW, &event);
+}
+
+static void ball_init(){
+  oldX=ball.x=(w-BALL_SIZE)/2;
+  oldY=ball.y=(h-BALL_SIZE)/2;
+  draw_ball(ball.x,ball.y,BALL_SIZE,BALL_SIZE,COL_RED);
 }
 
 void move_ball(int direction){
@@ -72,6 +74,7 @@ void move_ball(int direction){
 }
 
 void update(){
+  if(oldX==ball.x&&oldY==ball.y)return;
   draw_ball(oldX,oldY,BALL_SIZE,BALL_SIZE,COL_GREEN);
   draw_ball(ball.x,ball.y,BALL_SIZE,BALL_SIZE,COL_RED);
 }
