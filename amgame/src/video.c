@@ -57,7 +57,7 @@ void move_ball(int direction){
   switch (direction)
   {
   case UP:
-    if(ball.y-STEP_SIZE>=0)oldY=ball.y,ball.y-=STEP_SIZE;
+    if(ball.y-STEP_SIZE>=0){oldY=ball.y;ball.y-=STEP_SIZE;}
     if(oldY==ball.y)printf("no\n");
     break;
   case DOWN:
