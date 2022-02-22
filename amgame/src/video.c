@@ -58,6 +58,7 @@ void move_ball(int direction){
   {
   case UP:
     if(ball.y-STEP_SIZE>=0)oldY=ball.y,ball.y-=STEP_SIZE;
+    printf("fuck\n");
     break;
   case DOWN:
     if(ball.y+STEP_SIZE<h)oldY=ball.y,ball.y+=STEP_SIZE;
