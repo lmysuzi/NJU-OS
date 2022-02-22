@@ -12,7 +12,7 @@ void print_key() {
   if (event.keycode != AM_KEY_NONE && event.keydown) {
     puts("Key pressed: ");
     puts(key_names[event.keycode]);
-    putch(event.keycode-'0');
+    printf("%d",event.keycode);
     puts("\n");
   }
 }
