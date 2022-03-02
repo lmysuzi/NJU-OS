@@ -74,16 +74,7 @@ void second(){
   }
 }
 
-__attribute__((constructor))void initial(){
-  cosn[0].status=CO_RUNNING;
-  cosn[0].func=main;
-  cosn[0].rsp=cosn[0].stack+sizeof(cosn[0].stack);
-  asm volatile(
-    "movq %0,%%rsp"
-    ::"b"((uintptr_t)cosn[0].rsp)
-  );
-  current=&cosn[0];
-}
+
 
 int main()
 {
@@ -94,4 +85,15 @@ int main()
   co_yield();
   }
   return 0;
+}
+
+__attribute__((constructor))void initial(){
+  cosn[0].status=CO_RUNNING;
+  cosn[0].func=main;
+  cosn[0].rsp=cosn[0].stack+sizeof(cosn[0].stack);
+  asm volatile(
+    "movq %0,%%rsp"
+    ::"b"((uintptr_t)cosn[0].rsp)
+  );
+  current=&cosn[0];
 }
