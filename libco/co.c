@@ -89,7 +89,7 @@ int main()
 
 __attribute__((constructor))void initial(){
   cosn[0].status=CO_RUNNING;
-  cosn[0].func=main;
+  cosn[0].func=(void*)main;
   cosn[0].rsp=cosn[0].stack+sizeof(cosn[0].stack);
   asm volatile(
     "movq %0,%%rsp"
