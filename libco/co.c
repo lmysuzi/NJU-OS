@@ -92,7 +92,7 @@ __attribute__((constructor))void initial(){
   cosn[0].func=(void*)main;
   cosn[0].rsp=cosn[0].stack+sizeof(cosn[0].stack);
   asm volatile(
-    "movq %0,%%rsp"
+    "movq %0,%rsp"
     ::"b"((uintptr_t)cosn[0].rsp)
   );
   current=&cosn[0];
