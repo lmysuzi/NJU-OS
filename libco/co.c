@@ -91,9 +91,16 @@ __attribute__((constructor))void initial(){
   cosn[0].status=CO_RUNNING;
   cosn[0].func=(void*)main;
   cosn[0].rsp=cosn[0].stack+sizeof(cosn[0].stack);
+  
   asm volatile(
-    "movq %0,%%rsp"
-    ::"b"((uintptr_t)cosn[0].rsp)
+    
+    #if __x86_64__
+    "movq %0, %%rsp; jmp *%1"
+      : : "b"((uintptr_t)cosn[0].rsp),     "d"(cosn[0].func)
+#else
+    "movl %0, %%esp; movl %2, 4(%0); jmp *%1"
+      : : "b"((uintptr_t)cosn[0].rsp - 8), "d"(cosn[0].func)
+#endif
   );
   current=&cosn[0];
 }
