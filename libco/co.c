@@ -98,7 +98,7 @@ __attribute__((constructor))void initial(){
     "movq %0, %%rsp; jmp *%1"
       : : "b"((uintptr_t)cosn[0].rsp),     "d"(cosn[0].func)
 #else
-    "movl %0, %%esp; movl %2, 4(%0); jmp *%1"
+    "movl %0, %%esp; jmp *%1"
       : : "b"((uintptr_t)cosn[0].rsp - 8), "d"(cosn[0].func)
 #endif
   );
