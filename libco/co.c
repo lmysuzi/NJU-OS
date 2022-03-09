@@ -106,6 +106,7 @@ void co_wait(struct co *co) {
   current->status=CO_WAITING;
   current->waitfor++;
   while(co->status!=CO_DEAD){
+    if(!setjmp(current->context))
     co_yield();
   }
   coFree(co);
@@ -124,7 +125,7 @@ begin:
       asm volatile(
       #if __x86_64__
       "movq %0, %%rsp"
-      ::"b"((uintptr_t)current->sp)
+      ::"b"((uintptr_t)current->sp-8)
       #else
       "movl %0, %%esp"
       ::"b"((uintptr_t)current->sp-8)
