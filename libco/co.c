@@ -123,7 +123,7 @@ begin:
       asm volatile(
       #if __x86_64__
       "movq %0, %%rsp"
-      ::"b"((uintptr_t)current->sp-8)
+      ::"b"((uintptr_t)current->sp-96)
       #else
       "movl %0, %%esp"
       ::"b"((uintptr_t)current->sp-8)
