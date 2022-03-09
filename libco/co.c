@@ -118,6 +118,7 @@ begin:
     current=coFind(rand()%coNum);
   }while(current->status==CO_DEAD||current->status==CO_WAITING);
   if(!setjmp(prev->context)){
+   printf("shit\n");
     if(current->status==CO_NEW){
       current->status=CO_RUNNING;
       asm volatile(
