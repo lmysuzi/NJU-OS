@@ -87,7 +87,6 @@ static void coFree(struct co *wasted){
 int f(){return 1;}
 
 struct co *co_start(const char *name, void (*func)(void *), void *arg) {
-    printf("fuck\n");
   coTail->next=malloc(sizeof(struct co));
   coTail->next->prev=coTail;
   coTail=coTail->next;
