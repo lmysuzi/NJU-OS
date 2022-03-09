@@ -106,7 +106,6 @@ void co_wait(struct co *co) {
   current->status=CO_WAITING;
   current->waitfor++;
   while(co->status!=CO_DEAD){
-    printf("fucccck\n");
     co_yield();
   }
   coFree(co);
@@ -118,6 +117,7 @@ begin:
   do{
     current=coFind(rand()%coNum);
   }while(current->status==CO_DEAD||current->status==CO_WAITING);
+    printf("fucccck\n");
   if(!setjmp(prev->context)){
     if(current->status==CO_NEW){
       current->status=CO_RUNNING;
