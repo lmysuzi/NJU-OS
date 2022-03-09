@@ -105,8 +105,8 @@ void co_wait(struct co *co) {
   co->waiter=current;
   current->status=CO_WAITING;
   current->waitfor++;
-    printf("fuck\n");
   while(co->status!=CO_DEAD){
+    printf("fuck\n");
     co_yield();
   }
   coFree(co);
