@@ -117,6 +117,7 @@ begin:
   do{
     current=coFind(rand()%coNum);
   }while(current->status==CO_DEAD||current->status==CO_WAITING);
+  if(current==prev)return;
   if(!setjmp(prev->context)){
     if(current->status==CO_NEW){
       current->status=CO_RUNNING;
