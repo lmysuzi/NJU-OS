@@ -129,7 +129,6 @@ begin:
       ::"b"((uintptr_t)current->sp-8)
       #endif
       );
-    printf("fucccck\n");
       current->func(current->arg);
     }
     else if(current->status==CO_RUNNING)longjmp(current->context,1);
