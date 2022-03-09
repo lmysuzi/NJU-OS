@@ -140,8 +140,8 @@ begin:
     if(current->waiter){
       struct co* wait=current->waiter;
       current->waiter=NULL;
-      assert(wait->waitfor>=0);
       wait->waitfor--;
+      assert(wait->waitfor>=0);
       if(!wait->waitfor)wait->status==CO_RUNNING;
     }
     longjmp(prev->context,1);
