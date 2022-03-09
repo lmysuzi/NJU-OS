@@ -7,7 +7,7 @@
 #include <time.h>
 #include <assert.h>
 
-#define STACK_SIZE 8192
+#define STACK_SIZE 8192*4
 #define NAME_LENGTH 50
 #define MAX_CO 128
 #define stack_switch(x)\
