@@ -18,7 +18,8 @@ static void work_loop(void *arg) {
     const char *s = (const char*)arg;
     printf("%d\n",1);
     for (int i = 0; i < 100; ++i) {
-        printf("%s%d  ", s, get_count());
+        printf("%s  ", s);
+        printf("%d  ",  get_count());
     //printf("fucccck\n");
         add_count();
         co_yield();
