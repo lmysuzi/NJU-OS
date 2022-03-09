@@ -84,7 +84,6 @@ static void coFree(struct co *wasted){
   coNum--;
 }
 
-int f(){return 1;}
 
 struct co *co_start(const char *name, void (*func)(void *), void *arg) {
   coTail->next=malloc(sizeof(struct co));
@@ -106,6 +105,7 @@ void co_wait(struct co *co) {
   co->waiter=current;
   current->status=CO_WAITING;
   current->waitfor++;
+    printf("fuck\n");
   while(co->status!=CO_DEAD){
     co_yield();
   }
