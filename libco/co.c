@@ -120,7 +120,6 @@ begin:
   if(!setjmp(prev->context)){
     if(current->status==CO_NEW){
       current->status=CO_RUNNING;
-    printf("fucccck\n");
       asm volatile(
       #if __x86_64__
       "movq %0, %%rsp"
@@ -130,6 +129,7 @@ begin:
       ::"b"((uintptr_t)current->sp-8)
       #endif
       );
+    printf("fucccck\n");
       current->func(current->arg);
     }
     else if(current->status==CO_RUNNING)longjmp(current->context,1);
