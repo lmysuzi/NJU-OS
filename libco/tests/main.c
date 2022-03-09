@@ -16,7 +16,7 @@ static int get_count() {
 
 static void work_loop(void *arg) {
     const char *s = (const char*)arg;
-    printf("%s\n",s);
+    printf("%d\n",1);
     for (int i = 0; i < 100; ++i) {
         printf("%s%d  ", s, get_count());
     //printf("fucccck\n");
