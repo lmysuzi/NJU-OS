@@ -122,6 +122,7 @@ asm volatile(
 }
 
 void co_wait(struct co *co) {
+  if(co==NULL)return;
   co->waiter=current;
     printf("fuck\n");
   current->status=CO_WAITING;
