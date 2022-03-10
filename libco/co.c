@@ -9,17 +9,6 @@
 
 #define STACK_SIZE 16384
 #define NAME_LENGTH 50
-#define MAX_CO 128
-#define stack_switch(x)\
-     asm volatile(\
-      "#if" "__x86_64__"\
-      "movq %0, %%rsp"\
-        ::"b"((uintptr_t)coInfo[x].rsp)\
-      "#else"\
-      "movl %%esp,%0"\
-        ::"g"(coInfo[x].rsp)\
-      "#endif"\
-    )
 
 enum co_status {
   CO_NEW = 1, // 新创建，还未执行过
@@ -47,8 +36,7 @@ struct co {
   struct co *next,*prev;
 };
 
-struct co coInfo[MAX_CO];
-static struct co *coHead=NULL,*coTail=NULL,*current=NULL;
+static struct co *coHead=NULL,*current=NULL;
 static int coNum=1;
 
 static inline void stack_switch_call(void *sp, void *entry, uintptr_t arg) {
@@ -148,6 +136,7 @@ void co_yield() {
   struct co* prev=current;
   do{
     current=coFind(rand()%coNum);
+   printf("shit\n");
   }while(current->status==CO_DEAD||current->status==CO_WAITING);
   if(current==prev)return;
   if(!setjmp(prev->context)){
@@ -210,5 +199,5 @@ __attribute__((constructor))void initial(){
   coHead->waiter=NULL;
   coHead->waitfor=0;
   strcpy(coHead->name,"main");
-  coTail=current=coHead;
+  current=coHead;
 }
