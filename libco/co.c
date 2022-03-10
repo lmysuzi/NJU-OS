@@ -54,6 +54,7 @@ static inline struct co *deadFind(){
 }
 
 static inline void deadAdd(struct co *added){
+  if(added->waiter==NULL)return;
   struct coDead *ans=malloc(sizeof(struct coDead));
   ans->addr=added;
   if(deadHead)ans->next=deadHead->next;
@@ -67,13 +68,6 @@ static void coFree(struct co *wasted){
   if(wasted->next)wasted->next->prev=wasted->prev;
   free(wasted);
   coNum--;
-}
-
-static void done(){
-    current->status=CO_DEAD;
-    if(current->waiter!=NULL)deadAdd(current->waiter);
-    co_yield();
-
 }
 
 struct co *co_start(const char *name, void (*func)(void *), void *arg) {
@@ -105,7 +99,9 @@ struct co *co_start(const char *name, void (*func)(void *), void *arg) {
         #endif
       );
       current->func(current->arg);
-      done();
+    current->status=CO_DEAD;
+    deadAdd(current->waiter);
+    co_yield();
     }
   }
   return ans;
