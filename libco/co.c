@@ -16,11 +16,6 @@ enum co_status {
   CO_DEAD,    // 已经结束，但还未释放资源
 };
 
-struct coDead{
-  struct co *addr;
-  struct coDead *next,*prev;
-};
-
 struct co {
   char name[NAME_LENGTH];
   char stack[STACK_SIZE] __attribute__ (( aligned(16) )); // 协程的堆栈
@@ -34,41 +29,10 @@ struct co {
 };
 
 static struct co *coHead=NULL,*current=NULL,*coTail=NULL;
-static struct coDead *deadHead=NULL;
 static int coNum=1;
 
-static inline struct co *coFind(int n){
-  struct co *ans=coHead;
-  for(int i=0;i<n;i++)ans=ans->next;
-  return ans;
-}
-
-static inline void deadDelete(struct coDead* deleted){
-  if(deleted->prev)deleted->prev->next=deleted->next;
-  if(deleted->next)deleted->next->prev=deleted->prev;
-  free(deleted);
-}
-
-static inline struct co *deadFind(){
-  struct coDead *temp=deadHead;
-  while(temp!=NULL){
-    if(temp->addr->waiter!=NULL){
-      struct co *ans=temp->addr->waiter;
-      deadDelete(temp);
-      printf("fuck\n");
-      return ans;
-    }
-    else{
-      struct coDead* t=temp;
-      temp=temp->next;
-      deadDelete(t);
-    }
-  }
-  return NULL;
-}
-
 static int flag=1;
-static inline struct co *deadReturn(){
+static inline struct co *coFind(){
   if(flag){
     flag=0;
     struct co *ans=coHead;
@@ -89,19 +53,6 @@ static inline struct co *deadReturn(){
   }
   return NULL;
 }
-
-static inline void deadAdd(struct co *added){
-  struct coDead *ans=malloc(sizeof(struct coDead));
-  ans->addr=added;
-  ans->prev=NULL;
-  if(deadHead!=NULL){
-    ans->next=deadHead->next;
-    deadHead->prev=ans;
-  }
-  else ans->next=NULL;
-  deadHead=ans;
-}
-
 
 static void coFree(struct co *wasted){
   if(wasted->prev)wasted->prev->next=wasted->next;
@@ -141,7 +92,6 @@ struct co *co_start(const char *name, void (*func)(void *), void *arg) {
       );
       current->func(current->arg);
       current->status=CO_DEAD;
-    //deadAdd(current);
       co_yield();
     }
   }
@@ -160,19 +110,7 @@ void co_wait(struct co *co) {
 
 void co_yield() {
   struct co* prev=current;
-  /*do{
-    current=coFind(rand()%coNum);
-    if(current->status==CO_DEAD&&current->waiter!=NULL){
-      current=current->waiter;
-    }
-  }while(current->status==CO_DEAD);*/
-  struct co *temp=coHead;
-  /*while(temp!=NULL){
-    printf("%d ",temp->status);
-    temp=temp->next;
-  }
-  printf("\n");*/
-  current=deadReturn();
+  current=coFind();
   assert(current!=NULL);
   if(!setjmp(prev->context)){
     longjmp(current->context,1);
@@ -180,7 +118,6 @@ void co_yield() {
 }
 
 __attribute__((constructor))void initial(){
-  srand((unsigned)time(NULL));
   coHead=malloc(sizeof(struct co));
   coHead->status=CO_RUNNING;
   coHead->waiter=NULL;
