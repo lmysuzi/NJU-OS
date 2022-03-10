@@ -144,9 +144,9 @@ void co_yield() {
     current=coFind(rand()%coNum);
   }while(current->status==CO_DEAD||current->status==CO_WAITING);
   if(current==prev)return;
-    printf("fucccck\n");
   if(!setjmp(prev->context)){
     if(current->status==CO_NEW){
+    printf("fucccck\n");
       current->status=CO_RUNNING;
       asm volatile(
       #if __x86_64__
