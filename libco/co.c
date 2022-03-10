@@ -15,6 +15,11 @@ enum co_status {
   CO_DEAD,    // 已经结束，但还未释放资源
 };
 
+struct coDead{
+  struct co *addr;
+  struct coDead *next;
+};
+
 struct co {
   char name[NAME_LENGTH]__attribute__ (( aligned(16) ));
   char stack[STACK_SIZE] __attribute__ (( aligned(16) )); // 协程的堆栈
@@ -28,6 +33,7 @@ struct co {
 };
 
 static struct co *coHead=NULL,*current=NULL;
+static struct coDead *deadHead=NULL;
 static int coNum=1;
 
 static inline struct co *coFind(int n){
@@ -37,13 +43,24 @@ static inline struct co *coFind(int n){
 }
 
 static inline struct co *deadFind(){
-  struct co *ans=coHead;
-  while(ans){
-    if(ans->status==CO_DEAD&&ans->waiter!=NULL)return ans->waiter;
-    ans=ans->next;
+  if(deadHead!=NULL){
+    struct coDead *temp=deadHead;
+    deadHead=deadHead->next;
+    struct co *ans=temp->addr->waiter;
+    free(temp);
+    return ans;
   }
   return NULL;
 }
+
+static inline void deadAdd(struct co *added){
+  struct coDead *ans=malloc(sizeof(struct coDead));
+  ans->addr=added;
+  if(deadHead)ans->next=deadHead->next;
+  else ans->next=NULL;
+  deadHead=ans;
+}
+
 
 static void coFree(struct co *wasted){
   if(wasted->prev)wasted->prev->next=wasted->next;
@@ -83,6 +100,7 @@ struct co *co_start(const char *name, void (*func)(void *), void *arg) {
       current->func(current->arg);
     }
     current->status=CO_DEAD;
+    if(current->waiter!=NULL)deadAdd(current);
     co_yield();
   }
   return ans;
