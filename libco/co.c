@@ -148,12 +148,11 @@ void co_yield() {
     else{
       current=coHead->next;
       while(current!=NULL){
-        printf("fukc\n");
         if(current->status!=CO_DEAD)break;
         current=current->next;
       }
-      if(current==NULL)current=coHead;
     }
+    if(current==NULL)current=coHead;
   }
   if(!setjmp(prev->context)){
     longjmp(current->context,1);
