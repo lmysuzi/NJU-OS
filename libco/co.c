@@ -70,22 +70,22 @@ static inline struct co *deadFind(){
 static int flag=1;
 static inline struct co *deadReturn(){
   if(flag){
+    flag=0;
     struct co *ans=coHead;
     while(ans!=NULL){
       if(ans->status==CO_DEAD&&ans->waiter!=NULL)return ans->waiter;
       else if(ans->status==CO_RUNNING)return ans;
       ans=ans->next;
     }
-    flag=0;
   }
   else{
+    flag=1;
     struct co *ans=coTail;
     while(ans!=NULL){
       if(ans->status==CO_DEAD&&ans->waiter!=NULL)return ans->waiter;
       else if(ans->status==CO_RUNNING)return ans;
       ans=ans->prev;
     }
-    flag=1;
   }
   return NULL;
 }
