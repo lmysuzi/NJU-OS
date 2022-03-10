@@ -125,6 +125,7 @@ asm volatile(
       if(!wait->waitfor){
    printf("shit\n");
         wait->status==CO_RUNNING;
+        if(coHead==wait)printf("yes\n");
       printf("%d\n",coHead->status);
       }
     }
