@@ -65,17 +65,18 @@ struct co *co_start(const char *name, void (*func)(void *), void *arg) {
       longjmp(current->context,1);
     }
     else {
-asm volatile(
-      #if __x86_64__
-      "movq %0, %%rsp"
-      ::"b"((uintptr_t)current->sp)
-      #else
-      "movl %0, %%esp"
-      ::"b"((uintptr_t)current->sp-8)
-      #endif
+      asm volatile(
+        #if __x86_64__
+        "movq %0, %%rsp"
+        ::"b"((uintptr_t)current->sp)
+        #else
+        "movl %0, %%esp"
+        ::"b"((uintptr_t)current->sp)
+        #endif
       );
       current->func(current->arg);
     }
+    printf("www\n");
     current->status=CO_DEAD;
     if(current->waiter!=NULL){
       current->waiter->status=CO_RUNNING;
