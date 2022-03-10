@@ -69,6 +69,13 @@ static void coFree(struct co *wasted){
   coNum--;
 }
 
+static void done(){
+    current->status=CO_DEAD;
+    if(current->waiter!=NULL)deadAdd(current->waiter);
+    co_yield();
+
+}
+
 struct co *co_start(const char *name, void (*func)(void *), void *arg) {
   struct co *ans=malloc(sizeof(struct co));
   if(coHead->next)coHead->next->prev=ans;
@@ -98,9 +105,7 @@ struct co *co_start(const char *name, void (*func)(void *), void *arg) {
         #endif
       );
       current->func(current->arg);
-    current->status=CO_DEAD;
-    if(current->waiter!=NULL)deadAdd(current->waiter);
-    co_yield();
+      done();
     }
   }
   return ans;
