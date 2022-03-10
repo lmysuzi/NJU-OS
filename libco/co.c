@@ -74,7 +74,6 @@ static void coFree(struct co *wasted){
 
 
 struct co *co_start(const char *name, void (*func)(void *), void *arg) {
-  printf("%d\n",coNum);
   struct co *ans=malloc(sizeof(struct co));
   if(coHead->next)coHead->next->prev=ans;
   ans->next=coHead->next;
@@ -140,7 +139,6 @@ void co_yield() {
   }while(current->status==CO_WAITING||current->status==CO_DEAD);
   if(!setjmp(prev->context)){
     longjmp(current->context,1);
-
     //执行到这里说明该协程已经执行完毕
   }
   else{
