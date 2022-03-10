@@ -135,13 +135,10 @@ void co_yield() {
   struct co* prev=current;
   do{
     current=coFind(rand()%coNum);
-    struct co *temp=coHead;
   }while(current->status==CO_WAITING||current->status==CO_DEAD);
   if(!setjmp(prev->context)){
     longjmp(current->context,1);
     //执行到这里说明该协程已经执行完毕
-  }
-  else{
   }
 }
 
