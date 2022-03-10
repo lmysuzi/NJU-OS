@@ -101,7 +101,6 @@ void co_yield() {
       current=coFind(rand()%coNum);
     }while(current->status==CO_DEAD);
   }
-  if(current==prev)return;
   if(!setjmp(prev->context)){
     longjmp(current->context,1);
   }
