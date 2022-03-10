@@ -137,7 +137,7 @@ void co_yield() {
   do{
     current=coFind(rand()%coNum);
     struct co *temp=coHead;
-  }while(current->status==CO_WAITING);
+  }while(current->status==CO_WAITING||current->status==CO_DEAD);
   if(!setjmp(prev->context)){
     if(current->status==CO_DEAD){
       longjmp(current->context,1);
