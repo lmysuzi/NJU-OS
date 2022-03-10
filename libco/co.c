@@ -8,7 +8,7 @@
 #include <assert.h>
 
 #define STACK_SIZE 16384
-#define NAME_LENGTH 50
+#define NAME_LENGTH 64 
 
 enum co_status {
   CO_NEW = 1, // 新创建，还未执行过
@@ -24,6 +24,7 @@ struct coNode{
 
 struct co {
   char name[NAME_LENGTH];
+  uint8_t        stack[STACK_SIZE] __attribute__ (( aligned(16) )); // 协程的堆栈
   void (*func)(void *); // co_start 指定的入口地址和参数
   void *arg;
   void* sp;
@@ -32,7 +33,6 @@ struct co {
   enum co_status status;  // 协程的状态
   struct co *    waiter;  // 是否有其他协程在等待当前协程
   jmp_buf        context; // 寄存器现场 (setjmp.h)
-  uint8_t        stack[STACK_SIZE] __attribute__ (( aligned(16) )); // 协程的堆栈
 };
 
 static struct co *coHead=NULL,*current=NULL;
