@@ -146,7 +146,6 @@ void co_yield() {
   if(current==prev)return;
   if(!setjmp(prev->context)){
     if(current->status==CO_NEW){
-    printf("fucccck\n");
       current->status=CO_RUNNING;
       asm volatile(
       #if __x86_64__
@@ -159,7 +158,11 @@ void co_yield() {
       );
       current->func(current->arg);
     }
-    else if(current->status==CO_RUNNING)longjmp(current->context,1);
+    else if(current->status==CO_RUNNING){
+    printf("fucccck\n");
+      longjmp(current->context,1);
+    }
+
     assert(current->status==CO_NEW||current->status==CO_RUNNING);
     //执行到这里说明该协程已经执行完毕
   }
