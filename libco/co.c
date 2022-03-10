@@ -78,10 +78,10 @@ struct co *co_start(const char *name, void (*func)(void *), void *arg) {
     }
     current->status=CO_DEAD;
     printf("\nwww\n");
-    if(current->waiter!=NULL){
+    /*if(current->waiter!=NULL){
       current->waiter->status=CO_RUNNING;
     }
-    co_yield();
+    co_yield();*/
   }
   return ans;
 }
@@ -101,7 +101,7 @@ void co_yield() {
   struct co* prev=current;
   do{
     current=coFind(rand()%coNum);
-  }while(current->status==CO_WAITING||current->status==CO_DEAD);
+  }while(current->status==CO_DEAD);
   if(current==prev)return;
   if(!setjmp(prev->context)){
     longjmp(current->context,1);
