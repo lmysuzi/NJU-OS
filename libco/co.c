@@ -140,7 +140,7 @@ void co_yield() {
       printf("%d ",temp->status);
     }
     printf("\n");
-  }while(current->status==CO_DEAD||current->status==CO_WAITING);
+  }while(current->status==CO_WAITING);
   if(current==prev)return;
   if(!setjmp(prev->context)){
     if(current->status==CO_NEW){
