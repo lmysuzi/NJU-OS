@@ -105,8 +105,8 @@ asm volatile(
       current->func(current->arg);
     }
     current->status=CO_DEAD;
-    printf("\nfuck\n");
     if(current->waiter){
+    printf("\nfuck\n");
       struct co* wait=current->waiter;
       wait->waitfor--;
       assert(wait->waitfor>=0);
