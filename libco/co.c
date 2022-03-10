@@ -99,7 +99,7 @@ asm volatile(
       ::"b"((uintptr_t)current->sp-8)
       #else
       "movl %0, %%esp"
-      ::"b"((uintptr_t)current->sp-8)
+      ::"b"((uintptr_t)current->sp-16)
       #endif
       );
       current->func(current->arg);
