@@ -86,10 +86,11 @@ static void coFree(struct co *wasted){
 
 
 struct co *co_start(const char *name, void (*func)(void *), void *arg) {
-  coTail->next=malloc(sizeof(struct co));
-  coTail->next->prev=coTail;
-  coTail=coTail->next;
-  struct co *ans=coTail;
+  struct co *ans=malloc(sizeof(struct co));
+  if(coHead->next)coHead->next->prev=ans;
+  ans->next=coHead->next;
+  coHead->next=ans;
+  ans->prev=coHead;
   if(name)strcpy(ans->name,name);
   ans->arg=arg;
   ans->waitfor=0;
