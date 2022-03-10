@@ -22,6 +22,7 @@ struct co {
   void *arg __attribute__ (( aligned(16) ));
   void* sp __attribute__ (( aligned(16) ));
   struct co *next,*prev __attribute__ (( aligned(16) ));
+  struct co* waiter;
   enum co_status status __attribute__ (( aligned(16) ));  // 协程的状态
   jmp_buf        context __attribute__ (( aligned(16) )); // 寄存器现场 (setjmp.h)
 };
@@ -38,7 +39,7 @@ static inline struct co *coFind(int n){
 static inline struct co *deadFind(){
   struct co *ans=coHead;
   while(ans){
-    if(ans->status==CO_DEAD)return ans;
+    if(ans->status==CO_DEAD&&ans->waiter!=NULL)return ans->waiter;
     ans=ans->next;
   }
   return NULL;
@@ -61,6 +62,7 @@ struct co *co_start(const char *name, void (*func)(void *), void *arg) {
   ans->arg=arg;
   ans->func=func;
   ans->status=CO_RUNNING;
+  ans->waiter=NULL;
   ans->sp=(void*)(ans->stack+sizeof(ans->stack));
   coNum++;
   if(!setjmp(current->context)){
@@ -87,6 +89,7 @@ struct co *co_start(const char *name, void (*func)(void *), void *arg) {
 }
 
 void co_wait(struct co *co) {
+  co->waiter=current;
   while(co->status!=CO_DEAD){
     if(!setjmp(current->context))co_yield();
   }
@@ -110,6 +113,7 @@ __attribute__((constructor))void initial(){
   srand((unsigned)time(NULL));
   coHead=malloc(sizeof(struct co));
   coHead->status=CO_RUNNING;
+  coHead->waiter=NULL;
   coHead->next=coHead->prev=NULL;
   strcpy(coHead->name,"main");
   current=coHead;
