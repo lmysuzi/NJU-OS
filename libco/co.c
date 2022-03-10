@@ -136,7 +136,11 @@ void co_yield() {
   struct co* prev=current;
   do{
     current=coFind(rand()%coNum);
-    printf("%d\n",coNum);
+    struct co *temp=coHead;
+    for(int i=0;i<coNum;i++){
+      printf("%d ",temp->status);
+    }
+    printf("\n");
   }while(current->status==CO_DEAD||current->status==CO_WAITING);
   if(current==prev)return;
   if(!setjmp(prev->context)){
