@@ -22,15 +22,15 @@ struct coDead{
 };
 
 struct co {
-  char name[NAME_LENGTH]__attribute__ (( aligned(16) ));
+  char name[NAME_LENGTH];
   char stack[STACK_SIZE] __attribute__ (( aligned(16) )); // 协程的堆栈
-  void (*func)(void *)__attribute__ (( aligned(16) )); // co_start 指定的入口地址和参数
-  void *arg __attribute__ (( aligned(16) ));
-  void* sp __attribute__ (( aligned(16) ));
-  struct co *next,*prev __attribute__ (( aligned(16) ));
-  struct co* waiter __attribute__ (( aligned(16) ));
-  enum co_status status __attribute__ (( aligned(16) ));  // 协程的状态
-  jmp_buf        context __attribute__ (( aligned(16) )); // 寄存器现场 (setjmp.h)
+  void (*func)(void *); // co_start 指定的入口地址和参数
+  void *arg ;
+  void* sp ;
+  struct co *next,*prev ;
+  struct co* waiter ;
+  enum co_status status ;  // 协程的状态
+  jmp_buf        context ; // 寄存器现场 (setjmp.h)
 };
 
 static struct co *coHead=NULL,*current=NULL,*coTail=NULL;
