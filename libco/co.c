@@ -114,13 +114,12 @@ asm volatile(
       ::"b"((uintptr_t)current->sp-8)
       #endif
       );
-    printf("fucccck\n");
       current->func(current->arg);
     }
-    ans->status=CO_DEAD;
-    if(ans->waiter){
-      struct co* wait=ans->waiter;
-      ans->waiter=NULL;
+    current->status=CO_DEAD;
+    if(current->waiter){
+      struct co* wait=current->waiter;
+      current->waiter=NULL;
       wait->waitfor--;
       assert(wait->waitfor>=0);
       if(!wait->waitfor)wait->status==CO_RUNNING;
