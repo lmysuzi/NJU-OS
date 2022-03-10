@@ -56,6 +56,11 @@ static inline struct co *deadFind(){
       deadDelete(temp);
       return ans;
     }
+    else{
+      struct coDead* t=temp;
+      temp=temp->next;
+      deadDelete(t);
+    }
   }
   return NULL;
 }
