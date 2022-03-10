@@ -185,5 +185,5 @@ __attribute__((constructor))void initial(){
   coHead->waiter=NULL;
   coHead->next=coHead->prev=NULL;
   strcpy(coHead->name,"main");
-  current=coHead;
+  current=coTail=coHead;
 }
