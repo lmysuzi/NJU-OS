@@ -27,7 +27,7 @@ struct co {
   void *arg __attribute__ (( aligned(16) ));
   void* sp __attribute__ (( aligned(16) ));
   struct co *next,*prev __attribute__ (( aligned(16) ));
-  struct co* waiter;
+  struct co* waiter __attribute__ (( aligned(16) ));
   enum co_status status __attribute__ (( aligned(16) ));  // 协程的状态
   jmp_buf        context __attribute__ (( aligned(16) )); // 寄存器现场 (setjmp.h)
 };
