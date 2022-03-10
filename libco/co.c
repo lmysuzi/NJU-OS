@@ -46,7 +46,6 @@ static inline struct co *coFind(int n){
 static inline void deadDelete(struct coDead* deleted){
   if(deleted->prev)deleted->prev->next=deleted->next;
   if(deleted->next)deleted->next->prev=deleted->prev;
-  if(deleted==coTail)coTail=coTail->prev;
   free(deleted);
 }
 
@@ -107,6 +106,7 @@ static inline void deadAdd(struct co *added){
 static void coFree(struct co *wasted){
   if(wasted->prev)wasted->prev->next=wasted->next;
   if(wasted->next)wasted->next->prev=wasted->prev;
+  if(wasted==coTail)coTail=coTail->prev;
   free(wasted);
   coNum--;
 }
