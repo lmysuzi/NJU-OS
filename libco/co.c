@@ -118,6 +118,7 @@ asm volatile(
     }
     current->status=CO_DEAD;
     if(current->waiter){
+   printf("shit\n");
       struct co* wait=current->waiter;
       current->waiter=NULL;
       wait->waitfor--;
@@ -145,7 +146,6 @@ void co_yield() {
   struct co* prev=current;
   do{
     current=coFind(rand()%coNum);
-   printf("%d\n",coHead->status);
   }while(current->status==CO_DEAD||current->status==CO_WAITING);
   if(current==prev)return;
   if(!setjmp(prev->context)){
