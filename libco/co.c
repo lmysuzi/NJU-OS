@@ -89,16 +89,40 @@ struct co *co_start(const char *name, void (*func)(void *), void *arg) {
   coTail->next=malloc(sizeof(struct co));
   coTail->next->prev=coTail;
   coTail=coTail->next;
-  if(name)strcpy(coTail->name,name);
-  coTail->arg=arg;
-  coTail->waitfor=0;
-  coTail->func=func;
-  coTail->status=CO_NEW;
-  coTail->waiter=NULL;
-  coTail->next=NULL;
-  coTail->sp=(void*)(coTail->stack+sizeof(coTail->stack));
+  struct co *ans=coTail;
+  if(name)strcpy(ans->name,name);
+  ans->arg=arg;
+  ans->waitfor=0;
+  ans->func=func;
+  ans->status=CO_RUNNING;
+  ans->waiter=NULL;
+  ans->next=NULL;
+  ans->sp=(void*)(ans->stack+sizeof(ans->stack));
   coNum++;
-  return coTail;
+  if(!setjmp(current->context)){
+    asm volatile(
+      #if __x86_64__
+      "movq %0, %%rsp"
+      ::"b"((uintptr_t)current->sp-8)
+      #else
+      "movl %0, %%esp"
+      ::"b"((uintptr_t)current->sp-8)
+      #endif
+      );
+    if(!setjmp(ans->context))longjmp(current->context,1);
+    else ans->func(ans->arg);
+    ans->status=CO_DEAD;
+    if(ans->waiter){
+      struct co* wait=ans->waiter;
+      ans->waiter=NULL;
+      wait->waitfor--;
+      assert(wait->waitfor>=0);
+      if(!wait->waitfor)wait->status==CO_RUNNING;
+    }
+    co_yield();
+  }
+
+  return ans;
 }
 
 void co_wait(struct co *co) {
@@ -136,19 +160,8 @@ begin:
     else if(current->status==CO_RUNNING)longjmp(current->context,1);
     assert(current->status==CO_NEW||current->status==CO_RUNNING);
     //执行到这里说明该协程已经执行完毕
-    current->status=CO_DEAD;
-    if(current->waiter){
-      struct co* wait=current->waiter;
-      current->waiter=NULL;
-      wait->waitfor--;
-      assert(wait->waitfor>=0);
-      if(!wait->waitfor)wait->status==CO_RUNNING;
-    }
-    longjmp(prev->context,1);
   }
   else{
-    current=prev;
-    if(current->status==CO_WAITING)goto begin;
   }
 }
 
