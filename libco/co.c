@@ -33,7 +33,7 @@ struct co {
   jmp_buf        context __attribute__ (( aligned(16) )); // 寄存器现场 (setjmp.h)
 };
 
-static struct co *coHead=NULL,*current=NULL;
+static struct co *coHead=NULL,*current=NULL,*coTail=NULL;
 static struct coDead *deadHead=NULL;
 static int coNum=1;
 
@@ -46,6 +46,7 @@ static inline struct co *coFind(int n){
 static inline void deadDelete(struct coDead* deleted){
   if(deleted->prev)deleted->prev->next=deleted->next;
   if(deleted->next)deleted->next->prev=deleted->prev;
+  if(deleted==coTail)coTail=coTail->prev;
   free(deleted);
 }
 
@@ -67,12 +68,25 @@ static inline struct co *deadFind(){
   return NULL;
 }
 
+static int flag=1;
 static inline struct co *deadReturn(){
-  struct co *ans=coHead;
-  while(ans!=NULL){
-    if(ans->status==CO_DEAD&&ans->waiter!=NULL)return ans->waiter;
-    else if(ans->status==CO_RUNNING)return ans;
-    ans=ans->next;
+  if(flag){
+    struct co *ans=coHead;
+    while(ans!=NULL){
+      if(ans->status==CO_DEAD&&ans->waiter!=NULL)return ans->waiter;
+      else if(ans->status==CO_RUNNING)return ans;
+      ans=ans->next;
+    }
+    flag=0;
+  }
+  else{
+    struct co *ans=coTail;
+    while(ans!=NULL){
+      if(ans->status==CO_DEAD&&ans->waiter!=NULL)return ans->waiter;
+      else if(ans->status==CO_RUNNING)return ans;
+      ans=ans->prev;
+    }
+    flag=1;
   }
   return NULL;
 }
@@ -99,10 +113,9 @@ static void coFree(struct co *wasted){
 
 struct co *co_start(const char *name, void (*func)(void *), void *arg) {
   struct co *ans=malloc(sizeof(struct co));
-  if(coHead->next)coHead->next->prev=ans;
-  ans->next=coHead->next;
-  coHead->next=ans;
-  ans->prev=coHead;
+  coTail->next=ans;
+  ans->prev=coTail;
+  ans->next=NULL;
   if(name)strcpy(ans->name,name);
   ans->arg=arg;
   ans->func=func;
