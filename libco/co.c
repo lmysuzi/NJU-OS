@@ -98,8 +98,8 @@ struct co *co_start(const char *name, void (*func)(void *), void *arg) {
         #endif
       );
       current->func(current->arg);
-    if(current->waiter)deadAdd(current->waiter);
     current->status=CO_DEAD;
+    if(current->waiter!=NULL)deadAdd(current->waiter);
     co_yield();
     }
   }
