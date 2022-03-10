@@ -152,6 +152,12 @@ void co_yield() {
       current=current->waiter;
     }
   }while(current->status==CO_DEAD);*/
+  struct co *temp=coHead;
+  while(temp!=NULL){
+    printf("%d ",temp->status);
+    temp=temp->next;
+  }
+  printf("\n");
   current=deadReturn();
   assert(current!=NULL);
   if(!setjmp(prev->context)){
