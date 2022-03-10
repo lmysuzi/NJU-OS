@@ -124,6 +124,7 @@ asm volatile(
       wait->waitfor--;
       assert(wait->waitfor>=0);
       if(!wait->waitfor)wait->status==CO_RUNNING;
+      printf("%d\n",coHead->waitfor);
     }
     co_yield();
   }
