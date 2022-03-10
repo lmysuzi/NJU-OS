@@ -17,7 +17,7 @@ enum co_status {
 
 struct coDead{
   struct co *addr;
-  struct coDead *next;
+  struct coDead *next,*prev;
 };
 
 struct co {
@@ -42,22 +42,32 @@ static inline struct co *coFind(int n){
   return ans;
 }
 
+static inline void deadDelete(struct coDead* deleted){
+  if(deleted->prev)deleted->prev->next=deleted->next;
+  if(deleted->next)deleted->next->prev=deleted->prev;
+  free(deleted);
+}
+
 static inline struct co *deadFind(){
   struct coDead *temp=deadHead;
-  if(temp!=NULL){
-    deadHead=deadHead->next;
-    struct co *ans=temp->addr;
-    free(temp);
-    return ans;
+  while(temp!=NULL){
+    if(temp->addr->waiter!=NULL){
+      struct co *ans=temp->addr->waiter;
+      deadDelete(temp);
+      return ans;
+    }
   }
   return NULL;
 }
 
 static inline void deadAdd(struct co *added){
-  if(added->waiter==NULL)return;
   struct coDead *ans=malloc(sizeof(struct coDead));
-  ans->addr=added->waiter;
-  if(deadHead)ans->next=deadHead->next;
+  ans->addr=added;
+  ans->prev=NULL;
+  if(deadHead){
+    ans->next=deadHead->next;
+    deadHead->prev=ans;
+  }
   else ans->next=NULL;
   deadHead=ans;
 }
