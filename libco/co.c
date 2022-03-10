@@ -135,7 +135,6 @@ void co_wait(struct co *co) {
   current->status=CO_WAITING;
   current->waitfor++;
   while(co->status!=CO_DEAD){
-   printf("shit\n");
     if(!setjmp(current->context))
     co_yield();
   }
@@ -146,6 +145,7 @@ void co_yield() {
   struct co* prev=current;
   do{
     current=coFind(rand()%coNum);
+   printf("shit\n");
   }while(current->status==CO_DEAD||current->status==CO_WAITING);
   if(current==prev)return;
   if(!setjmp(prev->context)){
