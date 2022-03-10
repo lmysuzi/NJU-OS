@@ -12,6 +12,7 @@
 
 enum co_status {
   CO_RUNNING, // 已经执行过
+  CO_WAITING,
   CO_DEAD,    // 已经结束，但还未释放资源
 };
 
@@ -70,7 +71,8 @@ static inline struct co *deadReturn(){
   struct co *ans=coHead;
   while(ans!=NULL){
     if(ans->status==CO_DEAD&&ans->waiter!=NULL)return ans->waiter;
-    ans=ans->next;
+    else if(ans->status==CO_RUNNING)return ans;
+    else ans=ans->next;
   }
   return NULL;
 }
@@ -134,20 +136,24 @@ struct co *co_start(const char *name, void (*func)(void *), void *arg) {
 
 void co_wait(struct co *co) {
   co->waiter=current;
+  current->status=CO_WAITING;
   while(co->status!=CO_DEAD){
     if(!setjmp(current->context))co_yield();
   }
+  current->status=CO_RUNNING;
   coFree(co);
 }
 
 void co_yield() {
   struct co* prev=current;
-  do{
+  /*do{
     current=coFind(rand()%coNum);
     if(current->status==CO_DEAD&&current->waiter!=NULL){
       current=current->waiter;
     }
-  }while(current->status==CO_DEAD);
+  }while(current->status==CO_DEAD);*/
+  current=deadReturn();
+  assert(current!=NULL);
   if(!setjmp(prev->context)){
     longjmp(current->context,1);
   }
