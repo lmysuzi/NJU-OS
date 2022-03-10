@@ -77,10 +77,6 @@ struct co *co_start(const char *name, void (*func)(void *), void *arg) {
       current->func(current->arg);
     }
     current->status=CO_DEAD;
-    printf("\nwww\n");
-    /*if(current->waiter!=NULL){
-      current->waiter->status=CO_RUNNING;
-    }*/
     co_yield();
   }
   return ans;
