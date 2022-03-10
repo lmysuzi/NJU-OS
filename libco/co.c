@@ -156,7 +156,6 @@ void co_yield() {
       longjmp(current->context,1);
     }
 
-    assert(current->status==CO_NEW||current->status==CO_RUNNING);
     //执行到这里说明该协程已经执行完毕
   }
   else{
