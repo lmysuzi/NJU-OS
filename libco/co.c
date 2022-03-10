@@ -17,11 +17,6 @@ enum co_status {
   CO_DEAD,    // 已经结束，但还未释放资源
 };
 
-struct coNode{
-  struct co *addr;
-  struct coNode *next;
-};
-
 struct co {
   char name[NAME_LENGTH]__attribute__ (( aligned(16) ));
   char stack[STACK_SIZE] __attribute__ (( aligned(16) )); // 协程的堆栈
@@ -38,31 +33,11 @@ struct co {
 static struct co *coHead=NULL,*current=NULL;
 static int coNum=1;
 
-static inline void stack_switch_call(void *sp, void *entry, uintptr_t arg) {
-  asm volatile (
-#if __x86_64__
-    "movq %0, %%rsp; movq %2, %%rdi; jmp *%1"
-      : : "b"((uintptr_t)sp-96),     "d"(entry), "a"(arg)
-#else
-    "movl %0, %%esp; movl %2, 4(%0); jmp *%1"
-      : : "b"((uintptr_t)sp - 8), "d"(entry), "a"(arg)
-#endif
-  );
-}
-
 static inline struct co *coFind(int n){
   struct co *ans=coHead;
   for(int i=0;i<n;i++)ans=ans->next;
   return ans;
 }
-
-/*static inline void waitingsAdd(struct co *wait){
-  struct coNode *temp;
-  temp->addr=wait;
-  if(current->waitings==NULL)temp->next=NULL;
-  else temp->next=current->waitings->next;
-  current->waitings=temp;
-}*/
 
 static void coFree(struct co *wasted){
   if(wasted->prev)wasted->prev->next=wasted->next;
@@ -70,7 +45,6 @@ static void coFree(struct co *wasted){
   free(wasted);
   coNum--;
 }
-
 
 struct co *co_start(const char *name, void (*func)(void *), void *arg) {
   struct co *ans=malloc(sizeof(struct co));
@@ -104,20 +78,10 @@ asm volatile(
     }
     current->status=CO_DEAD;
     if(current->waiter!=NULL){
-    printf("\nfuck\n");
       current->waiter->status=CO_RUNNING;
-   printf("shit\n");
-      /*struct co* wait=current->waiter;
-    printf("\nfuck\n");
-      wait->waitfor--;
-      assert(wait->waitfor>=0);
-      if(!wait->waitfor){
-        wait->status=CO_RUNNING;
-      }*/
     }
     co_yield();
   }
-
   return ans;
 }
 
@@ -137,38 +101,11 @@ void co_yield() {
   do{
     current=coFind(rand()%coNum);
   }while(current->status==CO_WAITING||current->status==CO_DEAD);
+  if(current==prev)return;
   if(!setjmp(prev->context)){
     longjmp(current->context,1);
-    //执行到这里说明该协程已经执行完毕
   }
 }
-
-void first(){
-    printf("fuck\n");
-}
-
-void second(){
-  while(1){
-   printf("shit\n");
-    co_yield();
-  }
-}
-
-
-
-void entry(void *arg) {
-  while (1) {
-    printf("%s", (const char *)arg);
-    co_yield();
-  }
-}
-
-/*int main() {
-  struct co *co1 = co_start("co1", entry, "a");
-  struct co *co2 = co_start("co2", entry, "b");
-  co_wait(co1); // never returns
-  co_wait(co2);
-}*/
 
 __attribute__((constructor))void initial(){
   srand((unsigned)time(NULL));
