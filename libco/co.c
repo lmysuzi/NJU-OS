@@ -114,6 +114,7 @@ asm volatile(
       ::"b"((uintptr_t)ans->sp-8)
       #endif
       );
+    printf("fucccck\n");
       ans->func(ans->arg);
     }
     ans->status=CO_DEAD;
