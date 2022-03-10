@@ -114,7 +114,6 @@ asm volatile(
         wait->status=CO_RUNNING;
       }
     }
-    else {coFree(current);current=coHead;}
     co_yield();
   }
 
@@ -122,13 +121,13 @@ asm volatile(
 }
 
 void co_wait(struct co *co) {
-  if(co==NULL)return;
+  if(co->status!=CO_DEAD){
   co->waiter=current;
-    printf("fuck\n");
   current->status=CO_WAITING;
   current->waitfor++;
   while(co->status!=CO_DEAD){
     if(!setjmp(current->context))co_yield();
+  }
   }
   coFree(co);
 }
@@ -141,8 +140,7 @@ void co_yield() {
   }while(current->status==CO_WAITING);
   if(!setjmp(prev->context)){
     if(current->status==CO_DEAD){
-      assert(current->waiter!=NULL);
-      longjmp(current->waiter->context,1);
+      longjmp(current->context,1);
     }
     else if(current->status==CO_RUNNING){
       longjmp(current->context,1);
