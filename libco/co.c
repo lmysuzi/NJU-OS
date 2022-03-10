@@ -116,6 +116,7 @@ struct co *co_start(const char *name, void (*func)(void *), void *arg) {
   coTail->next=ans;
   ans->prev=coTail;
   ans->next=NULL;
+  coTail=ans;
   if(name)strcpy(ans->name,name);
   ans->arg=arg;
   ans->func=func;
@@ -166,11 +167,11 @@ void co_yield() {
     }
   }while(current->status==CO_DEAD);*/
   struct co *temp=coHead;
-  while(temp!=NULL){
+  /*while(temp!=NULL){
     printf("%d ",temp->status);
     temp=temp->next;
   }
-  printf("\n");
+  printf("\n");*/
   current=deadReturn();
   assert(current!=NULL);
   if(!setjmp(prev->context)){
