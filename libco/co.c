@@ -142,7 +142,6 @@ void co_wait(struct co *co) {
 
 void co_yield() {
   struct co* prev=current;
-  current=deadReturn();
   if(current==NULL){
     do{
       current=coFind(rand()%coNum);
