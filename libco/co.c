@@ -141,7 +141,7 @@ void co_yield() {
   if(!setjmp(prev->context)){
     if(current->status==CO_DEAD){
       assert(current->waiter!=NULL);
-      longjmp(current->context,1);
+      longjmp(current->waiter->context,1);
     }
     else if(current->status==CO_RUNNING){
       longjmp(current->context,1);
