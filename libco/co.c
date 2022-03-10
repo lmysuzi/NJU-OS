@@ -7,7 +7,7 @@
 #include <time.h>
 #include <assert.h>
 
-#define STACK_SIZE 16384
+#define STACK_SIZE 32*1024
 #define NAME_LENGTH 64 
 
 enum co_status {
@@ -105,7 +105,6 @@ asm volatile(
     current->status=CO_DEAD;
     if(current->waiter!=NULL){
       current->waiter->status=CO_RUNNING;
-    printf("\nfuck\n");
       /*struct co* wait=current->waiter;
     printf("\nfuck\n");
       wait->waitfor--;
