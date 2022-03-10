@@ -143,8 +143,8 @@ void co_yield() {
   do{
     current=coFind(rand()%coNum);
   }while(current->status==CO_DEAD||current->status==CO_WAITING);
-    printf("fucccck\n");
   if(current==prev)return;
+    printf("fucccck\n");
   if(!setjmp(prev->context)){
     if(current->status==CO_NEW){
       current->status=CO_RUNNING;
