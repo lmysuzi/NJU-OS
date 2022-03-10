@@ -118,12 +118,14 @@ asm volatile(
     }
     current->status=CO_DEAD;
     if(current->waiter){
-   printf("shit\n");
       struct co* wait=current->waiter;
       current->waiter=NULL;
       wait->waitfor--;
       assert(wait->waitfor>=0);
-      if(!wait->waitfor)wait->status==CO_RUNNING;
+      if(!wait->waitfor){
+   printf("shit\n");
+        wait->status==CO_RUNNING;
+      }
       printf("%d\n",coHead->waitfor);
     }
     co_yield();
