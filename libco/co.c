@@ -136,6 +136,17 @@ void co_yield() {
   struct co* prev=current;
   do{
     current=coFind(rand()%coNum);
+    if(current->status==CO_DEAD){
+      if(current->waiter){
+      struct co* wait=current->waiter;
+      current->waiter=NULL;
+      wait->waitfor--;
+      assert(wait->waitfor>=0);
+      if(!wait->waitfor){
+        wait->status=CO_RUNNING;
+      }
+    }
+    }
   }while(current->status==CO_DEAD||current->status==CO_WAITING);
   if(current==prev)return;
   if(!setjmp(prev->context)){
