@@ -24,7 +24,7 @@ struct coNode{
 
 struct co {
   char name[NAME_LENGTH]__attribute__ (( aligned(16) ));
-  uint8_t        stack[STACK_SIZE] __attribute__ (( aligned(16) )); // 协程的堆栈
+  char stack[STACK_SIZE] __attribute__ (( aligned(16) )); // 协程的堆栈
   void (*func)(void *)__attribute__ (( aligned(16) )); // co_start 指定的入口地址和参数
   void *arg __attribute__ (( aligned(16) ));
   void* sp __attribute__ (( aligned(16) ));
