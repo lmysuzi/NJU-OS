@@ -100,6 +100,7 @@ struct co *co_start(const char *name, void (*func)(void *), void *arg) {
   ans->sp=(void*)(ans->stack+sizeof(ans->stack));
   coNum++;
   if(!setjmp(current->context)){
+    printf("fucccck\n");
     asm volatile(
       #if __x86_64__
       "movq %0, %%rsp"
@@ -113,7 +114,6 @@ struct co *co_start(const char *name, void (*func)(void *), void *arg) {
       longjmp(current->context,1);
     }
     else {
-    printf("fucccck\n");
       ans->func(ans->arg);
     }
     ans->status=CO_DEAD;
