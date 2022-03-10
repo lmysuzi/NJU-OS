@@ -35,6 +35,15 @@ static inline struct co *coFind(int n){
   return ans;
 }
 
+static inline struct co *deadFind(){
+  struct co *ans=coHead;
+  while(ans){
+    if(ans->status==CO_DEAD)return ans;
+    ans=ans->next;
+  }
+  return NULL;
+}
+
 static void coFree(struct co *wasted){
   if(wasted->prev)wasted->prev->next=wasted->next;
   if(wasted->next)wasted->next->prev=wasted->prev;
@@ -86,9 +95,12 @@ void co_wait(struct co *co) {
 
 void co_yield() {
   struct co* prev=current;
-  do{
-    current=coFind(rand()%coNum);
-  }while(current->status==CO_DEAD);
+  current=deadFind();
+  if(current==NULL){
+    do{
+      current=coFind(rand()%coNum);
+    }while(current->status==CO_DEAD);
+  }
   if(current==prev)return;
   if(!setjmp(prev->context)){
     longjmp(current->context,1);
