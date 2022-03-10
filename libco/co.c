@@ -70,7 +70,6 @@ static inline struct co *deadReturn(){
   struct co *ans=coHead;
   while(ans!=NULL){
     if(ans->status==CO_DEAD&&ans->waiter!=NULL)return ans->waiter;
-    ans=ans->next;
   }
   return NULL;
 }
@@ -144,15 +143,9 @@ void co_yield() {
   struct co* prev=current;
   current=deadReturn();
   if(current==NULL){
-    if(coNum==1)current=coHead;
-    else{
-      current=coHead->next;
-      while(current!=NULL){
-        if(current->status!=CO_DEAD)break;
-        current=current->next;
-      }
-    }
-    if(current==NULL)current=coHead;
+    do{
+      current=coFind(rand()%coNum);
+    }while(current->status==CO_DEAD);
   }
   if(!setjmp(prev->context)){
     longjmp(current->context,1);
