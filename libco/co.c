@@ -146,7 +146,10 @@ void co_yield() {
     if(coNum==1)current=coHead;
     else{
       current=coHead->next;
-      while(current!=NULL&&current->status==CO_DEAD)current=current->next;
+      while(current!=NULL){
+        if(current->status!=CO_DEAD)break;
+        current=current->next;
+      }
       if(current==NULL)current=coHead;
     }
   }
