@@ -7,13 +7,11 @@
 #include <time.h>
 #include <assert.h>
 
-#define STACK_SIZE 32*1024
-#define NAME_LENGTH 64 
+#define STACK_SIZE 128*1024
+#define NAME_LENGTH 128
 
 enum co_status {
-  CO_NEW = 1, // 新创建，还未执行过
   CO_RUNNING, // 已经执行过
-  CO_WAITING, // 在 co_wait 上等待
   CO_DEAD,    // 已经结束，但还未释放资源
 };
 
@@ -24,9 +22,7 @@ struct co {
   void *arg __attribute__ (( aligned(16) ));
   void* sp __attribute__ (( aligned(16) ));
   struct co *next,*prev __attribute__ (( aligned(16) ));
-
   enum co_status status __attribute__ (( aligned(16) ));  // 协程的状态
-  struct co *    waiter  __attribute__ (( aligned(16) ));  // 是否有其他协程在等待当前协程
   jmp_buf        context __attribute__ (( aligned(16) )); // 寄存器现场 (setjmp.h)
 };
 
@@ -56,7 +52,6 @@ struct co *co_start(const char *name, void (*func)(void *), void *arg) {
   ans->arg=arg;
   ans->func=func;
   ans->status=CO_RUNNING;
-  ans->waiter=NULL;
   ans->sp=(void*)(ans->stack+sizeof(ans->stack));
   coNum++;
   if(!setjmp(current->context)){
@@ -83,12 +78,8 @@ struct co *co_start(const char *name, void (*func)(void *), void *arg) {
 }
 
 void co_wait(struct co *co) {
-  if(co->status!=CO_DEAD){
-  co->waiter=current;
-  current->status=CO_WAITING;
   while(co->status!=CO_DEAD){
     if(!setjmp(current->context))co_yield();
-  }
   }
   coFree(co);
 }
@@ -109,7 +100,6 @@ __attribute__((constructor))void initial(){
   coHead=malloc(sizeof(struct co));
   coHead->status=CO_RUNNING;
   coHead->next=coHead->prev=NULL;
-  coHead->waiter=NULL;
   strcpy(coHead->name,"main");
   current=coHead;
 }
