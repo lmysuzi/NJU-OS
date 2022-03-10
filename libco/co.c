@@ -69,7 +69,7 @@ static inline void deadAdd(struct co *added){
   struct coDead *ans=malloc(sizeof(struct coDead));
   ans->addr=added;
   ans->prev=NULL;
-  if(deadHead){
+  if(deadHead!=NULL){
     ans->next=deadHead->next;
     deadHead->prev=ans;
   }
