@@ -127,6 +127,7 @@ void co_wait(struct co *co) {
   while(co->status!=CO_DEAD){
     if(!setjmp(current->context))co_yield();
   }
+    printf("fuck\n");
   coFree(co);
 }
 
