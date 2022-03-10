@@ -129,7 +129,7 @@ void co_wait(struct co *co) {
     if(!setjmp(current->context))
     co_yield();
   }
-   printf("shit\n");
+   printf("shiiiit\n");
   coFree(co);
 }
 
