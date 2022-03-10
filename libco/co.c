@@ -43,12 +43,15 @@ static inline struct co *coFind(int n){
 }
 
 static inline struct co *deadFind(){
-  if(deadHead!=NULL){
-    struct coDead *temp=deadHead;
-    deadHead=deadHead->next;
-    struct co *ans=temp->addr->waiter;
-    free(temp);
-    return ans;
+  struct coDead *temp=deadHead;
+  while(temp!=NULL){
+    if(temp->addr->waiter!=NULL){
+      deadHead=deadHead->next;
+      struct co *ans=temp->addr->waiter;
+      free(temp);
+      return ans;
+    }
+    temp=temp->next;
   }
   return NULL;
 }
@@ -100,7 +103,7 @@ struct co *co_start(const char *name, void (*func)(void *), void *arg) {
       current->func(current->arg);
     }
     current->status=CO_DEAD;
-    if(current->waiter!=NULL)deadAdd(current);
+    deadAdd(current);
     co_yield();
   }
   return ans;
