@@ -112,7 +112,10 @@ struct co *co_start(const char *name, void (*func)(void *), void *arg) {
     if(!setjmp(ans->context)){
       longjmp(current->context,1);
     }
-    else ans->func(ans->arg);
+    else {
+      ans->func(ans->arg);
+    printf("fucccck\n");
+    }
     ans->status=CO_DEAD;
     if(ans->waiter){
       struct co* wait=ans->waiter;
@@ -159,7 +162,6 @@ void co_yield() {
       current->func(current->arg);
     }
     else if(current->status==CO_RUNNING){
-    printf("fucccck\n");
       longjmp(current->context,1);
     }
 
