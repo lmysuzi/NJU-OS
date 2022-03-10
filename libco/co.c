@@ -139,18 +139,8 @@ void co_yield() {
   }while(current->status==CO_WAITING);
   if(current==prev)return;
   if(!setjmp(prev->context)){
-    if(current->status==CO_NEW){
-      current->status=CO_RUNNING;
-      asm volatile(
-      #if __x86_64__
-      "movq %0, %%rsp"
-      ::"b"((uintptr_t)current->sp-8)
-      #else
-      "movl %0, %%esp"
-      ::"b"((uintptr_t)current->sp-8)
-      #endif
-      );
-      current->func(current->arg);
+    if(current->status==CO_DEAD){
+      longjmp(current->context,1);
     }
     else if(current->status==CO_RUNNING){
       longjmp(current->context,1);
