@@ -109,7 +109,10 @@ struct co *co_start(const char *name, void (*func)(void *), void *arg) {
       ::"b"((uintptr_t)ans->sp-8)
       #endif
       );
-    if(!setjmp(ans->context))longjmp(current->context,1);
+    if(!setjmp(ans->context)){
+    printf("fucccck\n");
+      longjmp(current->context,1);
+    }
     else ans->func(ans->arg);
     ans->status=CO_DEAD;
     if(ans->waiter){
