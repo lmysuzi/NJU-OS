@@ -105,6 +105,7 @@ asm volatile(
       current->func(current->arg);
     }
     current->status=CO_DEAD;
+    printf("\nfuck\n");
     if(current->waiter){
       struct co* wait=current->waiter;
       wait->waitfor--;
@@ -113,7 +114,6 @@ asm volatile(
         wait->status=CO_RUNNING;
       }
     }
-    printf("\nfuck\n");
     co_yield();
   }
 
