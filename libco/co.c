@@ -91,14 +91,12 @@ struct co *co_start(const char *name, void (*func)(void *), void *arg) {
   ans->next=coHead->next;
   coHead->next=ans;
   ans->prev=coHead;
-  printf("fuccck\n");
   if(name)strcpy(ans->name,name);
   ans->arg=arg;
   ans->waitfor=0;
   ans->func=func;
   ans->status=CO_RUNNING;
   ans->waiter=NULL;
-  ans->next=NULL;
   ans->sp=(void*)(ans->stack+sizeof(ans->stack));
   coNum++;
   if(!setjmp(current->context)){
