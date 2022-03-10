@@ -110,6 +110,7 @@ asm volatile(
       struct co* wait=current->waiter;
       current->waiter=NULL;
       wait->waitfor--;
+      printf("%d\n",wait->waitfor);
       assert(wait->waitfor>=0);
       if(!wait->waitfor){
         wait->status=CO_RUNNING;
