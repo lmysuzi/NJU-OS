@@ -56,7 +56,7 @@ static inline struct co *deadFind(){
 static inline void deadAdd(struct co *added){
   if(added->waiter==NULL)return;
   struct coDead *ans=malloc(sizeof(struct coDead));
-  ans->addr=added;
+  ans->addr=added->waiter;
   if(deadHead)ans->next=deadHead->next;
   else ans->next=NULL;
   deadHead=ans;
