@@ -11,7 +11,7 @@
 #define NAME_LENGTH 128
 
 enum co_status {
-  CO_RUNNING, // 已经执行过
+  CO_RUNNING=1, // 已经执行过
   CO_WAITING,
   CO_DEAD,    // 已经结束，但还未释放资源
 };
@@ -126,9 +126,9 @@ struct co *co_start(const char *name, void (*func)(void *), void *arg) {
         #endif
       );
       current->func(current->arg);
-    current->status=CO_DEAD;
+      current->status=CO_DEAD;
     //deadAdd(current);
-    co_yield();
+      co_yield();
     }
   }
   return ans;
