@@ -29,7 +29,6 @@ struct co {
 
   enum co_status status;  // 协程的状态
   struct co *    waiter;  // 是否有其他协程在等待当前协程
-  int waitfor;
   jmp_buf        context; // 寄存器现场 (setjmp.h)
   uint8_t        stack[STACK_SIZE]; // 协程的堆栈
   void* sp;
@@ -81,7 +80,6 @@ struct co *co_start(const char *name, void (*func)(void *), void *arg) {
   ans->prev=coHead;
   if(name)strcpy(ans->name,name);
   ans->arg=arg;
-  ans->waitfor=0;
   ans->func=func;
   ans->status=CO_RUNNING;
   ans->waiter=NULL;
@@ -126,7 +124,6 @@ void co_wait(struct co *co) {
   if(co->status!=CO_DEAD){
   co->waiter=current;
   current->status=CO_WAITING;
-  current->waitfor++;
   while(co->status!=CO_DEAD){
     if(!setjmp(current->context))co_yield();
   }
@@ -178,7 +175,6 @@ __attribute__((constructor))void initial(){
   coHead->status=CO_RUNNING;
   coHead->next=coHead->prev=NULL;
   coHead->waiter=NULL;
-  coHead->waitfor=0;
   strcpy(coHead->name,"main");
   current=coHead;
 }
