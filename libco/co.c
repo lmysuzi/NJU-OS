@@ -53,8 +53,8 @@ static inline struct co *deadFind(){
   while(temp!=NULL){
     if(temp->addr->waiter!=NULL){
       struct co *ans=temp->addr->waiter;
-      printf("fuck\n");
       deadDelete(temp);
+      printf("fuck\n");
       return ans;
     }
     else{
