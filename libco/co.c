@@ -131,6 +131,7 @@ void co_wait(struct co *co) {
   }
    printf("shiiiit\n");
   coFree(co);
+  printf("%d\n",coNum);
 }
 
 void co_yield() {
