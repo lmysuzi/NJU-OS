@@ -124,7 +124,6 @@ struct co *co_start(const char *name, void (*func)(void *), void *arg) {
     co_yield();
   }
 
-    printf("fucccck\n");
   return ans;
 }
 
@@ -132,6 +131,7 @@ void co_wait(struct co *co) {
   co->waiter=current;
   current->status=CO_WAITING;
   current->waitfor++;
+    printf("fucccck\n");
   while(co->status!=CO_DEAD){
     if(!setjmp(current->context))
     co_yield();
