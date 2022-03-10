@@ -66,6 +66,14 @@ static inline struct co *deadFind(){
   return NULL;
 }
 
+static inline struct co *deadReturn(){
+  struct co *ans=coHead;
+  while(ans!=NULL){
+    if(ans->status==CO_DEAD&&ans->waiter!=NULL)return ans->waiter;
+  }
+  return NULL;
+}
+
 static inline void deadAdd(struct co *added){
   struct coDead *ans=malloc(sizeof(struct coDead));
   ans->addr=added;
@@ -116,7 +124,7 @@ struct co *co_start(const char *name, void (*func)(void *), void *arg) {
       );
       current->func(current->arg);
     current->status=CO_DEAD;
-    deadAdd(current);
+    //deadAdd(current);
     co_yield();
     }
   }
@@ -133,11 +141,14 @@ void co_wait(struct co *co) {
 
 void co_yield() {
   struct co* prev=current;
-  current=deadFind();
+  current=deadReturn();
   if(current==NULL){
-    do{
-      current=coFind(rand()%coNum);
-    }while(current->status==CO_DEAD);
+    if(coNum==1)current=coHead;
+    else{
+      current=coHead->next;
+      while(current!=NULL&&current->status!=CO_DEAD)current=current->next;
+      if(current==NULL)current=coHead;
+    }
   }
   if(!setjmp(prev->context)){
     longjmp(current->context,1);
