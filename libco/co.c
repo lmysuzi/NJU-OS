@@ -91,6 +91,7 @@ struct co *co_start(const char *name, void (*func)(void *), void *arg) {
   ans->next=coHead->next;
   coHead->next=ans;
   ans->prev=coHead;
+  printf("fuccck\n");
   if(name)strcpy(ans->name,name);
   ans->arg=arg;
   ans->waitfor=0;
