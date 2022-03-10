@@ -72,7 +72,7 @@ static inline struct co *deadReturn(){
   while(ans!=NULL){
     if(ans->status==CO_DEAD&&ans->waiter!=NULL)return ans->waiter;
     else if(ans->status==CO_RUNNING)return ans;
-    else ans=ans->next;
+    ans=ans->next;
   }
   return NULL;
 }
