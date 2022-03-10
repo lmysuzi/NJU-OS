@@ -137,7 +137,6 @@ void co_yield() {
     current=coFind(rand()%coNum);
     struct co *temp=coHead;
   }while(current->status==CO_WAITING);
-  if(current==prev)return;
   if(!setjmp(prev->context)){
     if(current->status==CO_DEAD){
       assert(current->waiter!=NULL);
