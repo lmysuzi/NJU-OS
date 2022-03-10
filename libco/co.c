@@ -86,6 +86,7 @@ static void coFree(struct co *wasted){
 
 
 struct co *co_start(const char *name, void (*func)(void *), void *arg) {
+  printf("%d\n",coNum);
   struct co *ans=malloc(sizeof(struct co));
   if(coHead->next)coHead->next->prev=ans;
   ans->next=coHead->next;
