@@ -18,7 +18,6 @@ static void work_loop(void *arg) {
     const char *s = (const char*)arg;
     for (int i = 0; i < 100; ++i) {
         printf("%s%d  ", s, get_count());
-    //printf("fucccck\n");
         add_count();
         co_yield();
     }
@@ -33,6 +32,7 @@ static void test_1() {
     struct co *thd1 = co_start("thread-1", work, "X");
     struct co *thd2 = co_start("thread-2", work, "Y");
 
+    printf("fucccck\n");
     co_wait(thd1);
     co_wait(thd2);
 
