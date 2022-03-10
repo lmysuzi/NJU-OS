@@ -108,7 +108,6 @@ asm volatile(
     current->status=CO_DEAD;
     if(current->waiter){
       struct co* wait=current->waiter;
-      current->waiter=NULL;
       wait->waitfor--;
       assert(wait->waitfor>=0);
       if(!wait->waitfor){
@@ -140,6 +139,7 @@ void co_yield() {
   if(current==prev)return;
   if(!setjmp(prev->context)){
     if(current->status==CO_DEAD){
+      assert(current->waiter);
       longjmp(current->context,1);
     }
     else if(current->status==CO_RUNNING){
