@@ -126,7 +126,6 @@ void co_wait(struct co *co) {
   current->status=CO_WAITING;
   current->waitfor++;
   while(co->status!=CO_DEAD){
-    if(!setjmp(current->context))
     co_yield();
   }
    printf("shiiiit\n");
