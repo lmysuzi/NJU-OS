@@ -99,6 +99,7 @@ struct co *co_start(const char *name, void (*func)(void *), void *arg) {
   ans->next=NULL;
   ans->sp=(void*)(ans->stack+sizeof(ans->stack));
   coNum++;
+    printf("fucccck\n");
   if(!setjmp(current->context)){
     asm volatile(
       #if __x86_64__
