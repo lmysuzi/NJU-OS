@@ -126,7 +126,7 @@ asm volatile(
    printf("shit\n");
         wait->status==CO_RUNNING;
         if(coHead==wait)printf("yes\n");
-      printf("%d\n",CO_RUNNING);
+      printf("%d\n",coHead->status);
       }
     }
     co_yield();
