@@ -138,7 +138,6 @@ void co_wait(struct co *co) {
 
 void co_yield() {
   struct co* prev=current;
-begin:
   do{
     current=coFind(rand()%coNum);
   }while(current->status==CO_DEAD||current->status==CO_WAITING);
