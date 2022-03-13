@@ -1,7 +1,8 @@
 #include <common.h>
 
 #define MAGIC 7654321
-#define actual(size) (size+sizeof(header_t))
+#define actual(size) (size+sizeof(node_t))
+#define headerAddr(addr) ((void*)addr-sizeof(node_t))
 
 typedef struct node_t{
   size_t size;
@@ -48,7 +49,7 @@ static void *kalloc(size_t size) {
             if(node->prev)node->prev->next=newAddr;
             if(node->next)node->next->prev=newAddr;
           }
-          header_t *header=(header_t*)(addr-sizeof(header_t));
+          header_t *header=(header_t*)(addr-sizeof(node_t));
           header->size=size,header->magic=MAGIC;
           return addr;
         }
