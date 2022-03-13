@@ -27,7 +27,7 @@ static void pmm_init() {
   node_t *Head=(node_t *)heap.start;
   Head->next=NULL,Head->size=pmsize-sizeof(node_t);
   head=&Head;
-  printf("%p\n",head);
+  printf("%p\n",*head);
 }
 
 MODULE_DEF(pmm) = {
