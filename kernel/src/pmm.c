@@ -70,6 +70,7 @@ static void pmm_init() {
   Head->prev=NULL,Head->next=NULL,Head->size=pmsize-sizeof(node_t);
   head=Head;
   int* a=kalloc(sizeof(int));
+  printf("%d\n",sizeof(int));
   *a=1;
   printf("%p %d",a,*a);
 }
