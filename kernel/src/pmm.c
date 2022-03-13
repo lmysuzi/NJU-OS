@@ -71,6 +71,7 @@ static void pmm_init() {
   head=Head;
   int* a=kalloc(sizeof(int));
   *a=1;
+  printf("%p %d",a,*a);
 }
 
 MODULE_DEF(pmm) = {
