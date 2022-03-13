@@ -5,12 +5,12 @@
 
 typedef struct node_t{
   size_t size;
-  struct node_t *next;
+  struct node_t *next,*prev;
 }node_t;
 
 typedef struct header_t{
   size_t size;
-  int magic;
+  long magic;
 }header_t;
 
 static const size_t maxSize=(16<<20);
@@ -46,8 +46,8 @@ static void kfree(void *ptr) {
 static void pmm_init() {
   uintptr_t pmsize = ((uintptr_t)heap.end - (uintptr_t)heap.start);
   printf("Got %d MiB heap: [%p, %p)\n", pmsize >> 20, heap.start, heap.end);
-  printf("%d %d\n",sizeof(node_t),sizeof(header_t));
   node_t *Head=(node_t *)heap.start;
+  printf("%d %d\n",sizeof(header_t),sizeof(node_t));
   Head->next=NULL,Head->size=pmsize-sizeof(node_t);
   head=Head;
 }
