@@ -1,6 +1,7 @@
 #include <common.h>
 
 #define MAGIC 7654321
+#define Size(size) (size+sizeof(node_t))
 
 typedef struct node_t{
   uintptr_t size;
@@ -27,7 +28,6 @@ static void pmm_init() {
   node_t *Head=(node_t *)heap.start;
   Head->next=NULL,Head->size=pmsize-sizeof(node_t);
   head=Head;
-  printf("%d\n",head->size);
 }
 
 MODULE_DEF(pmm) = {
