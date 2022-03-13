@@ -12,7 +12,7 @@ typedef struct header_t{
   int magic;
 }header_t;
 
-static node_t **head;
+static node_t *head;
 
 static void *kalloc(size_t size) {
   return NULL;
@@ -26,8 +26,8 @@ static void pmm_init() {
   printf("Got %d MiB heap: [%p, %p)\n", pmsize >> 20, heap.start, heap.end);
   node_t *Head=(node_t *)heap.start;
   Head->next=NULL,Head->size=pmsize-sizeof(node_t);
-  head=&Head;
-  printf("%p\n",*head);
+  head=Head;
+  printf("%p\n",head);
 }
 
 MODULE_DEF(pmm) = {
