@@ -10,7 +10,7 @@ typedef struct node_t{
 
 typedef struct header_t{
   size_t size;
-  long magic;
+  int magic,m;
 }header_t;
 
 static const size_t maxSize=(16<<20);
