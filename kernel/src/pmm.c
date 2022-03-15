@@ -13,6 +13,7 @@ typedef struct lock_t{
 int testAndSet(int *oldPtr,int new){
   int old=*oldPtr;
   *oldPtr=new;
+  mark;
   return old;
 }
 
@@ -143,7 +144,6 @@ static void pmm_init() {
   head=Head;
   int* a=kalloc(sizeof(int));
   printf("%p %p\n",a,head);
-  mark;
   kfree(a);
   printf("%p %p\n",a,head);
 }
