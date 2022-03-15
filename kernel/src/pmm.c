@@ -6,6 +6,28 @@
 
 #define mark printf("fuck")
 
+typedef struct lock_t{
+  int flag;
+}lock_t;
+
+int testAndSet(int *oldPtr,int new){
+  int old=*oldPtr;
+  *oldPtr=new;
+  return old;
+}
+
+void init(lock_t *lock){
+  lock->flag=0;
+}
+
+void lock(lock_t *lock){
+  while(testAndSet(&lock->flag,1)==1);
+}
+
+void unlock(lock_t *lock){
+  lock->flag=0;
+}
+
 typedef struct node_t{
   size_t size;
   struct node_t *next,*prev;
@@ -18,6 +40,7 @@ typedef struct header_t{
 
 static const size_t maxSize=(16<<20);
 static node_t *head;
+static lock_t pmmLock;
 
 static size_t tableSizeFor(size_t val){
   if (val & (val - 1)){
@@ -65,6 +88,7 @@ static void *kalloc(size_t size) {
   size_t sizePow=tableSizeFor(size);
   size_t mask=~((size_t)sizePow-1);
   node_t *node=head;
+  lock(&pmmLock);
   while(node!=NULL){
     if(node->size>=actual(size)){
       void *iniAddr=(void*)node+sizeof(node_t);
@@ -88,6 +112,7 @@ static void *kalloc(size_t size) {
     }
     node=node->next;
   }
+  unlock(&pmmLock);
   return NULL;
 }
 
@@ -97,20 +122,22 @@ static void kfree(void *ptr) {
   size_t size=header->size;
   node_t *new=(node_t*)header;
   new->size=size;
+  lock(&pmmLock);
   if(mergeR(new)==-1)
     if(mergeL(new)==-1){
       new->next=head->next;
       new->prev=head->prev;
       head->prev=new;
       head=new;
-      mark;
     }
+  unlock(&pmmLock);
 }
 
 static void pmm_init() {
   uintptr_t pmsize = ((uintptr_t)heap.end - (uintptr_t)heap.start);
   printf("Got %d MiB heap: [%p, %p)\n", pmsize >> 20, heap.start, heap.end);
   node_t *Head=(node_t *)heap.start;
+  init(&pmmLock);
   printf("%d %d\n",sizeof(header_t),sizeof(node_t));
   Head->prev=NULL,Head->next=NULL,Head->size=pmsize-sizeof(node_t);
   head=Head;
