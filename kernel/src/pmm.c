@@ -143,6 +143,7 @@ static void pmm_init() {
   head=Head;
   int* a=kalloc(sizeof(int));
   printf("%p %p\n",a,head);
+  mark;
   kfree(a);
   printf("%p %p\n",a,head);
 }
