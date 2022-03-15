@@ -4,6 +4,8 @@
 #define actual(size) (size+sizeof(node_t))
 #define headerAddr(addr) ((void*)addr-sizeof(node_t))
 
+#define mark printf("fuck")
+
 typedef struct node_t{
   size_t size;
   struct node_t *next,*prev;
@@ -101,6 +103,7 @@ static void kfree(void *ptr) {
       new->prev=head->prev;
       head->prev=new;
       head=new;
+      mark;
     }
 }
 
