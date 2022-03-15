@@ -106,6 +106,7 @@ static void *kalloc(size_t size) {
           }
           header_t *header=(header_t*)(addr-sizeof(node_t));
           header->size=size,header->magic=MAGIC;
+          unlock(&pmmLock);
           return addr;
         }
       }
@@ -123,7 +124,6 @@ static void kfree(void *ptr) {
   node_t *new=(node_t*)header;
   new->size=size;
   lock(&pmmLock);
-  printf("%d\n",pmmLock.flag);
   if(mergeR(new)==-1)
     if(mergeL(new)==-1){
       new->next=head->next;
