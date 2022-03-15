@@ -13,7 +13,6 @@ typedef struct lock_t{
 int testAndSet(int *oldPtr,int new){
   int old=*oldPtr;
   *oldPtr=new;
-  mark;
   return old;
 }
 
@@ -124,6 +123,7 @@ static void kfree(void *ptr) {
   node_t *new=(node_t*)header;
   new->size=size;
   lock(&pmmLock);
+  printf("%d\n",pmmLock.flag);
   if(mergeR(new)==-1)
     if(mergeL(new)==-1){
       new->next=head->next;
