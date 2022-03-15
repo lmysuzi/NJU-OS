@@ -29,6 +29,35 @@ static size_t tableSizeFor(size_t val){
   else return val == 0 ? 1 : val;
 }
 
+static int mergeL(node_t *new){
+  node_t *temp=head;
+  while(temp){
+    if((void*)temp+temp->size+sizeof(node_t)==(void*)new){
+      temp->size+=sizeof(node_t)+new->size;
+      return 0;
+    }
+    temp=temp->next;
+  }
+  return -1;
+}
+
+static int mergeR(node_t *new){
+  node_t *temp=head;
+  while(temp){
+    if((void*)new+new->size+sizeof(node_t)==(void*)temp){
+      new->size+=temp->size+sizeof(node_t);
+      new->next=temp->next;
+      new->prev=temp->prev;
+      if(temp==head)head=new;
+      if(temp->prev)temp->prev->next=new;
+      if(temp->next)temp->next->prev=new;
+      return 0;
+    }
+    temp=temp->next;
+  }
+  return -1;
+}
+
 static void *kalloc(size_t size) {
   if(size<=0||size>maxSize)return NULL;
   size_t sizePow=tableSizeFor(size);
@@ -61,6 +90,18 @@ static void *kalloc(size_t size) {
 }
 
 static void kfree(void *ptr) {
+  header_t *header=headerAddr(ptr);
+  if(header->magic!=MAGIC)printf("wrong!\n"),halt(1);
+  size_t size=header->size;
+  node_t *new=(node_t*)header;
+  new->size=size;
+  if(mergeR(new)==-1)
+    if(mergeL(new)==-1){
+      new->next=head->next;
+      new->prev=head->prev;
+      head->prev=new;
+      head=new;
+    }
 }
 
 static void pmm_init() {
@@ -71,8 +112,8 @@ static void pmm_init() {
   Head->prev=NULL,Head->next=NULL,Head->size=pmsize-sizeof(node_t);
   head=Head;
   int* a=kalloc(sizeof(int));
-  printf("%d\n",sizeof(int));
-  *a=1;
+  printf("%p %p\n",a,head);
+  kfree(a);
   printf("%p %p\n",a,head);
 }
 
