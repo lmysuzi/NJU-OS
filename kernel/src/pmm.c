@@ -144,7 +144,7 @@ static void pmm_init() {
   printf("%d %d\n",sizeof(header_t),sizeof(node_t));
   Head->prev=NULL,Head->next=NULL,Head->size=pmsize-sizeof(node_t);
   head=Head;
-  int* a=kalloc(sizeof(int));
+  int* a=kalloc(5);
   printf("%p %p\n",a,head);
   kfree(a);
   printf("%p %p\n",a,head);
