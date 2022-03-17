@@ -98,7 +98,7 @@ static void *kalloc(size_t size) {
       for(;addr<endAddr;addr+=sizePow){
         if(addr>=iniAddr){
           if(addr+actual(size)<endAddr){
-            node_t *newAddr=(node_t*)(addr+size);
+            node_t *newAddr=(node_t*)(addr+actual(size));
             newAddr->size=endAddr-(void*)newAddr-sizeof(node_t);
             newAddr->next=node->next,newAddr->prev=node->prev;
             if(node==head)head=newAddr;
