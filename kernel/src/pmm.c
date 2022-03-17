@@ -95,9 +95,9 @@ static void *kalloc(size_t size) {
       void *endAddr=iniAddr+node->size;
       void *addr=(void*)(mask&(size_t)iniAddr);
       printf("%x\n",addr);
-      for(;addr<iniAddr+node->size;addr+=sizePow){
+      for(;addr<endAddr;addr+=sizePow){
         if(addr>=iniAddr){
-          if(addr+size+sizeof(node_t)<endAddr){
+          if(addr+actual(size)<endAddr){
             node_t *newAddr=(node_t*)(addr+size);
             newAddr->size=endAddr-(void*)newAddr-sizeof(node_t);
             newAddr->next=node->next,newAddr->prev=node->prev;
@@ -145,7 +145,7 @@ static void pmm_init() {
   printf("%d %d\n",sizeof(header_t),sizeof(node_t));
   Head->prev=NULL,Head->next=NULL,Head->size=pmsize-sizeof(node_t);
   head=Head;
-  int* a=kalloc(9);
+  int* a=kalloc(19);
   printf("%p %p\n",a,head);
   kfree(a);
   printf("%p %p\n",a,head);
