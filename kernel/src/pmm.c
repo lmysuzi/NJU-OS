@@ -102,7 +102,10 @@ static void *kalloc(size_t size) {
             newAddr->size=endAddr-(void*)newAddr-sizeof(node_t);
             newAddr->next=node->next,newAddr->prev=node->prev;
             if(node==head)head=newAddr;
-            if(node->prev)node->prev->next=newAddr;
+            if(node->prev){
+              node->prev->next=newAddr;
+              node->prev->size=addr-(void*)node->prev-sizeof(node_t);
+            }
             if(node->next)node->next->prev=newAddr;
           }
           header_t *header=(header_t*)(addr-sizeof(node_t));
