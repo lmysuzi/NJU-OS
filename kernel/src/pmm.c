@@ -93,6 +93,7 @@ static void *kalloc(size_t size) {
     if(node->size>=actual(size)){
       void *iniAddr=(void*)node+sizeof(node_t);
       void *endAddr=iniAddr+node->size;
+      printf("%p\n",endAddr);
       void *addr=(void*)(mask&(size_t)iniAddr);
       for(;addr<iniAddr+node->size;addr+=sizePow){
         if(addr>=iniAddr){
