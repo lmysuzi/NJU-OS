@@ -166,7 +166,7 @@ static void pmm_init() {
   kfree(a);
   node_t *temp=head;
   while(temp){
-    printf("%p %x\n",temp,temp->size);
+    printf("%p %x %x\n",temp,temp->size,temp+temp->size+sizeof(node_t));
     temp=temp->next;
   }
 }
