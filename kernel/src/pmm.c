@@ -109,7 +109,7 @@ static void *kalloc(size_t size) {
             if(node->next)node->next->prev=newAddr;
           }
           header_t *header=(header_t*)(addr-sizeof(node_t));
-          header->size=sizePow,header->magic=MAGIC;
+          header->size=size,header->magic=MAGIC;
           unlock(&pmmLock);
           return addr;
         }
