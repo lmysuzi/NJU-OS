@@ -126,6 +126,7 @@ static void *kalloc(size_t size) {
       void *endAddr=iniAddr+node->size;
       void *addr=(void*)(mask&(size_t)iniAddr);
       for(;addr<endAddr;addr+=size){
+        //若申请到的内存块为head，可能会存在大量内存浪费
         if(addr>=iniAddr){
           if(addr+actual(size)<endAddr){//加上node_t以提供新的空闲内存的节点
             node_t *newAddr=(node_t*)(addr+size);
