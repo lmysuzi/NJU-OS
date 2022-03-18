@@ -100,6 +100,19 @@ static void insert(node_t *new){
   }
 }
 
+static void merge(){
+  lock(&pmmLock);
+  node_t *temp=head;
+  while(temp){
+    if(temp->next&&(void*)temp+actual(temp->size)==(void*)temp->next){
+      temp->size+=actual(temp->next->size);
+      temp->next=temp->next->next;
+    }
+    else temp=temp->next;
+  }
+  unlock(&pmmLock);
+}
+
 static void *kalloc(size_t size) {
   if(size<=0||size>maxSize)return NULL;
   size_t sizePow=tableSizeFor(size);
@@ -165,6 +178,12 @@ static void pmm_init() {
   kfree(b);
   kfree(a);
   node_t *temp=head;
+  while(temp){
+    printf("%p %x %x\n",temp,temp->size,(void*)temp+temp->size+sizeof(node_t));
+    temp=temp->next;
+  }
+  merge();
+  temp=head;
   while(temp){
     printf("%p %x %x\n",temp,temp->size,(void*)temp+temp->size+sizeof(node_t));
     temp=temp->next;
