@@ -88,7 +88,7 @@ static size_t tableSizeFor(size_t val){
 static void insert(node_t *new){
   if(new<head){
     new->next=head,new->prev=NULL;
-    head->prev=new,head=new;
+    head->prev=new;head=new;
     mark;
     return;
   }
