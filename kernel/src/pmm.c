@@ -160,7 +160,8 @@ void kfree(void *ptr) {
   new->size=size;
   lock(&pmmLock);
   insert(new);
-  if((++count)==10)count=0,merge();
+  if((++count)==COUNT)count=0,merge();
+  printf("%d\n",count);
   unlock(&pmmLock);
 }
 
