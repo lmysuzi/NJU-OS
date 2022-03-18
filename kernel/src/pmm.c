@@ -22,7 +22,7 @@ void init(lock_t *lock){
 }
 
 void lock(lock_t *lock){
-  while(testAndSet(&lock->flag,1)==1)mark;
+  while(testAndSet(&lock->flag,1)==1);
 }
 
 void unlock(lock_t *lock){
@@ -89,6 +89,7 @@ static void insert(node_t *new){
   if(new<head){
     new->next=head,new->prev=NULL;
     head->prev=new,head=new;
+    mark;
     return;
   }
   node_t *temp=head;
