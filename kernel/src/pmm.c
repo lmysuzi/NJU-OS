@@ -96,6 +96,7 @@ static void insert(node_t *new){
     if(temp->next==NULL||temp->next>new){
       new->next=temp->next,new->prev=temp;
       if(temp->next!=NULL)temp->next->prev=new;
+      temp->next=new;
     mark;
       return;
     }
