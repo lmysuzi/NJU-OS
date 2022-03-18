@@ -161,10 +161,9 @@ static void pmm_init() {
   head=Head;
   int* a=kalloc(9);
   int* b=kalloc(32);
-  printf("%p %p\n",a,head);
+  printf("%p %p\n\n",a,head);
   kfree(b);
   kfree(a);
-  printf("%p %p\n",a,head);
   node_t *temp=head;
   while(temp){
     printf("%p %x\n",temp,temp->size);
