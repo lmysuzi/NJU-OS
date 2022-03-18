@@ -113,7 +113,7 @@ static void merge(){
   unlock(&pmmLock);
 }
 
-static void *kalloc(size_t size) {
+void *kalloc(size_t size) {
   if(size<=0||size>maxSize)return NULL;
   size_t sizePow=tableSizeFor(size);
   size=tableSizeFor(size);
@@ -152,7 +152,7 @@ static void *kalloc(size_t size) {
   return NULL;
 }
 
-static void kfree(void *ptr) {
+void kfree(void *ptr) {
   header_t *header=headerAddr(ptr);
   if(header->magic!=MAGIC)printf("wrong!\n"),halt(1);
   size_t size=header->size;
