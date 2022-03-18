@@ -113,10 +113,9 @@ static void merge(){
   }
 }
 
-void *kalloc(size_t size) {
+static void *kalloc(size_t size) {
   if(size<=0||size>maxSize)return NULL;
   size_t sizePow=tableSizeFor(size);
-  size=tableSizeFor(size);
   size_t mask=~((size_t)sizePow-1);
   node_t *node=head;
   lock(&pmmLock);
@@ -139,6 +138,11 @@ void *kalloc(size_t size) {
             }
             if(node->next)node->next->prev=newAddr;
           }
+          else{//该内存块分完
+            if(head==node)head=node->next;
+            if(node->prev)node->prev->next=node->next,node->prev->size=addr-(void*)node->prev-sizeof(node_t);
+            if(node->next)node->next->prev=node->prev;
+          }
           header_t *header=(header_t*)(addr-sizeof(node_t));
           header->size=size,header->magic=MAGIC;
           unlock(&pmmLock);
@@ -152,7 +156,7 @@ void *kalloc(size_t size) {
   return NULL;
 }
 
-void kfree(void *ptr) {
+static void kfree(void *ptr) {
   header_t *header=headerAddr(ptr);
   if(header->magic!=MAGIC)printf("wrong!\n"),halt(1);
   size_t size=header->size;
@@ -161,7 +165,6 @@ void kfree(void *ptr) {
   lock(&pmmLock);
   insert(new);
   if((++count)==COUNT)count=0,merge();
-  printf("%d\n",count);
   unlock(&pmmLock);
 }
 
