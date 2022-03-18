@@ -89,7 +89,6 @@ static void insert(node_t *new){
   if(new<head){
     new->next=head,new->prev=NULL;
     head->prev=new;head=new;
-    mark;
     return;
   }
   node_t *temp=head;
@@ -97,6 +96,7 @@ static void insert(node_t *new){
     if(temp->next==NULL||temp->next>new){
       new->next=temp->next,new->prev=temp;
       if(temp->next!=NULL)temp->next->prev=new;
+    mark;
       return;
     }
     temp=temp->next;
