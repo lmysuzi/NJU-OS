@@ -22,7 +22,7 @@ void init(lock_t *lock){
 }
 
 void lock(lock_t *lock){
-  while(testAndSet(&lock->flag,1)==1);
+  while(testAndSet(&lock->flag,1)==1)mark;
 }
 
 void unlock(lock_t *lock){
@@ -108,7 +108,6 @@ static void merge(){
     printf("%p %x %x\n",temp,temp->size,(void*)temp+temp->size+sizeof(node_t));
     temp=temp->next;
   }
-  mark;
   temp=head;
   while(temp){
     if(temp->next&&(void*)temp+actual(temp->size)==(void*)temp->next){
