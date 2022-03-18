@@ -86,6 +86,7 @@ static int mergeR(node_t *new){
 static void *kalloc(size_t size) {
   if(size<=0||size>maxSize)return NULL;
   size_t sizePow=tableSizeFor(size);
+  size=tableSizeFor(size);
   size_t mask=~((size_t)sizePow-1);
   node_t *node=head;
   lock(&pmmLock);
@@ -94,11 +95,10 @@ static void *kalloc(size_t size) {
       void *iniAddr=(void*)node+sizeof(node_t);
       void *endAddr=iniAddr+node->size;
       void *addr=(void*)(mask&(size_t)iniAddr);
-      printf("%x\n",addr);
-      for(;addr<endAddr;addr+=sizePow){
+      for(;addr<endAddr;addr+=size){
         if(addr>=iniAddr){
-          if(addr+actual(size)<endAddr){
-            node_t *newAddr=(node_t*)(addr+actual(size));
+          if(addr+actual(size)<endAddr){//加上node_t以提供新的空闲内存的节点
+            node_t *newAddr=(node_t*)(addr+size);
             newAddr->size=endAddr-(void*)newAddr-sizeof(node_t);
             newAddr->next=node->next,newAddr->prev=node->prev;
             if(node==head)head=newAddr;
