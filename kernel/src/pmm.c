@@ -111,6 +111,12 @@ static void merge(){
     }
     else temp=temp->next;
   }
+  temp=head;
+  while(temp){
+    printf("%p %x %x\n",temp,temp->size,(void*)temp+temp->size+sizeof(node_t));
+    temp=temp->next;
+  }
+  printf("\n");
 }
 
 static void *kalloc(size_t size) {
@@ -166,11 +172,6 @@ static void kfree(void *ptr) {
   insert(new);
   if((++count)==COUNT)count=0,merge();
   unlock(&pmmLock);
-  node_t *temp=head;
-  while(temp){
-    printf("%p %x %x\n",temp,temp->size,(void*)temp+temp->size+sizeof(node_t));
-    temp=temp->next;
-  }
 }
 
 #ifndef TEST
