@@ -169,12 +169,12 @@ static void *kalloc(size_t size) {
 }
 
 static void kfree(void *ptr) {
+  lock(&pmmLock);
   header_t *header=headerAddr(ptr);
   if(header->magic!=MAGIC)printf("wrong!\n"),halt(1);
   size_t size=header->size;
   node_t *new=(node_t*)header;
   new->size=size;
-  lock(&pmmLock);
   insert(new);
   if((++count)==COUNT)count=0,merge();
   unlock(&pmmLock);
