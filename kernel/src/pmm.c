@@ -97,7 +97,6 @@ static void insert(node_t *new){
       new->next=temp->next,new->prev=temp;
       if(temp->next!=NULL)temp->next->prev=new;
       temp->next=new;
-    mark;
       return;
     }
     temp=temp->next;
@@ -110,6 +109,7 @@ static void merge(){
     printf("%p %x %x\n",temp,temp->size,(void*)temp+temp->size+sizeof(node_t));
     temp=temp->next;
   }
+    mark;
   temp=head;
   while(temp){
     if(temp->next&&(void*)temp+actual(temp->size)==(void*)temp->next){
