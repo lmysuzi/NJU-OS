@@ -4,7 +4,7 @@
 #define actual(size) (size+sizeof(node_t))
 #define headerAddr(addr) ((void*)addr-sizeof(node_t))
 
-#define mark printf("fuck")
+#define mark printf("fuck\n")
 
 typedef struct lock_t{
   int flag;
