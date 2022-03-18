@@ -165,6 +165,7 @@ static void kfree(void *ptr) {
   lock(&pmmLock);
   insert(new);
   if((++count)==COUNT)count=0,merge();
+  printf("%d\n",count);
   unlock(&pmmLock);
 }
 
