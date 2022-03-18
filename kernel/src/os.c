@@ -1,4 +1,5 @@
 #include <common.h>
+#include "pmm.h"
 
 static void os_init() {
   pmm->init();
@@ -8,7 +9,7 @@ static void os_run() {
   for (const char *s = "Hello World from CPU #*\n"; *s; s++) {
     putch(*s == '*' ? '0' + cpu_current() : *s);
   }
-  malloc(10);
+  kalloc(10);
   while (1) ;
 }
 
