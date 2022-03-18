@@ -165,7 +165,7 @@ static void pmm_init() {
   printf("%p %p\n",a,head);
   node_t *temp=head;
   while(temp){
-    printf("%p\n",temp);
+    printf("%p %x\n",temp,temp->size);
     temp=temp->next;
   }
 }
