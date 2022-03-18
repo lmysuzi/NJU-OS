@@ -11,9 +11,9 @@ static void os_run() {
   void*a[19];
   for(int i=1;i<=15;i++){
     a[i]=pmm->alloc(128*i);
+    pmm->free(a[i]);
   }
   for(int i=1;i<=15;i++){
-    pmm->free(a[i]);
   }
   while (1) ;
 }
