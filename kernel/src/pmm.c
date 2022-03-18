@@ -147,7 +147,7 @@ static void *kalloc(size_t size) {
             if(node==head)head=newAddr;
             if(node->prev){
               node->prev->next=newAddr;
-              node->prev->size+=(void*)newAddr-(void*)node;
+              node->prev->size=addr-(void*)node->prev-2*sizeof(node_t);
             }
             if(node->next)node->next->prev=newAddr;
           }
