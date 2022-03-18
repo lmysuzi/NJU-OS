@@ -167,6 +167,11 @@ static void kfree(void *ptr) {
   if((++count)==COUNT)count=0,merge();
   printf("%d\n",count);
   unlock(&pmmLock);
+  node_t *temp=head;
+  while(temp){
+    printf("%p %x %x\n",temp,temp->size,(void*)temp+temp->size+sizeof(node_t));
+    temp=temp->next;
+  }
 }
 
 #ifndef TEST
