@@ -184,6 +184,7 @@ static void pmm_init() {
   }
   merge();
   temp=head;
+  mark;
   while(temp){
     printf("%p %x %x\n",temp,temp->size,(void*)temp+temp->size+sizeof(node_t));
     temp=temp->next;
