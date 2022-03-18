@@ -1,6 +1,7 @@
 #include <common.h>
 
 #define MAGIC 7654321
+#define COUNT 10
 #define actual(size) (size+sizeof(node_t))
 #define headerAddr(addr) ((void*)addr-sizeof(node_t))
 
@@ -41,6 +42,7 @@ typedef struct header_t{
 static const size_t maxSize=(16<<20);
 static node_t *head;
 static lock_t pmmLock;
+static int count=0;//记录free的次数，定期merge
 
 static size_t tableSizeFor(size_t val){
   if (val & (val - 1)){
@@ -101,7 +103,6 @@ static void insert(node_t *new){
 }
 
 static void merge(){
-  lock(&pmmLock);
   node_t *temp=head;
   while(temp){
     if(temp->next&&(void*)temp+actual(temp->size)==(void*)temp->next){
@@ -110,7 +111,6 @@ static void merge(){
     }
     else temp=temp->next;
   }
-  unlock(&pmmLock);
 }
 
 void *kalloc(size_t size) {
@@ -160,8 +160,8 @@ void kfree(void *ptr) {
   new->size=size;
   lock(&pmmLock);
   insert(new);
+  if((++count)==10)count=0,merge();
   unlock(&pmmLock);
-  merge();
 }
 
 #ifndef TEST
