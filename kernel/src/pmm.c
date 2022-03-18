@@ -171,7 +171,7 @@ static void pmm_init() {
   printf("Got %d MiB heap: [%p, %p)\n", pmsize >> 20, heap.start, heap.end);
   node_t *Head=(node_t *)heap.start;
   init(&pmmLock);
-  printf("%d %d\n",sizeof(header_t),sizeof(node_t));
+  //printf("%d %d\n",sizeof(header_t),sizeof(node_t));
   Head->prev=NULL,Head->next=NULL,Head->size=pmsize-sizeof(node_t);
   head=Head;
   /*int* a=kalloc(9);
