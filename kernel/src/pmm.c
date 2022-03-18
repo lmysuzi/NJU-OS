@@ -161,6 +161,7 @@ static void kfree(void *ptr) {
   lock(&pmmLock);
   insert(new);
   unlock(&pmmLock);
+  merge();
 }
 
 #ifndef TEST
@@ -173,7 +174,7 @@ static void pmm_init() {
   printf("%d %d\n",sizeof(header_t),sizeof(node_t));
   Head->prev=NULL,Head->next=NULL,Head->size=pmsize-sizeof(node_t);
   head=Head;
-  int* a=kalloc(9);
+  /*int* a=kalloc(9);
   int* b=kalloc(32);
   printf("%p %p\n\n",a,head);
   kfree(b);
@@ -189,7 +190,7 @@ static void pmm_init() {
   while(temp){
     printf("%p %x %x\n",temp,temp->size,(void*)temp+temp->size+sizeof(node_t));
     temp=temp->next;
-  }
+  }*/
 }
 #else
 // 测试代码的 pmm_init ()
