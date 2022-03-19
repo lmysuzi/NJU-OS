@@ -8,7 +8,7 @@ static void os_run() {
   for (const char *s = "Hello World from CPU #*\n"; *s; s++) {
     putch(*s == '*' ? '0' + cpu_current() : *s);
   }
-  /*void*a[19];
+  void*a[19];
   for(int i=0;i<19;i++)a[i]=NULL;
   for(int i=15;i;i--){
     a[i]=pmm->alloc(128*i);
@@ -17,7 +17,7 @@ static void os_run() {
   for(int i=15;i;i--){
     if(a[i])
     pmm->free(a[i]);
-  }*/
+  }
   while (1) ;
 }
 
