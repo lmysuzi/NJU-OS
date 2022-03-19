@@ -11,9 +11,10 @@ static void os_run() {
   void*a[19];
   for(int i=1;i<=15;i++){
     a[i]=pmm->alloc(128*i);
-    memset(a[i],0x11,i*128);
+    if(a[i])memset(a[i],0x11,i*128);
   }
   for(int i=15;i;i--){
+    if(a[i])
     pmm->free(a[i]);
   }
   while (1) ;
