@@ -9,7 +9,7 @@ static void os_run() {
     putch(*s == '*' ? '0' + cpu_current() : *s);
   }
   void*a[19];
-  for(int i=1;i<=15;i++){
+  for(int i=15;i;i--){
     a[i]=pmm->alloc(128*i);
     if(a[i])printf("%p\n",a[i]),memset(a[i],0x11,i*128);
   }
