@@ -153,6 +153,9 @@ static void *kalloc(size_t size) {
           }
           else{//该内存块分完
             if(head==node)head=node->next;
+            if(node->prev){
+              node->prev->next=node->next;
+            }
             //if(node->prev)if((void*)node->prev+actual(node->prev->size)==(void*)node)node->prev->size=addr-(void*)node->prev-2*sizeof(node_t);
             if(node->next)node->next->prev=node->prev;
           }
