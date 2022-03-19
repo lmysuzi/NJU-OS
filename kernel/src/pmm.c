@@ -56,35 +56,6 @@ static size_t tableSizeFor(size_t val){
   else return val == 0 ? 1 : val;
 }
 
-/*static int mergeL(node_t *new){
-  node_t *temp=head;
-  while(temp){
-    if((void*)temp+temp->size+sizeof(node_t)==(void*)new){
-      temp->size+=sizeof(node_t)+new->size;
-      return 0;
-    }
-    temp=temp->next;
-  }
-  return -1;
-}*/
-
-/*static int mergeR(node_t *new){
-  node_t *temp=head;
-  while(temp){
-    if((void*)new+new->size+sizeof(node_t)==(void*)temp){
-      new->size+=temp->size+sizeof(node_t);
-      new->next=temp->next;
-      new->prev=temp->prev;
-      if(temp==head)head=new;
-      if(temp->prev)temp->prev->next=new;
-      if(temp->next)temp->next->prev=new;
-      return 0;
-    }
-    temp=temp->next;
-  }
-  return -1;
-}*/
-
 static void insert(node_t *new){
   if(new<head){
     new->next=head,new->prev=NULL;
@@ -93,7 +64,7 @@ static void insert(node_t *new){
   }
   node_t *temp=head;
   while(temp!=NULL){
-    if(temp->next==NULL||temp->next>new){
+    if(temp->                      next==NULL||temp->next>new){
       new->next=temp->next,new->prev=temp;
       if(temp->next!=NULL)temp->next->prev=new;
       temp->next=new;
