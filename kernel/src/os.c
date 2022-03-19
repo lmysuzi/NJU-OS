@@ -11,7 +11,7 @@ static void os_run() {
   void*a[19];
   for(int i=15;i;i--){
     a[i]=pmm->alloc(128*i);
-    if(a[i])printf("%p\n",a[i]),memset(a[i],0x11,i*128);
+    if(a[i])/*printf("%p\n",a[i]),*/memset(a[i],0x11,i*128);
   }
   for(int i=15;i;i--){
     if(a[i])
