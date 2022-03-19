@@ -142,14 +142,14 @@ static void *kalloc(size_t size) {
         if(addr>=iniAddr){
           if(addr+actual(size)<endAddr){//加上node_t以提供新的空闲内存的节点
             node_t *newAddr=(node_t*)(addr+size);
-            newAddr->size=endAddr-(void*)newAddr-sizeof(node_t);
-            newAddr->next=node->next,newAddr->prev=node->prev;
             if(node==head)head=newAddr;
             if(node->prev){
               node->prev->next=newAddr;
               if((void*)node->prev+actual(node->prev->size)==(void*)node)node->prev->size=addr-(void*)node->prev-2*sizeof(node_t);
             }
             if(node->next)node->next->prev=newAddr;
+            newAddr->size=endAddr-(void*)newAddr-sizeof(node_t);
+            newAddr->next=node->next,newAddr->prev=node->prev;
           }
           else{//该内存块分完
             if(head==node)head=node->next;
