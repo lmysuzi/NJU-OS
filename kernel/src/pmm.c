@@ -64,7 +64,7 @@ static void insert(node_t *new){
   }
   node_t *temp=head;
   while(temp!=NULL){
-    if(temp->                      next==NULL||temp->next>new){
+    if(temp->next==NULL||temp->next>new){
       new->next=temp->next,new->prev=temp;
       if(temp->next!=NULL)temp->next->prev=new;
       temp->next=new;
@@ -89,12 +89,12 @@ static void merge(){
     }
     else temp=temp->next;
   }
-  /*temp=head;
+  temp=head;
   while(temp){
     printf("%p %x %x\n",temp,temp->size,(void*)temp+temp->size+sizeof(node_t));
     temp=temp->next;
   }
-  printf("\n");*/
+  printf("\n");
 }
 
 static void *kalloc(size_t size) {
