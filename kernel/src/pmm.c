@@ -152,7 +152,6 @@ static void *kalloc(size_t size) {
             newAddr->next=node->next,newAddr->prev=node->prev;
           }
           else{//该内存块分完
-            printf("shit\n");
             if(head==node)head=node->next;
             if(node->prev){
               node->prev->next=node->next;
