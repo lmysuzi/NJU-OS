@@ -1,7 +1,7 @@
 #include <common.h>
 
 #define MAGIC 7654321
-#define COUNT 10
+#define COUNT 20
 #define actual(size) (size+sizeof(node_t))
 #define headerAddr(addr) ((void*)addr-sizeof(node_t))
 
