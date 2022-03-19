@@ -189,28 +189,9 @@ static void kfree(void *ptr) {
 static void pmm_init() {
   uintptr_t pmsize = ((uintptr_t)heap.end - (uintptr_t)heap.start);
   printf("Got %d MiB heap: [%p, %p)\n", pmsize >> 20, heap.start, heap.end);
-  node_t *Head=(node_t *)heap.start;
+  head=(node_t*)heap.start;
+  head->prev=NULL,head->next=NULL,head->size=pmsize-sizeof(node_t);
   init(&pmmLock);
-  //printf("%d %d\n",sizeof(header_t),sizeof(node_t));
-  Head->prev=NULL,Head->next=NULL,Head->size=pmsize-sizeof(node_t);
-  head=Head;
-  /*int* a=kalloc(9);
-  int* b=kalloc(32);
-  printf("%p %p\n\n",a,head);
-  kfree(b);
-  kfree(a);
-  node_t *temp=head;
-  while(temp){
-    printf("%p %x %x\n",temp,temp->size,(void*)temp+temp->size+sizeof(node_t));
-    temp=temp->next;
-  }
-  merge();
-  temp=head;
-  mark;
-  while(temp){
-    printf("%p %x %x\n",temp,temp->size,(void*)temp+temp->size+sizeof(node_t));
-    temp=temp->next;
-  }*/
 }
 #else
 // 测试代码的 pmm_init ()
