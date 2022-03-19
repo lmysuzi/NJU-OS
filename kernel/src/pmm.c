@@ -130,8 +130,8 @@ static void *kalloc(size_t size) {
   if(size<=0||size>maxSize)return NULL;
   size_t sizePow=tableSizeFor(size);
   size_t mask=~((size_t)sizePow-1);
-  node_t *node=head;
   lock(&pmmLock);
+  node_t *node=head;
   while(node!=NULL){
     if(node->size>=actual(size)){
       void *iniAddr=(void*)node+sizeof(node_t);
