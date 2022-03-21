@@ -14,10 +14,10 @@ static void os_run() {
     a[i]=pmm->alloc(128*i);
     //if(a[i])printf("%x\n",a[i]);
     //if(a[i])printf("%p\n",a[i]),memset(a[i],0x11,i*128);
-    if(a[i])
-    pmm->free(a[i]);
   }
   for(int i=15;i;i--){
+    if(a[i])
+    pmm->free(a[i]);
   }
   while (1) ;
 }
