@@ -42,7 +42,7 @@ typedef struct header_t{
 static const size_t maxSize=(16<<20);
 static node_t *head;
 static lock_t pmmLock;
-//static int count=0;//记录free的次数，定期merge
+static int count=0;//记录free的次数，定期merge
 
 static size_t tableSizeFor(size_t val){
   if (val & (val - 1)){
@@ -57,10 +57,12 @@ static size_t tableSizeFor(size_t val){
 }
 
 static void insert(node_t *new){
+  if(new<head){
     new->next=head,new->prev=NULL;
     head->prev=new;head=new;
     return;
-  /*node_t *temp=head;
+  }
+  node_t *temp=head;
   while(temp!=NULL){
     if(temp->next==NULL||temp->next>new){
       new->next=temp->next,new->prev=temp;
@@ -69,15 +71,15 @@ static void insert(node_t *new){
       return;
     }
     temp=temp->next;
-  }*/
+  }
 }
 
-/*static void merge(){
+static void merge(){
   node_t *temp=head;
-  while(temp){
+  /*while(temp){
     //printf("%p %x %x\n",temp,temp->size,(void*)temp+temp->size+sizeof(node_t));
     temp=temp->next;
-  }
+  }*/
   while(temp){
     if(temp->next&&(void*)temp+actual(temp->size)==(void*)temp->next){
       temp->size+=actual(temp->next->size);
@@ -85,7 +87,7 @@ static void insert(node_t *new){
     }
     else temp=temp->next;
   }
-}*/
+}
 
 static void *kalloc(size_t size) {
   if(size<=0||size>maxSize)return NULL;
@@ -141,7 +143,7 @@ static void kfree(void *ptr) {
   node_t *new=(node_t*)header;
   new->size=size;
   insert(new);
-  //if((++count)==COUNT)count=0,merge();
+  if((++count)==COUNT)count=0,merge();
   unlock(&pmmLock);
 }
 
@@ -152,6 +154,7 @@ static void pmm_init() {
   printf("Got %d MiB heap: [%p, %p)\n", pmsize >> 20, heap.start, heap.end);
   head=(node_t*)heap.start;
   head->prev=NULL,head->next=NULL,head->size=pmsize-sizeof(node_t);
+  printf("%d %d\n",sizeof(header_t),sizeof(node_t));
   init(&pmmLock);
 }
 #else
