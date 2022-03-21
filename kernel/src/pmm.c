@@ -110,7 +110,7 @@ static void *kalloc(size_t size) {
             if(node==head)head=newAddr;
             if(node->prev){
               node->prev->next=newAddr;
-              if((void*)node->prev+actual(node->prev->size)==(void*)node){node->prev->size=addr-(void*)node->prev-2*sizeof(node_t);mark;}
+              //if((void*)node->prev+actual(node->prev->size)==(void*)node){node->prev->size=addr-(void*)node->prev-2*sizeof(node_t);mark;}
             }
             if(node->next)node->next->prev=newAddr;
             newAddr->size=endAddr-(void*)newAddr-sizeof(node_t);
@@ -139,11 +139,6 @@ static void *kalloc(size_t size) {
 
 static void kfree(void *ptr) {
   lock(&pmmLock);
-  node_t *temp=head;
-  while(temp){
-    printf("%p %x %x\n",temp,temp->size,(void*)temp+temp->size+sizeof(node_t));
-    temp=temp->next;
-  }
   header_t *header=headerAddr(ptr);
   if(header->magic!=MAGIC)printf("wrong!\n"),halt(1);
   size_t size=header->size;
