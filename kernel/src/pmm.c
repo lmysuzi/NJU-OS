@@ -76,12 +76,12 @@ static void insert(node_t *new){
 
 static void merge(){
   node_t *temp=head;
-  /*while(temp){
+  while(temp){
     printf("%p %x %x\n",temp,temp->size,(void*)temp+temp->size+sizeof(node_t));
     temp=temp->next;
   }
   mark;
-  temp=head;*/
+  temp=head;
   while(temp){
     if(temp->next&&(void*)temp+actual(temp->size)==(void*)temp->next){
       temp->size+=actual(temp->next->size);
@@ -89,12 +89,12 @@ static void merge(){
     }
     else temp=temp->next;
   }
-  /*temp=head;
+  temp=head;
   while(temp){
     printf("%p %x %x\n",temp,temp->size,(void*)temp+temp->size+sizeof(node_t));
     temp=temp->next;
   }
-  printf("shit\n");*/
+  printf("shit\n");
 }
 
 static void *kalloc(size_t size) {
@@ -116,7 +116,7 @@ static void *kalloc(size_t size) {
             if(node==head)head=newAddr;
             if(node->prev){
               node->prev->next=newAddr;
-              if((void*)node->prev+actual(node->prev->size)==(void*)node){node->prev->size=addr-(void*)node->prev-2*sizeof(node_t);mark;}
+              if((void*)node->prev+actual(node->prev->size)==(void*)node){node->prev->size=addr-(void*)node->prev-2*sizeof(node_t);}
             }
             if(node->next)node->next->prev=newAddr;
             newAddr->size=endAddr-(void*)newAddr-sizeof(node_t);
