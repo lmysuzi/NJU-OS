@@ -96,19 +96,19 @@ static void *kalloc(size_t size) {
   lock(&pmmLock);
   node_t *node=head;
   while(node!=NULL){
-    if(node->size>=actual(size)){
+    if(node->size>=size){
       void *iniAddr=(void*)node+sizeof(node_t);
       void *endAddr=iniAddr+node->size;
       void *addr=(void*)(mask&(size_t)iniAddr);
       for(;addr<endAddr;addr+=sizePow){
         //若申请到的内存块为head，可能会存在大量内存浪费
         if(addr>=iniAddr){
-          if(addr+size<endAddr){//加上node_t以提供新的空闲内存的节点
+          if(addr+actual(size)<endAddr){//加上node_t以提供新的空闲内存的节点
             node_t *newAddr=(node_t*)(addr+size);
             if(node==head)head=newAddr;
             if(node->prev){
               node->prev->next=newAddr;
-              //if((void*)node->prev+actual(node->prev->size)==(void*)node){node->prev->size=addr-(void*)node->prev-2*sizeof(node_t);mark;}
+              if((void*)node->prev+actual(node->prev->size)==(void*)node){node->prev->size=addr-(void*)node->prev-2*sizeof(node_t);mark;}
             }
             if(node->next)node->next->prev=newAddr;
             newAddr->size=endAddr-(void*)newAddr-sizeof(node_t);
@@ -119,7 +119,7 @@ static void *kalloc(size_t size) {
             if(node->prev){
               node->prev->next=node->next;
             }
-            //if(node->prev)if((void*)node->prev+actual(node->prev->size)==(void*)node)node->prev->size=addr-(void*)node->prev-2*sizeof(node_t);
+            if(node->prev)if((void*)node->prev+actual(node->prev->size)==(void*)node)node->prev->size=addr-(void*)node->prev-2*sizeof(node_t);
             if(node->next)node->next->prev=node->prev;
           }
           header_t *header=(header_t*)(addr-sizeof(node_t));
