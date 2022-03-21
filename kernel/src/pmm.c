@@ -100,6 +100,7 @@ static void merge(){
 static void *kalloc(size_t size) {
   if(size<=0||size>maxSize)return NULL;
   size_t sizePow=tableSizeFor(size);
+  size=sizePow;
   size_t mask=~((size_t)sizePow-1);
   lock(&pmmLock);
   node_t *node=head;
@@ -116,7 +117,7 @@ static void *kalloc(size_t size) {
             if(node==head)head=newAddr;
             if(node->prev){
               node->prev->next=newAddr;
-              //if((void*)node->prev+actual(node->prev->size)==(void*)node){node->prev->size=addr-(void*)node->prev-2*sizeof(node_t);}
+              if((void*)node->prev+actual(node->prev->size)==(void*)node){node->prev->size=addr-(void*)node->prev-2*sizeof(node_t);}
             }
             if(node->next)node->next->prev=newAddr;
             newAddr->size=endAddr-(void*)newAddr-sizeof(node_t);
@@ -126,7 +127,7 @@ static void *kalloc(size_t size) {
             if(head==node)head=node->next;
             if(node->prev){
               node->prev->next=node->next;
-             // if((void*)node->prev+actual(node->prev->size)==(void*)node)node->prev->size=addr-(void*)node->prev-2*sizeof(node_t);
+              if((void*)node->prev+actual(node->prev->size)==(void*)node)node->prev->size=addr-(void*)node->prev-2*sizeof(node_t);
             }
             if(node->next)node->next->prev=node->prev;
           }
