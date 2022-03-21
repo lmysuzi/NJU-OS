@@ -12,7 +12,7 @@ static void os_run() {
   for(int i=0;i<19;i++)a[i]=NULL;
   for(int i=15;i;i--){
     a[i]=pmm->alloc(128*i);
-    if(a[i])printf("%x\n",a[i]);
+    //if(a[i])printf("%x\n",a[i]);
     //if(a[i])printf("%p\n",a[i]),memset(a[i],0x11,i*128);
   }
   for(int i=15;i;i--){
