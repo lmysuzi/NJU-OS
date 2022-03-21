@@ -94,6 +94,7 @@ static void merge(){
     printf("%p %x %x\n",temp,temp->size,(void*)temp+temp->size+sizeof(node_t));
     temp=temp->next;
   }
+  printf("shit\n");
 }
 
 static void *kalloc(size_t size) {
