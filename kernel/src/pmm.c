@@ -80,7 +80,6 @@ static void merge(){
     //printf("%p %x %x\n",temp,temp->size,(void*)temp+temp->size+sizeof(node_t));
     temp=temp->next;
   }*/
-  temp=head;
   while(temp){
     if(temp->next&&(void*)temp+actual(temp->size)==(void*)temp->next){
       temp->size+=actual(temp->next->size);
