@@ -77,7 +77,7 @@ static void insert(node_t *new){
 static void merge(){
   node_t *temp=head;
   while(temp){
-    printf("%p %x %x\n",temp,temp->size,(void*)temp+temp->size+sizeof(node_t));
+    //printf("%p %x %x\n",temp,temp->size,(void*)temp+temp->size+sizeof(node_t));
     temp=temp->next;
   }
     mark;
