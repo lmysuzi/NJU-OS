@@ -103,7 +103,7 @@ static void *kalloc(size_t size) {
       for(;addr<endAddr;addr+=sizePow){
         //若申请到的内存块为head，可能会存在大量内存浪费
         if(addr>=iniAddr){
-          if(addr+actual(size)<endAddr){//加上node_t以提供新的空闲内存的节点
+          if(addr+size<endAddr){//加上node_t以提供新的空闲内存的节点
             node_t *newAddr=(node_t*)(addr+size);
             if(node==head)head=newAddr;
             if(node->prev){
@@ -154,7 +154,6 @@ static void pmm_init() {
   printf("Got %d MiB heap: [%p, %p)\n", pmsize >> 20, heap.start, heap.end);
   head=(node_t*)heap.start;
   head->prev=NULL,head->next=NULL,head->size=pmsize-sizeof(node_t);
-  printf("%d %d\n",sizeof(header_t),sizeof(node_t));
   init(&pmmLock);
 }
 #else
