@@ -18,15 +18,15 @@ int testAndSet(int *oldPtr,int new){
 }
 
 void init(lock_t *lock){
-  lock->flag=0;
+  atomic_xchg(&lock->flag,0);
 }
 
 void lock(lock_t *lock){
-  while(testAndSet(&lock->flag,1)==1);
+  while(atomic_xchg(&lock->flag,1)==1);
 }
 
 void unlock(lock_t *lock){
-  lock->flag=0;
+  atomic_xchg(&lock->flag,0);
 }
 
 typedef struct node_t{
