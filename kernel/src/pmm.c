@@ -1,6 +1,7 @@
 #include <common.h>
 
 #define PAGESIZE 4096
+#define MAXCPU 8
 
 
 typedef struct lock_t{
@@ -19,6 +20,11 @@ void unlock(lock_t *lock){
   atomic_xchg(&lock->flag,0);
 }
 
+typedef struct node_t{
+  void *addr;
+  size_t size;
+  struct node_t *next;
+}node_t;
 
 
 static size_t tableSizeFor(size_t val){
