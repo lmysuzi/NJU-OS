@@ -2,6 +2,7 @@
 
 #define MAGIC 7654321
 #define COUNT 20
+#define pagesise 4096
 #define actual(size) (size+sizeof(node_t))
 #define headerAddr(addr) ((void*)addr-sizeof(node_t))
 
@@ -161,6 +162,7 @@ static void kfree(void *ptr) {
 static void pmm_init() {
   uintptr_t pmsize = ((uintptr_t)heap.end - (uintptr_t)heap.start);
   printf("Got %d MiB heap: [%p, %p)\n", pmsize >> 20, heap.start, heap.end);
+  printf("%d\n",pmsize/pagesise);
   head=(node_t*)heap.start;
   head->prev=NULL,head->next=NULL,head->size=pmsize-sizeof(node_t);
   init(&pmmLock);
