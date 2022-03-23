@@ -1,7 +1,7 @@
 #include <common.h>
 
 #define PAGESIZE (4096)
-#define MINSIZE  PAGESIZE
+#define MINSIZE  (128)
 #define MAXSIZE  (16<<20)
 #define MAXCPU 8
 
@@ -23,10 +23,15 @@ void unlock(lock_t *lock){
 }
 
 typedef struct node_t{
-  void *addr;
+  void *addr128;
   size_t size;
   struct node_t *next;
 }node_t;
+
+typedef struct page128{
+  uint32_t status;
+}page128;
+
 
 
 static size_t tableSizeFor(size_t val){
@@ -53,6 +58,7 @@ static void kfree(void *ptr) {
 static void pmm_init() {
   uintptr_t pmsize = ((uintptr_t)heap.end - (uintptr_t)heap.start);
   printf("Got %d MiB heap: [%p, %p)\n", pmsize >> 20, heap.start, heap.end);
+  printf("%d\n",sizeof(uint32_t));
   printf("%d\n",pmsize/PAGESIZE);
   printf("%d\n",cpu_count());
 }
