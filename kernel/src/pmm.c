@@ -1,6 +1,8 @@
 #include <common.h>
 
-#define PAGESIZE 4096
+#define PAGESIZE (4096)
+#define MINSIZE  PAGESIZE
+#define MAXSIZE  (16<<20)
 #define MAXCPU 8
 
 
