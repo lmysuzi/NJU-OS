@@ -1,5 +1,7 @@
 #include <common.h>
 
+#define mark printf("fuck\n")
+
 #define PAGENUM  32000
 #define PAGESIZE (4096)
 #define MINSIZE  (128)
@@ -126,7 +128,6 @@ static size_t tableSizeFor(size_t val){
 }
 
 static void *slab_alloc(size_t size){
-    printf("fuck\n");
   int slabOrder=targetList(size);
   int cpu=cpu_current();
   node_t *list=slab[cpu].head[slabOrder];
@@ -164,6 +165,7 @@ static void pmm_init() {
   void *pt=heap.start;
   printf("%d\n",pmsize/PAGESIZE);
   slab_init(pt);
+  printf("%x\n",kalloc(9));
   printf("%x\n",kalloc(9));
   printf("%x\n",kalloc(1025));
   printf("%x\n",kalloc(3098));
