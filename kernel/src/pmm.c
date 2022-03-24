@@ -164,11 +164,25 @@ static void memory_init(void *ptr){
   printf("%x %x\n",head,head->size);
 }
 
+static void *memory_alloc(size_t size){
+  int flag=sizeSpecify(size);
+  header_t *list=head;
+  while(list){
+    if(list->size>=size){
+      void *iniaddr=(void*)(((size_t)list->addr>>flag)<<flag);   
+      printf("%p\n",iniaddr);
+    }
+
+  }
+  return NULL;
+}
+
 static void *kalloc(size_t size) {
   size=tableSizeFor(size);
   if(size<MINSIZE)size=MINSIZE;
   if(size>MAXSIZE)return NULL;
   else if(size>=MINSIZE&&size<=PAGESIZE)return slab_alloc(size);
+  else if(size<=MAXSIZE&&size>PAGESIZE)return memory_alloc(size);
   return NULL;
 }
 
@@ -184,9 +198,7 @@ static void pmm_init() {
   void *pt=heap.start;
   pt=slab_init(pt);
   memory_init(pt);
-  void *fuck=kalloc(127);
-  kfree(fuck);
-  printf("%d\n",sizeof(struct node_t));
+  kalloc(16<<20);
   /*node_t *temp=slab[cpu_current()].head[0];
   while(temp){
     printf("%x %d\n",temp->addr,temp->blockNum);
