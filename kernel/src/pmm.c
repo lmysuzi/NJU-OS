@@ -111,7 +111,7 @@ static inline int sizeSpecify(size_t size){
 }
 
 static void *slab_init(void *pt){
-  for(int i=0,n=cpu_count();i<n;i++){
+  for(int i=0,n=MAXCPU;i<n;i++){
     for(int j=0;j<SLABNUM;j++)lockInit(&slab[i].slabLock[j]);
     for(int j=0,blooksize=32;j<SLABNUM-1;j++,blooksize<<=1){
       slab[i].head[j]=pt;
@@ -132,12 +132,21 @@ static void *slab_init(void *pt){
 }
 
 static void slab_free(void *ptr,size_t size){
-  int cpu=cpu_current();
   node_t *node=(node_t *)ptr;
   node->size=size;
   node->addr=ptr;
   node->blockNum=1;
   int target=targetList(size);
+  int cpu;
+  for(cpu=0;cpu<MAXCPU;cpu++){
+    if(lock_acquire(&slab[cpu].slabLock[target])==0){
+      node->next=slab[cpu].head[target];
+      slab[cpu].head[target]=node;
+      unlock(&slab[cpu].slabLock[target]);
+      return;
+    }
+  }
+  cpu=rand()%MAXCPU;
   lock(&slab[cpu].slabLock[target]);
   node->next=slab[cpu].head[target];
   slab[cpu].head[target]=node;
@@ -173,7 +182,7 @@ static void *slab_alloc(size_t size){
   if(ans!=NULL)return ans;
   //从其他cpu偷取内存
   cpu=0;
-  for(int i=0,n=cpu_count();i<n;i++){
+  for(int i=0,n=MAXCPU;i<n;i++){
     if(lock_acquire(&slab[cpu].slabLock[slabOrder])==0){
       ans=slab_ask(cpu,slabOrder,size);
       unlock(&slab[cpu].slabLock[slabOrder]);
