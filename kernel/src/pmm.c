@@ -39,7 +39,8 @@ typedef struct node_t{
 }node_t;
 
 typedef struct slab_t{
-  node_t *head128,*head256,*head512,*head1024,*head2048,*headpage;
+  node_t *head128,*head256,*head512,*head1024,*head2048,*head4096;
+  node_t *head[6];
 }slab_t;
 
 static slab_t slab[MAXCPU];
@@ -76,10 +77,10 @@ static void slab_init(void *pt){
     slab[i].head2048->blockNum=slab[i].head2048->size/2048;
     slab[i].head2048->next=NULL;
     pt+=2*PAGESIZE;
-    slab[i].headpage=pt;
-    slab[i].headpage->addr=pt;
-    slab[i].headpage->size=1000*PAGESIZE;
-    slab[i].headpage->blockNum=1000;
+    slab[i].head4096=pt;
+    slab[i].head4096->addr=pt;
+    slab[i].head4096->size=1000*PAGESIZE;
+    slab[i].head4096->blockNum=1000;
     pt+=1000*PAGESIZE;
   }
 }
@@ -98,7 +99,6 @@ static size_t tableSizeFor(size_t val){
 }
 
 static void *slab_alloc(size_t size){
-
   return NULL;
 }
 
@@ -122,9 +122,7 @@ static void pmm_init() {
   kalloc(9);
   kalloc(1025);
   kalloc(3098);
-  int head128=12345;
-  printf("%d\n",slabAddr(128));
-
+  printf("%d\n",1<<8);
   /*for(int i=0;i<cpu_count();i++){
     printf("%x %x %x %x %x %x\n",slab[i].head128,slab[i].head256,slab[i].head512,slab[i].head1024,slab[i].head2048,slab[i].headpage);
     printf("%d %d %d %d %d %d\n",slab[i].head128->blockNum,slab[i].head256->blockNum,slab[i].head512->blockNum,slab[i].head1024->blockNum,slab[i].head2048->blockNum,slab[i].headpage->blockNum);
