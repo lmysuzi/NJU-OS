@@ -238,6 +238,11 @@ static void pmm_init() {
   memory_init(pt);
   void *fuck=kalloc(16<<16);
   printf("%x\n",fuck);
+  header_t *yin=head;
+  while(yin){
+    printf("%x %d\n",yin->addr,yin->size);
+    yin=yin->next;
+  }
   /*node_t *temp=slab[cpu_current()].head[0];
   while(temp){
     printf("%x %d\n",temp->addr,temp->blockNum);
