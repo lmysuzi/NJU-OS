@@ -166,6 +166,7 @@ static void memory_init(void *ptr){
 
 static void *memory_alloc(size_t size){
   int flag=sizeSpecify(size);
+  printf("%d\n",flag);
   header_t *list=head;
   while(list){
     if(list->size>=size){
