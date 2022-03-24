@@ -51,6 +51,7 @@ typedef struct header_t{//记录大内存
   struct header_t *next,*prev;
 }header_t;
 header_t *head;
+lock_t memoryLock;
 
 typedef struct node_t{//记录slab
   void *addr;
@@ -107,10 +108,10 @@ static void *slab_init(void *pt){
     for(int j=0,blooksize=128;j<SLABNUM-1;j++,blooksize<<=1){
       slab[i].head[j]=pt;
       slab[i].head[j]->addr=pt;
-      slab[i].head[j]->size=2*PAGESIZE;
-      slab[i].head[j]->blockNum=2*PAGESIZE/blooksize;
+      slab[i].head[j]->size=10*PAGESIZE;
+      slab[i].head[j]->blockNum=10*PAGESIZE/blooksize;
       slab[i].head[j]->next=NULL;
-      pt+=2*PAGESIZE;
+      pt+=10*PAGESIZE;
     }
     slab[i].head[SLABNUM-1]=pt;
     slab[i].head[SLABNUM-1]->addr=pt;
@@ -161,12 +162,12 @@ static void memory_init(void *ptr){
   head->addr=ptr;
   head->size=heap.end-ptr;
   head->next=head->prev=NULL;
-  printf("%x %x\n",head,head->size);
+  lockInit(&memoryLock);
 }
 
 static void *memory_alloc(size_t size){
   int flag=sizeSpecify(size);
-  printf("%d\n",flag);
+  lock(&memoryLock);
   header_t *list=head;
   while(list){
     if(list->size>=size){
@@ -207,12 +208,14 @@ static void *memory_alloc(size_t size){
           }
         }
         sizeOfPage[orderOfPage(ans)]=sizeSpecify(size);
+        unlock(&memoryLock);
         return ans;
       }
     }
     list=list->next;
 
   }
+  unlock(&memoryLock);
   return NULL;
 }
 
@@ -235,6 +238,7 @@ static void memory_free(void *ptr,size_t size){
   header_t *new=(header_t*)ptr;
   new->size=size;
   new->addr=ptr;
+  lock(&memoryLock);
   if(new<head){
     new->next=head,new->prev=NULL;
     head->prev=new,head=new;
@@ -252,6 +256,7 @@ static void memory_free(void *ptr,size_t size){
   }
   end:
   if(++freeCount==1)freeCount=0,memory_merge();
+  unlock(&memoryLock);
 }
 
 static void *kalloc(size_t size) {
