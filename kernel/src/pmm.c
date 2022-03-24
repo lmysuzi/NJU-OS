@@ -171,8 +171,43 @@ static void *memory_alloc(size_t size){
   while(list){
     if(list->size>=size){
       void *iniaddr=(void*)(((size_t)list->addr>>flag)<<flag);   
+      void *endaddr=iniaddr+list->size;
       if(iniaddr<list->addr)iniaddr+=size;
       printf("%p\n",iniaddr);
+      if(iniaddr+size<=endaddr){
+        void *ans=iniaddr;
+        
+        if(list->addr!=iniaddr){
+          list->size=iniaddr-list->addr;
+          if(iniaddr+size<endaddr){
+            header_t *new=(header_t*)(iniaddr+size);
+            new->prev=list;
+            new->next=list->next;
+            new->addr=(void*)new;
+            new->size=endaddr-new->addr;
+            if(list->next)list->next->prev=new;
+            list->next=new;
+          }
+        }
+        else{
+          if(iniaddr+size<endaddr){
+            header_t *new=(header_t*)(iniaddr+size);
+            new->prev=list->prev;
+            new->next=list->next;
+            new->addr=(void*)new;
+            new->size=endaddr-new->addr;
+            if(list->prev)list->prev->next=new;
+            if(list->next)list->next->prev=new;
+            if(list==head)head=new;
+          }
+          else{
+            if(list->prev)list->prev->next=list->next;
+            if(list->next)list->next->prev=list->prev;
+            if(list==head)head=list->next;
+          }
+        }
+        return ans;
+      }
     }
     list=list->next;
 
@@ -201,7 +236,8 @@ static void pmm_init() {
   void *pt=heap.start;
   pt=slab_init(pt);
   memory_init(pt);
-  kalloc(16<<16);
+  void *fuck=kalloc(16<<16);
+  printf("%x\n",fuck);
   /*node_t *temp=slab[cpu_current()].head[0];
   while(temp){
     printf("%x %d\n",temp->addr,temp->blockNum);
