@@ -177,9 +177,9 @@ static void *memory_alloc(size_t size){
       if(iniaddr+size<=endaddr){
         void *ans=iniaddr;
         
-        if(list->addr!=iniaddr){
+        if(list->addr!=iniaddr){//新地址前有剩余
           list->size=iniaddr-list->addr;
-          if(iniaddr+size<endaddr){
+          if(iniaddr+size<endaddr){//新地址后有剩余
             header_t *new=(header_t*)(iniaddr+size);
             new->prev=list;
             new->next=list->next;
@@ -206,6 +206,7 @@ static void *memory_alloc(size_t size){
             if(list==head)head=list->next;
           }
         }
+        sizeOfPage[orderOfPage(ans)]=sizeSpecify(size);
         return ans;
       }
     }
@@ -213,6 +214,27 @@ static void *memory_alloc(size_t size){
 
   }
   return NULL;
+}
+
+static void memory_free(void *ptr,size_t size){
+  header_t *new=(header_t*)ptr;
+  new->size=size;
+  new->addr=ptr;
+  if(new<head){
+    new->next=head,new->prev=NULL;
+    head->prev=new,head=new;
+    return;
+  }
+  header_t *temp=head;
+  while(temp){
+    if(temp->next==NULL||temp->next>new){
+      new->prev=temp,new->next=temp->next;
+      if(temp->next)temp->next->prev=new;
+      temp->next=new;
+      return;
+    }
+    temp=temp->next;
+  }
 }
 
 static void *kalloc(size_t size) {
@@ -227,6 +249,7 @@ static void *kalloc(size_t size) {
 static void kfree(void *ptr){
   size_t size=1<<sizeOfPage[orderOfPage(ptr)];
   if(size<=PAGESIZE&&size>=MINSIZE)slab_free(ptr,size);
+  else if(size>PAGESIZE)memory_free(ptr,size);
   printf("%d\n",size);
 }
 
@@ -238,6 +261,7 @@ static void pmm_init() {
   memory_init(pt);
   void *fuck=kalloc(16<<16);
   printf("%x\n",fuck);
+  kfree(fuck);
   header_t *yin=head;
   while(yin){
     printf("%x %x\n",yin->addr,yin->size);
