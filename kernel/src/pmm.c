@@ -5,6 +5,7 @@
 #define MINSIZE  (128)
 #define MAXSIZE  (16<<20)
 #define MAXCPU 8
+#define SLABNUM 6
 
 #define orderOfPage(x) (((uint64_t)(x-0x300000))>>12)
 #define slabAddr(x) head##x
@@ -39,15 +40,27 @@ typedef struct node_t{
 }node_t;
 
 typedef struct slab_t{
-  node_t *head128,*head256,*head512,*head1024,*head2048,*head4096;
-  node_t *head[6];
+  //node_t *head128,*head256,*head512,*head1024,*head2048,*head4096;
+  node_t *head[SLABNUM];
 }slab_t;
 
 static slab_t slab[MAXCPU];
 
+static inline int targetList(size_t size){
+  switch (size){
+  case 128: return 0;
+  case 256: return 1;
+  case 512: return 2;
+  case 1024: return 3;
+  case 2048: return 4;
+  case 4096: return 5;
+  default:printf("wrong size\n");halt(1);
+  }
+}
+
 static void slab_init(void *pt){
   for(int i=0,n=cpu_count();i<n;i++){
-    slab[i].head128=pt;
+    /*slab[i].head128=pt;
     slab[i].head128->addr=pt;
     slab[i].head128->size=2*PAGESIZE;
     slab[i].head128->blockNum=slab[i].head128->size/128;
@@ -81,6 +94,20 @@ static void slab_init(void *pt){
     slab[i].head4096->addr=pt;
     slab[i].head4096->size=1000*PAGESIZE;
     slab[i].head4096->blockNum=1000;
+    pt+=1000*PAGESIZE;*/
+    for(int j=0,blooksize=128;j<SLABNUM-1;j++,blooksize<<=1){
+      slab[i].head[j]=pt;
+      slab[i].head[j]->addr=pt;
+      slab[i].head[j]->size=2*PAGESIZE;
+      slab[i].head[j]->blockNum=2*PAGESIZE/blooksize;
+      slab[i].head[j]->next=NULL;
+      pt+=2*PAGESIZE;
+    }
+    slab[i].head[SLABNUM-1]=pt;
+    slab[i].head[SLABNUM-1]->addr=pt;
+    slab[i].head[SLABNUM-1]->size=1000*PAGESIZE;
+    slab[i].head[SLABNUM-1]->blockNum=1000;
+    slab[i].head[SLABNUM-1]->next=NULL;
     pt+=1000*PAGESIZE;
   }
 }
@@ -99,6 +126,23 @@ static size_t tableSizeFor(size_t val){
 }
 
 static void *slab_alloc(size_t size){
+  int slabOrder=targetList(size);
+  int cpu=cpu_current();
+  node_t *list=slab[cpu].head[slabOrder];
+  if(list){
+    --list->blockNum;
+    void *ans=(void*)list;
+    if(!list->blockNum)slab[cpu].head[slabOrder]=slab[cpu].head[slabOrder]->next;
+    else{
+      node_t *new=(node_t*)(ans+size);
+      new->addr=(void *)new;
+      new->blockNum=list->blockNum;
+      new->size=new->blockNum*size;
+      new->next=list->next;
+      slab[cpu].head[slabOrder]=new;
+    }
+    return ans;
+  }
   return NULL;
 }
 
@@ -106,7 +150,7 @@ static void *kalloc(size_t size) {
   size=tableSizeFor(size);
   if(size<MINSIZE)size=MINSIZE;
   else if(size>MAXSIZE)return NULL;
-  slab_alloc(size);
+  else if(size>=MINSIZE&&size<=PAGESIZE)return slab_alloc(size);
   return NULL;
 }
 
@@ -122,7 +166,9 @@ static void pmm_init() {
   kalloc(9);
   kalloc(1025);
   kalloc(3098);
-  printf("%d\n",1<<8);
+  printf("%x\n",kalloc(9));
+  printf("%x\n",kalloc(1025));
+  printf("%x\n",kalloc(3098));
   /*for(int i=0;i<cpu_count();i++){
     printf("%x %x %x %x %x %x\n",slab[i].head128,slab[i].head256,slab[i].head512,slab[i].head1024,slab[i].head2048,slab[i].headpage);
     printf("%d %d %d %d %d %d\n",slab[i].head128->blockNum,slab[i].head256->blockNum,slab[i].head512->blockNum,slab[i].head1024->blockNum,slab[i].head2048->blockNum,slab[i].headpage->blockNum);
