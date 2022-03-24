@@ -12,10 +12,10 @@
 #define orderOfPage(x) (((uint64_t)(x-0x300000))>>12)
 
 enum{
-  _128=1,_256,_512,_1024,_2048,_4096,_2p,_4p,_8p,_16p,_32p,_64p,_128p,_256p,_512p,_1024p,_2048p,_4096p
+  _128=7,_256,_512,_1024,_2048,_4096,_2p,_4p,_8p,_16p,_32p,_64p,_128p,_256p,_512p,_1024p,_2048p,_4096p
 };
 
-//static uint8_t sizeOfPage[PAGENUM];
+static uint8_t sizeOfPage[PAGENUM];
 
 typedef struct lock_t{
   int flag;
@@ -55,6 +55,30 @@ static inline int targetList(size_t size){
   case 1024: return 3;
   case 2048: return 4;
   case 4096: return 5;
+  default:printf("wrong size\n");halt(1);
+  }
+}
+
+static inline int sizeSpecify(size_t size){
+  switch (size){
+  case 128: return _128;
+  case 256: return _256;
+  case 512: return _512;
+  case 1024: return _1024;
+  case 2048: return _2048;
+  case 4096: return _4096;
+  case 2*PAGESIZE: return _2p;
+  case 4*PAGESIZE: return _4p;
+  case 8*PAGESIZE: return _8p;
+  case 16*PAGESIZE: return _16p;
+  case 32*PAGESIZE: return _32p;
+  case 64*PAGESIZE: return _64p;
+  case 128*PAGESIZE: return _128p;
+  case 256*PAGESIZE: return _256p;
+  case 512*PAGESIZE: return _512p;
+  case 1024*PAGESIZE: return _1024p;
+  case 2048*PAGESIZE: return _2048p;
+  case 4096*PAGESIZE: return _4096p;
   default:printf("wrong size\n");halt(1);
   }
 }
@@ -108,6 +132,7 @@ static void *slab_alloc(size_t size){
       new->next=list->next;
       slab[cpu].head[slabOrder]=new;
     }
+    sizeOfPage[orderOfPage(ans)]=sizeSpecify(size);
     return ans;
   }
   return NULL;
@@ -121,7 +146,9 @@ static void *kalloc(size_t size) {
   return NULL;
 }
 
-static void kfree(void *ptr) {
+static void kfree(void *ptr){
+  size_t size=1<<sizeOfPage[orderOfPage(ptr)];
+  printf("%d",size);
 }
 
 static void pmm_init() {
@@ -129,6 +156,8 @@ static void pmm_init() {
   printf("Got %d MiB heap: [%p, %p)\n", pmsize >> 20, heap.start, heap.end);
   void *pt=heap.start;
   slab_init(pt);
+  void *fuck=kalloc(9);
+  free(fuck);
   /*printf("%x\n",kalloc(9));
   printf("%x\n",kalloc(9));
   printf("%x\n",kalloc(1025));
