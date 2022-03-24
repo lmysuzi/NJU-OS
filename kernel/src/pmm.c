@@ -171,9 +171,10 @@ static void *memory_alloc(size_t size){
   while(list){
     if(list->size>=size){
       void *iniaddr=(void*)(((size_t)list->addr>>flag)<<flag);   
+      if(iniaddr<list->addr)iniaddr+=size;
       printf("%p\n",iniaddr);
-      return NULL;
     }
+    list=list->next;
 
   }
   return NULL;
