@@ -157,7 +157,7 @@ static void pmm_init() {
   void *pt=heap.start;
   slab_init(pt);
   void *fuck=kalloc(9);
-  free(fuck);
+  kfree(fuck);
   /*printf("%x\n",kalloc(9));
   printf("%x\n",kalloc(9));
   printf("%x\n",kalloc(1025));
