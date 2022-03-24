@@ -200,7 +200,7 @@ static void pmm_init() {
   void *pt=heap.start;
   pt=slab_init(pt);
   memory_init(pt);
-  kalloc(16<<20);
+  kalloc(16<<16);
   /*node_t *temp=slab[cpu_current()].head[0];
   while(temp){
     printf("%x %d\n",temp->addr,temp->blockNum);
