@@ -10,7 +10,6 @@
 #define SLABNUM 6
 
 #define orderOfPage(x) (((uint64_t)(x-0x300000))>>12)
-#define slabAddr(x) head##x
 
 enum{
   _128=1,_256,_512,_1024,_2048,_4096,_2p,_4p,_8p,_16p,_32p,_64p,_128p,_256p,_512p,_1024p,_2048p,_4096p
@@ -42,8 +41,8 @@ typedef struct node_t{
 }node_t;
 
 typedef struct slab_t{
-  //node_t *head128,*head256,*head512,*head1024,*head2048,*head4096;
   node_t *head[SLABNUM];
+  lock_t  lock[SLABNUM];
 }slab_t;
 
 static slab_t slab[MAXCPU];
@@ -62,41 +61,7 @@ static inline int targetList(size_t size){
 
 static void slab_init(void *pt){
   for(int i=0,n=cpu_count();i<n;i++){
-    /*slab[i].head128=pt;
-    slab[i].head128->addr=pt;
-    slab[i].head128->size=2*PAGESIZE;
-    slab[i].head128->blockNum=slab[i].head128->size/128;
-    slab[i].head128->next=NULL;
-    pt+=2*PAGESIZE;
-    slab[i].head256=pt;
-    slab[i].head256->addr=pt;
-    slab[i].head256->size=2*PAGESIZE;
-    slab[i].head256->blockNum=slab[i].head256->size/256;
-    slab[i].head256->next=NULL;
-    pt+=2*PAGESIZE;
-    slab[i].head512=pt;
-    slab[i].head512->addr=pt;
-    slab[i].head512->size=2*PAGESIZE;
-    slab[i].head512->blockNum=slab[i].head512->size/512;
-    slab[i].head512->next=NULL;
-    pt+=2*PAGESIZE;
-    slab[i].head1024=pt;
-    slab[i].head1024->addr=pt;
-    slab[i].head1024->size=2*PAGESIZE;
-    slab[i].head1024->blockNum=slab[i].head1024->size/1024;
-    slab[i].head1024->next=NULL;
-    pt+=2*PAGESIZE;
-    slab[i].head2048=pt;
-    slab[i].head2048->addr=pt;
-    slab[i].head2048->size=2*PAGESIZE;
-    slab[i].head2048->blockNum=slab[i].head2048->size/2048;
-    slab[i].head2048->next=NULL;
-    pt+=2*PAGESIZE;
-    slab[i].head4096=pt;
-    slab[i].head4096->addr=pt;
-    slab[i].head4096->size=1000*PAGESIZE;
-    slab[i].head4096->blockNum=1000;
-    pt+=1000*PAGESIZE;*/
+    for(int j=0;j<SLABNUM;j++)lockInit(&slab[i].lock[j]);
     for(int j=0,blooksize=128;j<SLABNUM-1;j++,blooksize<<=1){
       slab[i].head[j]=pt;
       slab[i].head[j]->addr=pt;
@@ -165,28 +130,11 @@ static void pmm_init() {
   void *pt=heap.start;
   printf("%d\n",pmsize/PAGESIZE);
   slab_init(pt);
-  printf("%x\n",kalloc(9));
-  printf("%x\n",kalloc(9));
-  printf("%x\n",kalloc(9));
-  printf("%x\n",kalloc(9));
-  printf("%x\n",kalloc(9));
-  printf("%x\n",kalloc(9));
-  printf("%x\n",kalloc(9));
-  printf("%x\n",kalloc(9));
-  printf("%x\n",kalloc(9));
-  printf("%x\n",kalloc(9));
-  printf("%x\n",kalloc(9));
+  /*printf("%x\n",kalloc(9));
   printf("%x\n",kalloc(9));
   printf("%x\n",kalloc(1025));
   printf("%x\n",kalloc(1025));
-  printf("%x\n",kalloc(3098));
-  printf("%x\n",kalloc(3098));
-  printf("%x\n",kalloc(3098));
-  printf("%x\n",kalloc(3098));
-  /*for(int i=0;i<cpu_count();i++){
-    printf("%x %x %x %x %x %x\n",slab[i].head128,slab[i].head256,slab[i].head512,slab[i].head1024,slab[i].head2048,slab[i].headpage);
-    printf("%d %d %d %d %d %d\n",slab[i].head128->blockNum,slab[i].head256->blockNum,slab[i].head512->blockNum,slab[i].head1024->blockNum,slab[i].head2048->blockNum,slab[i].headpage->blockNum);
-  }*/
+  printf("%x\n",kalloc(3098));*/
 }
 
 MODULE_DEF(pmm) = {
