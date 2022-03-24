@@ -264,7 +264,7 @@ static void pmm_init() {
   kfree(fuck);
   header_t *yin=head;
   while(yin){
-    printf("%x %x\n",yin->addr,yin->size);
+    printf("%x %x %x\n",yin->addr,yin->size,yin->addr+yin->size);
     yin=yin->next;
   }
   /*node_t *temp=slab[cpu_current()].head[0];
