@@ -148,7 +148,7 @@ static void *kalloc(size_t size) {
 
 static void kfree(void *ptr){
   size_t size=1<<sizeOfPage[orderOfPage(ptr)];
-  printf("%d",size);
+  printf("%d\n",size);
 }
 
 static void pmm_init() {
@@ -156,7 +156,7 @@ static void pmm_init() {
   printf("Got %d MiB heap: [%p, %p)\n", pmsize >> 20, heap.start, heap.end);
   void *pt=heap.start;
   slab_init(pt);
-  void *fuck=kalloc(9);
+  void *fuck=kalloc(128);
   kfree(fuck);
   /*printf("%x\n",kalloc(9));
   printf("%x\n",kalloc(9));
