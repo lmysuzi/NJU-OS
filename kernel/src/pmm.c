@@ -5,6 +5,9 @@
 #define MAXSIZE  (16<<20)
 #define MAXCPU 8
 
+enum{
+  _128=1,_256,_512,_1024,_2048,_4096,_2page,_4page,_8page,_16page,_32page,_64page
+};
 
 typedef struct lock_t{
   int flag;
@@ -58,7 +61,7 @@ static void kfree(void *ptr) {
 static void pmm_init() {
   uintptr_t pmsize = ((uintptr_t)heap.end - (uintptr_t)heap.start);
   printf("Got %d MiB heap: [%p, %p)\n", pmsize >> 20, heap.start, heap.end);
-  printf("%d\n",sizeof(uint32_t));
+  printf("%d\n",MAXSIZE/PAGESIZE);
   printf("%d\n",pmsize/PAGESIZE);
   printf("%d\n",cpu_count());
 }
