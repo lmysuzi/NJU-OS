@@ -4,15 +4,15 @@
 
 #define PAGENUM  32000
 #define PAGESIZE (4096)
-#define MINSIZE  (128)
+#define MINSIZE  (32)
 #define MAXSIZE  (16<<20)
 #define MAXCPU 8
-#define SLABNUM 6
+#define SLABNUM 8
 
 #define orderOfPage(x) (((uint64_t)(x-0x300000))>>12)
 
 enum{
-  _128=7,_256,_512,_1024,_2048,_4096,_2p,_4p,_8p,_16p,_32p,_64p,_128p,_256p,_512p,_1024p,_2048p,_4096p
+  _32=5,_64,_128,_256,_512,_1024,_2048,_4096,_2p,_4p,_8p,_16p,_32p,_64p,_128p,_256p,_512p,_1024p,_2048p,_4096p
 };
 
 static uint8_t sizeOfPage[PAGENUM];
@@ -109,7 +109,7 @@ static inline int sizeSpecify(size_t size){
 static void *slab_init(void *pt){
   for(int i=0,n=cpu_count();i<n;i++){
     for(int j=0;j<SLABNUM;j++)lockInit(&slab[i].slabLock[j]);
-    for(int j=0,blooksize=128;j<SLABNUM-1;j++,blooksize<<=1){
+    for(int j=0,blooksize=32;j<SLABNUM-1;j++,blooksize<<=1){
       slab[i].head[j]=pt;
       slab[i].head[j]->addr=pt;
       slab[i].head[j]->size=10*PAGESIZE;

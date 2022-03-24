@@ -10,11 +10,11 @@ static void os_run() {
   }
   void*a[19];
   for(int i=0;i<19;i++)a[i]=NULL;
-  for(int i=15;i;i--){
-    a[i]=pmm->alloc(128*i);
+  for(int i=50;i;i--){
+    a[i]=pmm->alloc(32*i);
     printf("%x\n",a[i]);
   }
-  for(int i=15;i;i--){
+  for(int i=50;i;i--){
     if(a[i])
     pmm->free(a[i]);
   }
