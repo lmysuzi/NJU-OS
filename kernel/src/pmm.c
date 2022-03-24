@@ -168,9 +168,10 @@ static void pmm_init() {
   printf("Got %d MiB heap: [%p, %p)\n", pmsize >> 20, heap.start, heap.end);
   void *pt=heap.start;
   slab_init(pt);
-  void *fuck=kalloc(4086);
+  void *fuck=kalloc(127);
   kfree(fuck);
-  node_t *temp=slab[cpu_current()].head[5];
+  
+  node_t *temp=slab[cpu_current()].head[0];
   while(temp){
     printf("%x %d\n",temp->addr,temp->blockNum);
     temp=temp->next;
