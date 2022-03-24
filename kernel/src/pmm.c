@@ -128,7 +128,6 @@ static void pmm_init() {
   uintptr_t pmsize = ((uintptr_t)heap.end - (uintptr_t)heap.start);
   printf("Got %d MiB heap: [%p, %p)\n", pmsize >> 20, heap.start, heap.end);
   void *pt=heap.start;
-  printf("%d\n",pmsize/PAGESIZE);
   slab_init(pt);
   /*printf("%x\n",kalloc(9));
   printf("%x\n",kalloc(9));

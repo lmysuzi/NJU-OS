@@ -8,7 +8,6 @@ static void os_run() {
   for (const char *s = "Hello World from CPU #*\n"; *s; s++) {
     putch(*s == '*' ? '0' + cpu_current() : *s);
   }
-  printf("%d\n",cpu_current());
   /*void*a[19];
   for(int i=0;i<19;i++)a[i]=NULL;
   for(int i=15;i;i--){
