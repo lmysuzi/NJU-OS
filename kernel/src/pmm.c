@@ -134,8 +134,10 @@ static void slab_free(void *ptr,size_t size){
   node->addr=ptr;
   node->blockNum=1;
   int target=targetList(size);
+  lock(&slab[cpu].slabLock[target]);
   node->next=slab[cpu].head[target];
   slab[cpu].head[target]=node;
+  unlock(&slab[cpu].slabLock[target]);
 }
 
 static void *slab_ask(int cpu,int slabOrder,size_t size){
