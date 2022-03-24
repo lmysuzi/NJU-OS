@@ -43,35 +43,7 @@ typedef struct slab_t{
 
 static slab_t slab[MAXCPU];
 
-
-
-static size_t tableSizeFor(size_t val){
-  if (val & (val - 1)){
-    val |= val>>1;
-    val |= val>>2;
-    val |= val>>4;
-    val |= val>>8;
-    val |= val>>16;
-    return val+1;
-  }
-  else return val == 0 ? 1 : val;
-}
-
-
-static void *kalloc(size_t size) {
-  size=tableSizeFor(size);
-  return NULL;
-}
-
-static void kfree(void *ptr) {
-}
-
-static void pmm_init() {
-  uintptr_t pmsize = ((uintptr_t)heap.end - (uintptr_t)heap.start);
-  printf("Got %d MiB heap: [%p, %p)\n", pmsize >> 20, heap.start, heap.end);
-  void *pt=heap.start;
-  printf("%d\n",pmsize/PAGESIZE);
-  printf("%d\n",cpu_count());
+static void slab_init(void *pt){
   for(int i=0,n=cpu_count();i<n;i++){
     slab[i].head128=pt;
     slab[i].head128->addr=pt;
@@ -109,6 +81,36 @@ static void pmm_init() {
     slab[i].headpage->blockNum=1000;
     pt+=1000*PAGESIZE;
   }
+}
+
+
+static size_t tableSizeFor(size_t val){
+  if (val & (val - 1)){
+    val |= val>>1;
+    val |= val>>2;
+    val |= val>>4;
+    val |= val>>8;
+    val |= val>>16;
+    return val+1;
+  }
+  else return val == 0 ? 1 : val;
+}
+
+
+static void *kalloc(size_t size) {
+  size=tableSizeFor(size);
+  return NULL;
+}
+
+static void kfree(void *ptr) {
+}
+
+static void pmm_init() {
+  uintptr_t pmsize = ((uintptr_t)heap.end - (uintptr_t)heap.start);
+  printf("Got %d MiB heap: [%p, %p)\n", pmsize >> 20, heap.start, heap.end);
+  void *pt=heap.start;
+  printf("%d\n",pmsize/PAGESIZE);
+  slab_init(pt);
   for(int i=0;i<cpu_count();i++){
     printf("%x %x %x %x %x %x\n",slab[i].head128,slab[i].head256,slab[i].head512,slab[i].head1024,slab[i].head2048,slab[i].headpage);
     printf("%d %d %d %d %d %d\n",slab[i].head128->blockNum,slab[i].head256->blockNum,slab[i].head512->blockNum,slab[i].head1024->blockNum,slab[i].head2048->blockNum,slab[i].headpage->blockNum);
