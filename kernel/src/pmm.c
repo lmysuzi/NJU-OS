@@ -141,6 +141,7 @@ static void *slab_alloc(size_t size){
       new->next=list->next;
       slab[cpu].head[slabOrder]=new;
     }
+    printf("fuck\n");
     return ans;
   }
   return NULL;
