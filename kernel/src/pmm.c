@@ -99,6 +99,8 @@ static size_t tableSizeFor(size_t val){
 
 static void *kalloc(size_t size) {
   size=tableSizeFor(size);
+  if(size<MINSIZE)size=MINSIZE;
+  else if(size>MAXSIZE)return NULL;
   printf("%d\n",size);
   return NULL;
 }
