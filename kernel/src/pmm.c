@@ -194,7 +194,6 @@ static void *memory_alloc(size_t size){
       void *iniaddr=(void*)(((size_t)list->addr>>flag)<<flag);   
       void *endaddr=iniaddr+list->size;
       if(iniaddr<list->addr)iniaddr+=size;
-      printf("%p\n",iniaddr);
       if(iniaddr+size<=endaddr){
         void *ans=iniaddr;
         
@@ -292,7 +291,6 @@ static void kfree(void *ptr){
   size_t size=1<<sizeOfPage[orderOfPage(ptr)];
   if(size<=PAGESIZE&&size>=MINSIZE)slab_free(ptr,size);
   else if(size>PAGESIZE)memory_free(ptr,size);
-  printf("%d\n",size);
 }
 
 static void pmm_init() {
@@ -301,14 +299,14 @@ static void pmm_init() {
   void *pt=heap.start;
   pt=slab_init(pt);
   memory_init(pt);
-  void *fuck=kalloc(16<<16);
+  /*void *fuck=kalloc(16<<16);
   printf("%x\n",fuck);
   kfree(fuck);
   header_t *yin=head;
   while(yin){
     printf("%x %x %x\n",yin->addr,yin->size,yin->addr+yin->size);
     yin=yin->next;
-  }
+  }*/
   /*node_t *temp=slab[cpu_current()].head[0];
   while(temp){
     printf("%x %d\n",temp->addr,temp->blockNum);
