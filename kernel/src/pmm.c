@@ -164,9 +164,6 @@ static void pmm_init() {
   void *pt=heap.start;
   printf("%d\n",pmsize/PAGESIZE);
   slab_init(pt);
-  kalloc(9);
-  kalloc(1025);
-  kalloc(3098);
   printf("%x\n",kalloc(9));
   printf("%x\n",kalloc(1025));
   printf("%x\n",kalloc(3098));
