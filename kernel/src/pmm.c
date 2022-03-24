@@ -33,6 +33,18 @@ void unlock(lock_t *lock){
   atomic_xchg(&lock->flag,0);
 }
 
+static size_t tableSizeFor(size_t val){
+  if (val & (val - 1)){
+    val |= val>>1;
+    val |= val>>2;
+    val |= val>>4;
+    val |= val>>8;
+    val |= val>>16;
+    return val+1;
+  }
+  else return val == 0 ? 1 : val;
+}
+
 typedef struct node_t{
   void *addr;
   int blockNum;
@@ -103,18 +115,17 @@ static void slab_init(void *pt){
   }
 }
 
-
-static size_t tableSizeFor(size_t val){
-  if (val & (val - 1)){
-    val |= val>>1;
-    val |= val>>2;
-    val |= val>>4;
-    val |= val>>8;
-    val |= val>>16;
-    return val+1;
-  }
-  else return val == 0 ? 1 : val;
+static void slab_free(void *ptr,size_t size){
+  int cpu=cpu_current();
+  node_t *node=(node_t *)ptr;
+  node->size=size;
+  node->addr=ptr;
+  node->blockNum=1;
+  int target=targetList(size);
+  node->next=slab[cpu].head[target];
+  slab[cpu].head[target]=node;
 }
+
 
 static void *slab_alloc(size_t size){
   int slabOrder=targetList(size);
@@ -148,6 +159,7 @@ static void *kalloc(size_t size) {
 
 static void kfree(void *ptr){
   size_t size=1<<sizeOfPage[orderOfPage(ptr)];
+  if(size<=PAGESIZE&&size>=MINSIZE)slab_free(ptr,size);
   printf("%d\n",size);
 }
 
