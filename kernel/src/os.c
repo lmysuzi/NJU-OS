@@ -11,7 +11,7 @@ static void os_run() {
   void*a[19];
   for(int i=0;i<19;i++)a[i]=NULL;
   for(int i=50;i;i--){
-    a[i]=pmm->alloc(32*i);
+    a[i]=pmm->alloc(128);
     printf("%x\n",a[i]);
   }
   for(int i=50;i;i--){

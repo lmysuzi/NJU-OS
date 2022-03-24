@@ -11,6 +11,7 @@
 
 #define orderOfPage(x) (((uint64_t)(x-0x300000))>>12)
 
+static void *memory_alloc(size_t size);
 enum{
   _32=5,_64,_128,_256,_512,_1024,_2048,_4096,_2p,_4p,_8p,_16p,_32p,_64p,_128p,_256p,_512p,_1024p,_2048p,_4096p
 };
@@ -174,12 +175,12 @@ static void *slab_ask(int cpu,int slabOrder,size_t size){
 }
 static void *slab_alloc(size_t size){
   int slabOrder=targetList(size);
-  int cpu=cpu_current();
+  int cpu=0;
   void *ans=NULL;
-  lock(&slab[cpu].slabLock[slabOrder]);
+  /*lock(&slab[cpu].slabLock[slabOrder]);
   ans=slab_ask(cpu,slabOrder,size);
   unlock(&slab[cpu].slabLock[slabOrder]);
-  if(ans!=NULL)return ans;
+  if(ans!=NULL)return ans;*/
   //从其他cpu偷取内存
   cpu=0;
   for(int i=0,n=MAXCPU;i<n;i++){
@@ -189,6 +190,21 @@ static void *slab_alloc(size_t size){
       if(ans!=NULL)return ans;
     }
   }
+  node_t *new=(node_t*)memory_alloc(PAGESIZE);
+  new->addr=(void*)new;
+  new->size=PAGESIZE;
+  new->blockNum=PAGESIZE/size;
+  cpu=0;
+  for(int i=0,n=MAXCPU;i<n;i++){
+    if(lock_acquire(&slab[cpu].slabLock[slabOrder])==0){
+      new->next=slab[cpu].head[slabOrder]->next;
+      slab[cpu].head[slabOrder]=new;
+      ans=slab_ask(cpu,slabOrder,size);
+      unlock(&slab[cpu].slabLock[slabOrder]);
+      if(ans!=NULL)return ans;
+    }
+  }
+  mark;
   return NULL;
 }
 
