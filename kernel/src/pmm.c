@@ -168,6 +168,10 @@ static void pmm_init() {
   printf("%x\n",kalloc(9));
   printf("%x\n",kalloc(9));
   printf("%x\n",kalloc(1025));
+  printf("%x\n",kalloc(1025));
+  printf("%x\n",kalloc(3098));
+  printf("%x\n",kalloc(3098));
+  printf("%x\n",kalloc(3098));
   printf("%x\n",kalloc(3098));
   /*for(int i=0;i<cpu_count();i++){
     printf("%x %x %x %x %x %x\n",slab[i].head128,slab[i].head256,slab[i].head512,slab[i].head1024,slab[i].head2048,slab[i].headpage);
