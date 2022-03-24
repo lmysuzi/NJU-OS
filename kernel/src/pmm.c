@@ -126,6 +126,7 @@ static size_t tableSizeFor(size_t val){
 }
 
 static void *slab_alloc(size_t size){
+    printf("fuck\n");
   int slabOrder=targetList(size);
   int cpu=cpu_current();
   node_t *list=slab[cpu].head[slabOrder];
@@ -141,7 +142,6 @@ static void *slab_alloc(size_t size){
       new->next=list->next;
       slab[cpu].head[slabOrder]=new;
     }
-    printf("fuck\n");
     return ans;
   }
   return NULL;
