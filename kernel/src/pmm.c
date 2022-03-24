@@ -170,6 +170,11 @@ static void pmm_init() {
   slab_init(pt);
   void *fuck=kalloc(4086);
   kfree(fuck);
+  node_t *temp=slab[cpu_current()].head[5];
+  while(temp){
+    printf("%x %d",temp->addr,temp->blockNum);
+    temp=temp->next;
+  }
   /*printf("%x\n",kalloc(9));
   printf("%x\n",kalloc(9));
   printf("%x\n",kalloc(1025));
