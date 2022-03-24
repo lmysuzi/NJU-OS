@@ -111,6 +111,7 @@ static void pmm_init() {
   }
   for(int i=0;i<cpu_count();i++){
     printf("%x %x %x %x %x %x\n",slab[i].head128,slab[i].head256,slab[i].head512,slab[i].head1024,slab[i].head2048,slab[i].headpage);
+    printf("%d %d %d %d %d %d\n",slab[i].head128->blockNum,slab[i].head256->blockNum,slab[i].head512->blockNum,slab[i].head1024->blockNum,slab[i].head2048->blockNum,slab[i].headpage->blockNum);
   }
 }
 
