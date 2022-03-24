@@ -167,6 +167,16 @@ static void pmm_init() {
   slab_init(pt);
   printf("%x\n",kalloc(9));
   printf("%x\n",kalloc(9));
+  printf("%x\n",kalloc(9));
+  printf("%x\n",kalloc(9));
+  printf("%x\n",kalloc(9));
+  printf("%x\n",kalloc(9));
+  printf("%x\n",kalloc(9));
+  printf("%x\n",kalloc(9));
+  printf("%x\n",kalloc(9));
+  printf("%x\n",kalloc(9));
+  printf("%x\n",kalloc(9));
+  printf("%x\n",kalloc(9));
   printf("%x\n",kalloc(1025));
   printf("%x\n",kalloc(1025));
   printf("%x\n",kalloc(3098));
