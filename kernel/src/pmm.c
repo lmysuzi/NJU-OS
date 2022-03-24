@@ -240,7 +240,7 @@ static void pmm_init() {
   printf("%x\n",fuck);
   header_t *yin=head;
   while(yin){
-    printf("%x %d\n",yin->addr,yin->size);
+    printf("%x %x\n",yin->addr,yin->size);
     yin=yin->next;
   }
   /*node_t *temp=slab[cpu_current()].head[0];
