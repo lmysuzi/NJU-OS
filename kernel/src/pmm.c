@@ -156,7 +156,7 @@ static void pmm_init() {
   printf("Got %d MiB heap: [%p, %p)\n", pmsize >> 20, heap.start, heap.end);
   void *pt=heap.start;
   slab_init(pt);
-  void *fuck=kalloc(128);
+  void *fuck=kalloc(4086);
   kfree(fuck);
   /*printf("%x\n",kalloc(9));
   printf("%x\n",kalloc(9));
