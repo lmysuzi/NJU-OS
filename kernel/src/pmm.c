@@ -6,7 +6,7 @@
 #define MAXSIZE  (16<<20)
 #define MAXCPU 8
 
-#define orderOfPage(x) ((x-0x300000)>>12)
+#define orderOfPage(x) (((uint64_t)(x-0x300000))>>12)
 
 enum{
   _128=1,_256,_512,_1024,_2048,_4096,_2p,_4p,_8p,_16p,_32p,_64p,_128p,_256p,_512p,_1024p,_2048p,_4096p
@@ -66,7 +66,7 @@ static void kfree(void *ptr) {
 static void pmm_init() {
   uintptr_t pmsize = ((uintptr_t)heap.end - (uintptr_t)heap.start);
   printf("Got %d MiB heap: [%p, %p)\n", pmsize >> 20, heap.start, heap.end);
-  printf("%d\n",sizeof(void*));
+  printf("%d\n",orderOfPage(heap.start));
   printf("%d\n",pmsize/PAGESIZE);
   printf("%d\n",cpu_count());
 }
