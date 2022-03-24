@@ -171,6 +171,7 @@ static void *memory_alloc(size_t size){
     if(list->size>=size){
       void *iniaddr=(void*)(((size_t)list->addr>>flag)<<flag);   
       printf("%p\n",iniaddr);
+      return NULL;
     }
 
   }
