@@ -29,6 +29,10 @@ void lock(lock_t *lock){
   while(atomic_xchg(&lock->flag,1)==1);
 }
 
+int lock_acquire(lock_t *lock){
+  return atomic_xchg(&lock->flag,1);
+}
+
 void unlock(lock_t *lock){
   atomic_xchg(&lock->flag,0);
 }
@@ -62,7 +66,7 @@ typedef struct node_t{//记录slab
 
 typedef struct slab_t{
   node_t *head[SLABNUM];
-  lock_t  lock[SLABNUM];
+  lock_t  slabLock[SLABNUM];
 }slab_t;
 static slab_t slab[MAXCPU];
 
@@ -104,7 +108,7 @@ static inline int sizeSpecify(size_t size){
 
 static void *slab_init(void *pt){
   for(int i=0,n=cpu_count();i<n;i++){
-    for(int j=0;j<SLABNUM;j++)lockInit(&slab[i].lock[j]);
+    for(int j=0;j<SLABNUM;j++)lockInit(&slab[i].slabLock[j]);
     for(int j=0,blooksize=128;j<SLABNUM-1;j++,blooksize<<=1){
       slab[i].head[j]=pt;
       slab[i].head[j]->addr=pt;
@@ -134,10 +138,7 @@ static void slab_free(void *ptr,size_t size){
   slab[cpu].head[target]=node;
 }
 
-
-static void *slab_alloc(size_t size){
-  int slabOrder=targetList(size);
-  int cpu=cpu_current();
+static void *slab_ask(int cpu,int slabOrder,size_t size){
   node_t *list=slab[cpu].head[slabOrder];
   if(list){
     --list->blockNum;
@@ -153,6 +154,25 @@ static void *slab_alloc(size_t size){
     }
     sizeOfPage[orderOfPage(ans)]=sizeSpecify(size);
     return ans;
+  }
+  return NULL;
+}
+static void *slab_alloc(size_t size){
+  int slabOrder=targetList(size);
+  int cpu=cpu_current();
+  void *ans=NULL;
+  lock(&slab[cpu].slabLock[slabOrder]);
+  ans=slab_ask(cpu,slabOrder,size);
+  unlock(&slab[cpu].slabLock[slabOrder]);
+  if(ans!=NULL)return ans;
+  //从其他cpu偷取内存
+  cpu=0;
+  for(int i=0,n=cpu_count();i<n;i++){
+    if(lock_acquire(&slab[cpu].slabLock[slabOrder])==0){
+      ans=slab_ask(cpu,slabOrder,size);
+      unlock(&slab[cpu].slabLock[slabOrder]);
+      if(ans!=NULL)return ans;
+    }
   }
   return NULL;
 }
