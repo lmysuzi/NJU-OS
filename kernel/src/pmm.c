@@ -150,7 +150,7 @@ static void *slab_alloc(size_t size){
 static void *kalloc(size_t size) {
   size=tableSizeFor(size);
   if(size<MINSIZE)size=MINSIZE;
-  else if(size>MAXSIZE)return NULL;
+  if(size>MAXSIZE)return NULL;
   else if(size>=MINSIZE&&size<=PAGESIZE)return slab_alloc(size);
   return NULL;
 }
