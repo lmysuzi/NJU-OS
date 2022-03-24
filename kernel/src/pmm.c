@@ -216,6 +216,21 @@ static void *memory_alloc(size_t size){
   return NULL;
 }
 
+static void memory_merge(){
+  header_t *temp=head;
+  while(temp){
+    begin:
+    if(temp->next&&temp->addr+temp->size==temp->next->addr){
+      if(temp->next->next)temp->next->next->prev=temp;
+      temp->size+=temp->next->size;
+      temp->next=temp->next->next;
+      goto begin;
+    }
+    else temp=temp->next;
+  }
+}
+
+static int freeCount=0;
 static void memory_free(void *ptr,size_t size){
   header_t *new=(header_t*)ptr;
   new->size=size;
@@ -223,7 +238,7 @@ static void memory_free(void *ptr,size_t size){
   if(new<head){
     new->next=head,new->prev=NULL;
     head->prev=new,head=new;
-    return;
+    goto end;
   }
   header_t *temp=head;
   while(temp){
@@ -231,10 +246,12 @@ static void memory_free(void *ptr,size_t size){
       new->prev=temp,new->next=temp->next;
       if(temp->next)temp->next->prev=new;
       temp->next=new;
-      return;
+      goto end;
     }
     temp=temp->next;
   }
+  end:
+  if(++freeCount==5)freeCount=0,memory_merge();
 }
 
 static void *kalloc(size_t size) {
@@ -259,14 +276,14 @@ static void pmm_init() {
   void *pt=heap.start;
   pt=slab_init(pt);
   memory_init(pt);
-  void *fuck=kalloc(16<<16);
+  /*void *fuck=kalloc(16<<16);
   printf("%x\n",fuck);
   kfree(fuck);
   header_t *yin=head;
   while(yin){
     printf("%x %x %x\n",yin->addr,yin->size,yin->addr+yin->size);
     yin=yin->next;
-  }
+  }*/
   /*node_t *temp=slab[cpu_current()].head[0];
   while(temp){
     printf("%x %d\n",temp->addr,temp->blockNum);
