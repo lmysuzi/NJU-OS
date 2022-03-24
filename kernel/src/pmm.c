@@ -7,6 +7,7 @@
 #define MAXCPU 8
 
 #define orderOfPage(x) (((uint64_t)(x-0x300000))>>12)
+#define slabAddr(x) head##x
 
 enum{
   _128=1,_256,_512,_1024,_2048,_4096,_2p,_4p,_8p,_16p,_32p,_64p,_128p,_256p,_512p,_1024p,_2048p,_4096p
@@ -96,12 +97,16 @@ static size_t tableSizeFor(size_t val){
   else return val == 0 ? 1 : val;
 }
 
+static void *slab_alloc(size_t size){
+
+  return NULL;
+}
 
 static void *kalloc(size_t size) {
   size=tableSizeFor(size);
   if(size<MINSIZE)size=MINSIZE;
   else if(size>MAXSIZE)return NULL;
-  printf("%d\n",size);
+  slab_alloc(size);
   return NULL;
 }
 
@@ -117,6 +122,8 @@ static void pmm_init() {
   kalloc(9);
   kalloc(1025);
   kalloc(3098);
+  int head128=12345;
+  printf("%d\n",slabAddr(128));
 
   /*for(int i=0;i<cpu_count();i++){
     printf("%x %x %x %x %x %x\n",slab[i].head128,slab[i].head256,slab[i].head512,slab[i].head1024,slab[i].head2048,slab[i].headpage);
