@@ -72,18 +72,22 @@ static slab_t slab[MAXCPU];
 
 static inline int targetList(size_t size){
   switch (size){
-  case 128: return 0;
-  case 256: return 1;
-  case 512: return 2;
-  case 1024: return 3;
-  case 2048: return 4;
-  case 4096: return 5;
+  case 32: return 0;
+  case 64: return 1;
+  case 128: return 2;
+  case 256: return 3;
+  case 512: return 4;
+  case 1024: return 5;
+  case 2048: return 6;
+  case 4096: return 7;
   default:printf("wrong size\n");halt(1);
   }
 }
 
 static inline int sizeSpecify(size_t size){
   switch (size){
+  case 32 : return _32;
+  case 64 : return _64;
   case 128: return _128;
   case 256: return _256;
   case 512: return _512;
