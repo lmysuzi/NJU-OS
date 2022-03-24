@@ -45,7 +45,14 @@ static size_t tableSizeFor(size_t val){
   else return val == 0 ? 1 : val;
 }
 
-typedef struct node_t{
+typedef struct header_t{//记录大内存
+  void *addr;
+  size_t size;
+  struct header_t *next,*prev;
+}header_t;
+header_t *head;
+
+typedef struct node_t{//记录slab
   void *addr;
   int blockNum;
   size_t size;
@@ -56,7 +63,6 @@ typedef struct slab_t{
   node_t *head[SLABNUM];
   lock_t  lock[SLABNUM];
 }slab_t;
-
 static slab_t slab[MAXCPU];
 
 static inline int targetList(size_t size){
@@ -95,7 +101,7 @@ static inline int sizeSpecify(size_t size){
   }
 }
 
-static void slab_init(void *pt){
+static void *slab_init(void *pt){
   for(int i=0,n=cpu_count();i<n;i++){
     for(int j=0;j<SLABNUM;j++)lockInit(&slab[i].lock[j]);
     for(int j=0,blooksize=128;j<SLABNUM-1;j++,blooksize<<=1){
@@ -113,6 +119,7 @@ static void slab_init(void *pt){
     slab[i].head[SLABNUM-1]->next=NULL;
     pt+=1000*PAGESIZE;
   }
+  return pt;
 }
 
 static void slab_free(void *ptr,size_t size){
@@ -149,6 +156,14 @@ static void *slab_alloc(size_t size){
   return NULL;
 }
 
+static void memory_init(void *ptr){
+  head=(header_t*)ptr;
+  head->addr=ptr;
+  head->size=heap.end-ptr;
+  head->next=head->prev=NULL;
+  printf("%x %x\n",head,head->size);
+}
+
 static void *kalloc(size_t size) {
   size=tableSizeFor(size);
   if(size<MINSIZE)size=MINSIZE;
@@ -167,7 +182,8 @@ static void pmm_init() {
   uintptr_t pmsize = ((uintptr_t)heap.end - (uintptr_t)heap.start);
   printf("Got %d MiB heap: [%p, %p)\n", pmsize >> 20, heap.start, heap.end);
   void *pt=heap.start;
-  slab_init(pt);
+  pt=slab_init(pt);
+  memory_init(pt);
   void *fuck=kalloc(127);
   kfree(fuck);
   printf("%d\n",sizeof(struct node_t));
