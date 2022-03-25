@@ -2,14 +2,14 @@
 
 #define mark printf("fuck\n")
 
-#define PAGENUM  32000
+#define PAGENUM  131073
 #define PAGESIZE (4096)
 #define MINSIZE  (32)
 #define MAXSIZE  (16<<20)
 #define MAXCPU 8
 #define SLABNUM 8
 
-#define orderOfPage(x) (((uint64_t)(x-0x300000))>>12)
+#define orderOfPage(x) (((uint64_t)(x-heap.start))>>12)
 
 static void *memory_alloc(size_t size);
 enum{
@@ -234,7 +234,6 @@ static void *memory_alloc(size_t size){
         }
         else{
           if(iniaddr+size<endaddr){
-            mark;
             header_t *new=(header_t*)(iniaddr+size);
             new->prev=list->prev;
             new->next=list->next;
