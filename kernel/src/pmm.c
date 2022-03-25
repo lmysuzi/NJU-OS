@@ -118,7 +118,7 @@ static void *slab_init(void *pt){
       slab[i].head[j]=pt;
       slab[i].head[j]->addr=pt;
       slab[i].head[j]->size=10*PAGESIZE;
-      slab[i].head[j]->blockNum=2*PAGESIZE/blooksize;
+      slab[i].head[j]->blockNum=10*PAGESIZE/blooksize;
       slab[i].head[j]->next=NULL;
       pt+=10*PAGESIZE;
     }
@@ -182,7 +182,6 @@ static void *slab_alloc(size_t size){
     }
   }
   node_t *new=(node_t*)memory_alloc(PAGESIZE);
-  mark;
   if(new==NULL)return NULL;
   new->addr=(void*)new;
   new->size=PAGESIZE;
