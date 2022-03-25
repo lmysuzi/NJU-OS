@@ -215,8 +215,9 @@ static void *memory_alloc(size_t size){
   while(list){
     if(list->size>=size){
       void *iniaddr=(void*)(((size_t)list->addr>>flag)<<flag);   
-      void *endaddr=iniaddr+list->size;
-      if(iniaddr<list->addr)iniaddr+=size;
+      void *endaddr=list->addr+list->size;
+      printf("%p\n",iniaddr);
+      //if(iniaddr<list->addr)iniaddr+=size;
       if(iniaddr+size<=endaddr){
         void *ans=iniaddr;
         
@@ -322,7 +323,6 @@ static void pmm_init() {
   void *pt=heap.start;
   pt=slab_init(pt);
   memory_init(pt);
-  printf("%x\n",ROUNDDOWN(0x1234567,4096));
 }
 
 MODULE_DEF(pmm) = {
