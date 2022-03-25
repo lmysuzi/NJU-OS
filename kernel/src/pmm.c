@@ -323,7 +323,7 @@ static void pmm_init() {
   void *pt=heap.start;
   pt=slab_init(pt);
   memory_init(pt);
-  printf("%p\n",kalloc(16<<16));
+  printf("%p\n",kalloc(1<<16));
 }
 
 MODULE_DEF(pmm) = {
