@@ -124,10 +124,10 @@ static void *slab_init(void *pt){
     }
     slab[i].head[SLABNUM-1]=pt;
     slab[i].head[SLABNUM-1]->addr=pt;
-    slab[i].head[SLABNUM-1]->size=1000*PAGESIZE;
-    slab[i].head[SLABNUM-1]->blockNum=1000;
+    slab[i].head[SLABNUM-1]->size=100*PAGESIZE;
+    slab[i].head[SLABNUM-1]->blockNum=100;
     slab[i].head[SLABNUM-1]->next=NULL;
-    pt+=1000*PAGESIZE;
+    pt+=100*PAGESIZE;
   }
   return pt;
 }
@@ -182,8 +182,7 @@ static void *slab_alloc(size_t size){
   unlock(&slab[cpu].slabLock[slabOrder]);
   if(ans!=NULL)return ans;*/
   //从其他cpu偷取内存
-  cpu=0;
-  for(int i=0,n=MAXCPU;i<n;i++){
+  for(cpu=0;cpu<MAXCPU;cpu++){
     if(lock_acquire(&slab[cpu].slabLock[slabOrder])==0){
       ans=slab_ask(cpu,slabOrder,size);
       unlock(&slab[cpu].slabLock[slabOrder]);
@@ -191,11 +190,12 @@ static void *slab_alloc(size_t size){
     }
   }
   node_t *new=(node_t*)memory_alloc(PAGESIZE);
+  if(new==NULL)halt(1);
   new->addr=(void*)new;
   new->size=PAGESIZE;
   new->blockNum=PAGESIZE/size;
   cpu=0;
-  for(int i=0,n=MAXCPU;i<n;i++){
+  for(cpu=0;cpu<MAXCPU;cpu++){
     if(lock_acquire(&slab[cpu].slabLock[slabOrder])==0){
       new->next=slab[cpu].head[slabOrder]->next;
       slab[cpu].head[slabOrder]=new;
@@ -204,7 +204,6 @@ static void *slab_alloc(size_t size){
       if(ans!=NULL)return ans;
     }
   }
-  mark;
   return NULL;
 }
 
@@ -330,24 +329,6 @@ static void pmm_init() {
   void *pt=heap.start;
   pt=slab_init(pt);
   memory_init(pt);
-  /*void *fuck=kalloc(16<<16);
-  printf("%x\n",fuck);
-  kfree(fuck);
-  header_t *yin=head;
-  while(yin){
-    printf("%x %x %x\n",yin->addr,yin->size,yin->addr+yin->size);
-    yin=yin->next;
-  }*/
-  /*node_t *temp=slab[cpu_current()].head[0];
-  while(temp){
-    printf("%x %d\n",temp->addr,temp->blockNum);
-    temp=temp->next;
-  }*/
-  /*printf("%x\n",kalloc(9));
-  printf("%x\n",kalloc(9));
-  printf("%x\n",kalloc(1025));
-  printf("%x\n",kalloc(1025));
-  printf("%x\n",kalloc(3098));*/
 }
 
 MODULE_DEF(pmm) = {
