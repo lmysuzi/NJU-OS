@@ -173,14 +173,19 @@ static void *slab_alloc(size_t size){
   ans=slab_ask(cpu,slabOrder,size);
   unlock(&slab[cpu].slabLock[slabOrder]);
   if(ans!=NULL)return ans;
+
+
   //从其他cpu偷取内存
   for(cpu=0;cpu<cpu_count();cpu++){
+    if(cpu==cpu_current())continue;
     if(lock_acquire(&slab[cpu].slabLock[slabOrder])==0){
       ans=slab_ask(cpu,slabOrder,size);
       unlock(&slab[cpu].slabLock[slabOrder]);
       if(ans!=NULL)return ans;
     }
   }
+
+  //从大内存申请
   node_t *new=(node_t*)memory_alloc(PAGESIZE);
   if(new==NULL)return NULL;
   new->addr=(void*)new;
@@ -229,6 +234,7 @@ static void *memory_alloc(size_t size){
         }
         else{
           if(iniaddr+size<endaddr){
+            mark;
             header_t *new=(header_t*)(iniaddr+size);
             new->prev=list->prev;
             new->next=list->next;
