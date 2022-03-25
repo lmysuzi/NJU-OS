@@ -117,8 +117,8 @@ static void *slab_init(void *pt){
     for(int j=0,blooksize=32;j<SLABNUM-1;j++,blooksize<<=1){
       slab[i].head[j]=pt;
       slab[i].head[j]->addr=pt;
-      slab[i].head[j]->size=10*PAGESIZE;
-      slab[i].head[j]->blockNum=10*PAGESIZE/blooksize;
+      slab[i].head[j]->size=2*PAGESIZE;
+      slab[i].head[j]->blockNum=2*PAGESIZE/blooksize;
       slab[i].head[j]->next=NULL;
       pt+=10*PAGESIZE;
     }
