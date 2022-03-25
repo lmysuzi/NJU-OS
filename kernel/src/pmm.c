@@ -322,7 +322,7 @@ static void pmm_init() {
   void *pt=heap.start;
   pt=slab_init(pt);
   memory_init(pt);
-  printf("%x\n",ROUNDUP(0x1234567,4096));
+  printf("%x\n",ROUNDDOWN(0x1234567,4096));
 }
 
 MODULE_DEF(pmm) = {
