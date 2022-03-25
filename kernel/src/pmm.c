@@ -320,7 +320,6 @@ static void pmm_init() {
   uintptr_t pmsize = ((uintptr_t)heap.end - (uintptr_t)heap.start);
   printf("Got %d MiB heap: [%p, %p)\n", pmsize >> 20, heap.start, heap.end);
   void *pt=heap.start;
-  printf("%x\n",pt);
   pt=slab_init(pt);
   memory_init(pt);
 }
