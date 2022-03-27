@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
     execve("/usr/bin/strace", exec_argv, exec_envp);
   }
   else{
-    close(pipefd[1]);
+    //close(pipefd[1]);
     char temp[100];
     memset(temp,0,100*sizeof(char));
     FILE *fp=fdopen(pipefd[0],"r");
