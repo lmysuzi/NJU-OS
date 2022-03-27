@@ -32,6 +32,7 @@ int main(int argc, char *argv[]) {
     memset(temp,0,100*sizeof(char));
     FILE *fp=fdopen(pipefd[0],"r");
     char a=fgetc(fp);
+    if(a==EOF)printf("fuck\n");
     while(a!=EOF)printf("%c",a),a=fgetc(fp);
     return 0;
   } 
