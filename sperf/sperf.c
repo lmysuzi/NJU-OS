@@ -29,6 +29,7 @@ int main(int argc, char *argv[]) {
   else{
     close(pipefd[1]);
     char temp[100];
+    memset(temp,0,100*sizeof(char));
     FILE *fp=fdopen(pipefd[0],"r");
     fgets(temp,99,fp);
     printf("%s\n",temp);
