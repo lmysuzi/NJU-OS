@@ -31,8 +31,8 @@ int main(int argc, char *argv[]) {
     char temp[100];
     memset(temp,0,100*sizeof(char));
     FILE *fp=fdopen(pipefd[0],"r");
-    fgets(temp,99,fp);
-    printf("%s\n",temp);
+    char a=fgetc(fp);
+    while(a!=EOF)printf("%c",a),a=fgetc(fp);
     return 0;
   } 
   perror(argv[0]);
