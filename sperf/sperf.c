@@ -3,7 +3,6 @@
 #include <unistd.h>
 #include <string.h>
 
-char command[100];
 int main(int argc, char *argv[]) {
   char *exec_envp[] = { "PATH=/bin", NULL, };
   char *exec_argv[argc+2];
@@ -17,5 +16,5 @@ int main(int argc, char *argv[]) {
 
   }
  // perror(argv[0]);
-  //exit(EXIT_FAILURE);
+  exit(EXIT_FAILURE);
 }
