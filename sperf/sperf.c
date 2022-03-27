@@ -5,7 +5,7 @@
 
 char command[100];
 int main(int argc, char *argv[]) {
-  char *exec_argv[] = { "strace","-Txx", "ls", NULL, };
+  char *exec_argv[] = { "strace", "ls", NULL, };
   char *exec_envp[] = { "PATH=/bin", NULL, };
   execve("strace",          exec_argv, exec_envp);
   execve("/bin/strace",     exec_argv, exec_envp);
