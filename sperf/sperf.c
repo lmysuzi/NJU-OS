@@ -13,13 +13,13 @@ int main(int argc, char *argv[]) {
   exec_argv[3]=NULL;*/
   pid_t pid=fork();
   if(!pid){
-
-  execve("strace",          exec_argv, exec_envp);
-  execve("/bin/strace",     exec_argv, exec_envp);
-  execve("/usr/bin/strace", exec_argv, exec_envp);
+    execve("/usr/bin/strace", exec_argv, exec_envp);
   }
   else return 0;
   perror(argv[0]);
   return 0;
   exit(EXIT_FAILURE);
 }
+
+  //execve("strace",          exec_argv, exec_envp);
+  //execve("/bin/strace",     exec_argv, exec_envp);
