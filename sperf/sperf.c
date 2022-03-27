@@ -19,5 +19,6 @@ int main(int argc, char *argv[]) {
   }
   else;
   perror(argv[0]);
+  return 0;
   exit(EXIT_FAILURE);
 }
