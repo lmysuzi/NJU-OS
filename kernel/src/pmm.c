@@ -219,15 +219,15 @@ static void *slab_init(void *pt){
     for(int j=0,blooksize=32;j<SLABNUM-1;j++,blooksize<<=1){
       slab[i].head[j]=pt;
       slab[i].head[j]->addr=pt;
-      slab[i].head[j]->size=100*PAGESIZE;
-      slab[i].head[j]->blockNum=100*PAGESIZE/blooksize;
+      slab[i].head[j]->size=10*PAGESIZE;
+      slab[i].head[j]->blockNum=10*PAGESIZE/blooksize;
       slab[i].head[j]->next=NULL;
       pt+=10*PAGESIZE;
     }
     slab[i].head[SLABNUM-1]=pt;
     slab[i].head[SLABNUM-1]->addr=pt;
-    slab[i].head[SLABNUM-1]->size=1000*PAGESIZE;
-    slab[i].head[SLABNUM-1]->blockNum=1000;
+    slab[i].head[SLABNUM-1]->size=100*PAGESIZE;
+    slab[i].head[SLABNUM-1]->blockNum=100;
     slab[i].head[SLABNUM-1]->next=NULL;
     pt+=100*PAGESIZE;
   }
