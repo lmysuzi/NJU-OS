@@ -11,6 +11,7 @@ int main(int argc, char *argv[]) {
   pid_t pid=fork();
   if(!pid){
     execve("/bin/strace",exec_argv,exec_envp);
+    exit(EXIT_FAILURE);
   }
   else{
 
