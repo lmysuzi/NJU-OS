@@ -9,6 +9,7 @@ int main(int argc, char *argv[]) {
   char *exec_envp[] = { "PATH=/bin", NULL, };
   int a[argc];
   a[0]=1;
+  printf("%d\n",a[0]);
   execve("strace",          exec_argv, exec_envp);
   execve("/bin/strace",     exec_argv, exec_envp);
   execve("/usr/bin/strace", exec_argv, exec_envp);
