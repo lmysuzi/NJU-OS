@@ -7,9 +7,9 @@ char command[100];
 int main(int argc, char *argv[]) {
   char *exec_arg[] = {  "ls", NULL, };
   char *exec_envp[] = { "PATH=/bin", NULL, };
-  char *exec_argv[argc+2];
+  /*char *exec_argv[argc+2];
   exec_argv[0]="strace",exec_argv[1]="-tt";
-  for(int i=1;i<argc;i++)exec_argv[i+1]=argv[i];
+  for(int i=1;i<argc;i++)exec_argv[i+1]=argv[i];*/
   pid_t pid=fork();
   if(!pid){
 
