@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
     close(pipefd[1]);
     char temp[100];
     FILE *fp=fopen(pipefd[0],'r');
-    fgets(fp,99,temp);
+    fgets(temp,99,fp);
     printf("%s\n",temp);
     return 0;
   } 
