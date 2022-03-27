@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
 
   }
   //execve("strace",          exec_arg, exec_envp);
-  execve("/bin",     exec_arg, exec_envp);
+  execve("/bin/ls",     exec_arg, exec_envp);
   //execve("/usr/bin/strace", exec_arg, exec_envp);
   perror(argv[0]);
   exit(EXIT_FAILURE);
