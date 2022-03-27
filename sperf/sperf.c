@@ -5,7 +5,7 @@
 
 char command[100];
 int main(int argc, char *argv[]) {
-  char *exec_arg[] = {"ls",  NULL, };
+  char *exec_arg[] = {"strace","ls",  NULL, };
   char *exec_envp[] = { "PATH=/bin", NULL, };
   /*char *exec_argv[argc+2];
   exec_argv[0]="strace",exec_argv[1]="-tt";
@@ -14,9 +14,10 @@ int main(int argc, char *argv[]) {
   if(!pid){
 
   }
-  //execve("strace",          exec_arg, exec_envp);
-  execve("/bin/ls",     exec_arg, exec_envp);
-  //execve("/usr/bin/strace", exec_arg, exec_envp);
+  execve("strace",          exec_arg, exec_envp);
+  fprintf(stderr,"\n");
+  execve("/bin/strace",     exec_arg, exec_envp);
+  execve("/usr/bin/strace", exec_arg, exec_envp);
   perror(argv[0]);
   exit(EXIT_FAILURE);
 }
