@@ -10,9 +10,8 @@ int main(int argc, char *argv[]) {
   execve("strace",          exec_argv, exec_envp);
   execve("/bin/strace",     exec_argv, exec_envp);
   execve("/usr/bin/strace", exec_argv, exec_envp);*/
-  char *a="xingyinga\n";
-  a[1]='1';
-  printf("%s",a);
+  char *a="abc";
+  printf("%p\n",a);
   perror(argv[0]);
   exit(EXIT_FAILURE);
 }
