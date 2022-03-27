@@ -21,9 +21,10 @@ int main(int argc, char *argv[]) {
     exit(EXIT_FAILURE);
   }
   else if(pid==0){
-    //close(pipefd[0]);
+    close(pipefd[0]);
     dup2(pipefd[1],STDERR_FILENO);
     close(STDERR_FILENO);
+    printf("fukc\n");
     execve("/usr/bin/strace", exec_argv, exec_envp);
   }
   else{
