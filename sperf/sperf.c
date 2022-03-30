@@ -30,10 +30,10 @@ int main(int argc, char *argv[]) {
     char temp[100];
     memset(temp,0,100*sizeof(char));
     FILE *fp=fdopen(pipefd[0],"r");
-    while(1){
+    /*while(1){
       fgets(temp,99,fp);
       printf("%s",temp);
-    }
+    }*/
     return 0;
   } 
   perror(argv[0]);
