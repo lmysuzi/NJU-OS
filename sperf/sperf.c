@@ -11,8 +11,8 @@ typedef struct sysCall{
 sysCall syscalls[100];
 int sysNum=0;
 
-double cmp(const void *a,const void *b){
-  return (((sysCall*)b)->time-((sysCall*)a)->time);
+int cmp(const void *a,const void *b){
+  return 1000*(((sysCall*)b)->time-((sysCall*)a)->time);
 }
 
 void update(char *name,double time){
