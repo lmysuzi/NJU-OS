@@ -4,6 +4,8 @@
 #include <string.h>
 #include <regex.h>
 
+char *timePattern="[<][0-9]+[.][0-9][>]";
+
 int main(int argc, char *argv[]) {
   char *exec_envp[] = { "PATH=/bin", NULL, };
   char *exec_argv[]={"strace","-T","ls",">","/dev/null",NULL};
@@ -27,8 +29,12 @@ int main(int argc, char *argv[]) {
     close(pipefd[1]);
     char buf[4096];
     FILE *fp=fdopen(pipefd[0],"r");
+    regex_t reg;
+    regcomp(&reg,timePattern,0);
+    regmatch_t pos;
     while(fgets(buf,4096,fp)!=NULL){
-      printf("%s",buf);
+      regexec(&reg,buf,4096,&pos,0);
+      printf("%s",buf+pos.rm_so);
     }
     return 0;
   } 
