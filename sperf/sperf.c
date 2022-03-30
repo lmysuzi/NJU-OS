@@ -12,7 +12,7 @@ sysCall syscalls[100];
 int sysNum=0;
 
 int cmp(const void *a,const void *b){
-  return ((sysCall*)b)->time-((sysCall*)a)->time;
+  return (((sysCall*)b)->time-((sysCall*)a)->time);
 }
 
 void update(char *name,double time){
