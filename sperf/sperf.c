@@ -4,7 +4,7 @@
 #include <string.h>
 #include <regex.h>
 
-char *timePattern="[<][0-9]+[.][0-9]+[>]";
+char *timePattern="[<][0-9]+\\.[0-9]+[>]";
 
 int main(int argc, char *argv[]) {
   char *exec_envp[] = { "PATH=/bin", NULL, };
