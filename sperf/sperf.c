@@ -4,7 +4,11 @@
 #include <string.h>
 #include <regex.h>
 
-char *timePattern="[0-9]+\\.[0-9]+>$";
+typedef struct sysCall{
+  double time;
+  char name[20];
+}sysCall;
+sysCall syscalls[100];
 
 int main(int argc, char *argv[]) {
   char *exec_envp[] = { "PATH=/bin", NULL, };
@@ -29,11 +33,14 @@ int main(int argc, char *argv[]) {
     close(pipefd[1]);
     char buf[4096];
     FILE *fp=fdopen(pipefd[0],"r");
-    regex_t reg;
-    regcomp(&reg,timePattern,REG_EXTENDED | REG_NEWLINE);
-    regmatch_t pos;
     while(fgets(buf,4096,fp)!=NULL){
-      printf("%s",buf);
+      char name[20];
+      int i=0;
+      while(buf[i]!='('){
+        name[i]=buf[i];i++;
+      }
+      name[i]='\0';
+      printf("%s\n",name);
     }
     return 0;
   } 
