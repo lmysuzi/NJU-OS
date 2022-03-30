@@ -25,7 +25,6 @@ int main(int argc, char *argv[]) {
     dup2(pipefd[1],STDERR_FILENO);
     close(STDERR_FILENO);
     execve("/usr/bin/strace", exec_argv, exec_envp);
-    printf("fukc\n");
   }
   else{
     //close(pipefd[1]);
@@ -37,6 +36,7 @@ int main(int argc, char *argv[]) {
       printf("%s",temp);
     }
     return 0;
+    printf("fukc\n");
   } 
   perror(argv[0]);
   exit(EXIT_FAILURE);
