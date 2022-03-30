@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
     char buf[4096];
     FILE *fp=fdopen(pipefd[0],"r");
     regex_t reg;
-    regcomp(&reg,timePattern,0);
+    regcomp(&reg,timePattern,REG_EXTENDED | REG_NEWLINE);
     regmatch_t pos;
     while(fgets(buf,4096,fp)!=NULL){
       regexec(&reg,buf,4096,&pos,0);
