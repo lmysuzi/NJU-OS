@@ -51,6 +51,8 @@ int main(int argc, char *argv[]) {
         time[j]=buf[i];i++;j++;
       }
       time[j]='\0';
+      double timeNum;
+      sscanf(&timeNum,time,"%f");
       printf("%s\n",time);
       printf("%s\n",name);
     }
