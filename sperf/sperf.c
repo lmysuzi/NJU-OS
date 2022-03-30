@@ -34,12 +34,12 @@ int main(int argc, char *argv[]) {
     char buf[4096];
     FILE *fp=fdopen(pipefd[0],"r");
     while(fgets(buf,4096,fp)!=NULL){
-      char name[20];
+      /*char name[20];
       int i=0;
       while(buf[i]!='('){
         name[i]=buf[i];i++;
       }
-      name[i]='\0';
+      name[i]='\0';*/
       printf("%s\n",buf);
     }
     return 0;
