@@ -3,7 +3,6 @@
 #include <unistd.h>
 #include <string.h>
 
-char command[100];
 int main(int argc, char *argv[]) {
   char *exec_envp[] = { "PATH=/bin", NULL, };
   char *exec_argv[argc+2];
@@ -24,7 +23,7 @@ int main(int argc, char *argv[]) {
     close(pipefd[0]);
     dup2(pipefd[1],STDERR_FILENO);
     close(STDERR_FILENO);
-    execve("/usr/bin/strace", exec_argv, exec_envp);
+    //execve("/usr/bin/strace", exec_argv, exec_envp);
   }
   else{
     //close(pipefd[1]);
@@ -36,7 +35,6 @@ int main(int argc, char *argv[]) {
       printf("%s",temp);
     }
     return 0;
-    printf("fukc\n");
   } 
   perror(argv[0]);
   exit(EXIT_FAILURE);
