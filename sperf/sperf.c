@@ -42,7 +42,14 @@ int main(int argc, char *argv[]) {
         name[i]=buf[i];i++;
       }
       name[i]='\0';
-      printf("%s",buf);
+      i=strlen(buf)-2;
+      char time[20];
+      while(buf[i]!='<')i--;
+      i++;
+      while(buf[i]!='>'){
+        time[i]=buf[i];i++;
+      }
+      printf("%s\n",time);
       printf("%s\n",name);
     }
     return 0;
