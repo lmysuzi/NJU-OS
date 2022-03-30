@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
         name[i]=buf[i];i++;
       }
       name[i]='\0';
-      printf("%s\n",buf);
+      printf("%s\n",name);
     }
     return 0;
   } 
