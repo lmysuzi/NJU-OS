@@ -21,15 +21,19 @@ int main(int argc, char *argv[]) {
     exit(EXIT_FAILURE);
   }
   if(pid==0){
-    /*close(pipefd[0]);
+    close(pipefd[0]);
     dup2(pipefd[1],STDERR_FILENO);
-    close(STDERR_FILENO);*/
+    close(STDERR_FILENO);
   execve("strace",          exec_argv, exec_envp);
     execve("/usr/bin/strace", exec_argv, exec_envp);
   execve("/bin/strace",     exec_argv, exec_envp);
   }
   else{
-    return 0;
+    close(pipefd[1]);
+    char buf;
+    while(read(pipefd[0],buf,1)>0){
+      printf("%c",buf);
+    }
   } 
   perror(argv[0]);
   exit(EXIT_FAILURE);
