@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
     regcomp(&reg,timePattern,REG_EXTENDED | REG_NEWLINE);
     regmatch_t pos;
     while(fgets(buf,4096,fp)!=NULL){
-      printf("%d\n",strlen(buf));
+      printf("%ld\n",strlen(buf));
     }
     return 0;
   } 
