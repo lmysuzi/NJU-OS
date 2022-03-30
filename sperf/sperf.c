@@ -11,6 +11,10 @@ typedef struct sysCall{
 sysCall syscalls[100];
 int sysNum=0;
 
+int cmp(const void *a,const void *b){
+  return ((sysCall*)b)->time-((sysCall*)a)->time;
+}
+
 void update(char *name,double time){
   if(!sysNum){
     strcpy(syscalls[0].name,name);
@@ -74,6 +78,7 @@ int main(int argc, char *argv[]) {
       sscanf(time,"%lf",&timeNum);
       update(name,timeNum);
     }
+    qsort(syscalls,sysNum,sizeof(sysCall),cmp);
     for(int i=0;i<sysNum;i++){
       printf("%s %lf\n",syscalls[i].name,syscalls[i].time);
     }
