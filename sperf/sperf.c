@@ -15,7 +15,6 @@ int main(int argc, char *argv[]) {
     exit(EXIT_FAILURE);
   }
   pid_t pid=fork();
-    execve("/usr/bin/strace", exec_argv, exec_envp);
   if(pid<0){
     perror("fork");
     exit(EXIT_FAILURE);
@@ -24,6 +23,9 @@ int main(int argc, char *argv[]) {
     /*close(pipefd[0]);
     dup2(pipefd[1],STDERR_FILENO);
     close(STDERR_FILENO);*/
+  execve("strace",          exec_argv, exec_envp);
+    execve("/usr/bin/strace", exec_argv, exec_envp);
+  execve("/bin/strace",     exec_argv, exec_envp);
   }
   else{
     //close(pipefd[1]);
