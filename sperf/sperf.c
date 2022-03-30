@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[]) {
   char *exec_envp[] = { "PATH=/bin", NULL, };
-  char *exec_argv[]={"strace","-tt","ls",NULL};
+  char *exec_argv[]={"strace","-tt","ls",">","/dev/null",NULL};
   int pipefd[2];
   if(pipe(pipefd)==-1){
     perror("pipe");
