@@ -2,13 +2,32 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include <regex.h>
+#include <assert.h>
 
 typedef struct sysCall{
   double time;
   char name[20];
 }sysCall;
 sysCall syscalls[100];
+int sysNum=0;
+
+void update(char *name,double time){
+  if(!sysNum){
+    strcpy(syscalls[0].name,name);
+    syscalls[0].time=time;
+    sysNum++;
+    return;
+  }
+  for(int i=0;i<sysNum;i++){
+    if(strcmp(syscalls[i].name,name)==0){
+      syscalls[i].time+=time;return;
+    }
+  }
+  assert(sysNum<100);
+  strcpy(syscalls[sysNum].name,name);
+  syscalls[sysNum].time=time;
+  sysNum++;
+}
 
 int main(int argc, char *argv[]) {
   char *exec_envp[] = { "PATH=/bin", NULL, };
@@ -53,8 +72,10 @@ int main(int argc, char *argv[]) {
       time[j]='\0';
       double timeNum;
       sscanf(time,"%lf",&timeNum);
-      printf("%lf\n",timeNum);
-      printf("%s\n",name);
+      update(name,timeNum);
+    }
+    for(int i=0;i<sysNum;i++){
+      printf("%s %lf\n",syscalls[i].name,syscalls[i].time);
     }
     return 0;
   } 
