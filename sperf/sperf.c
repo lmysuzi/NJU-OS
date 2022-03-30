@@ -30,7 +30,6 @@ int main(int argc, char *argv[]) {
     close(pipefd[1]);
     char buf=0;
     while(read(pipefd[0],&buf,1)>0){
-      printf("fuck\n");
       printf("%c",buf);
     }
     return 0;
