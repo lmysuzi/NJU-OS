@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
     regmatch_t pos;
     while(fgets(buf,4096,fp)!=NULL){
       regexec(&reg,buf,4096,&pos,0);
-      printf("%s",buf+pos.rm_so);
+      printf("%d",pos.rm_so);
     }
     return 0;
   } 
