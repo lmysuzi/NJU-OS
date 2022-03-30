@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
     perror("fork");
     exit(EXIT_FAILURE);
   }
-  else if(pid==0){
+  if(pid==0){
     close(pipefd[0]);
     dup2(pipefd[1],STDERR_FILENO);
     close(STDERR_FILENO);
