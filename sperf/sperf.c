@@ -46,9 +46,11 @@ int main(int argc, char *argv[]) {
       char time[20];
       while(buf[i]!='<')i--;
       i++;
+      int j=0;
       while(buf[i]!='>'){
-        time[i]=buf[i];i++;
+        time[j]=buf[i];i++;j++;
       }
+      time[j]='\0';
       printf("%s\n",time);
       printf("%s\n",name);
     }
