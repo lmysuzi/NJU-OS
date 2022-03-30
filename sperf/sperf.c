@@ -35,6 +35,7 @@ int main(int argc, char *argv[]) {
       printf("fuck\n");
       printf("%c",buf);
     }
+    return 0;
   } 
   perror(argv[0]);
   exit(EXIT_FAILURE);
