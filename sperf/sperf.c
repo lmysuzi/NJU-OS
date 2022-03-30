@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
       time[j]='\0';
       double timeNum;
       sscanf(time,"%lf",&timeNum);
-      printf("%s\n",time);
+      printf("%d\n",timeNum);
       printf("%s\n",name);
     }
     return 0;
