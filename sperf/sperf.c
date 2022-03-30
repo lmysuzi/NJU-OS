@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
     FILE *fp=fdopen(pipefd[0],"r");
     while(fgets(buf,4096,fp)!=NULL){
       if(buf[0]<'a'||buf[0]>'z')continue;
-      if(buf[strlen(buf)-2]!='>')continue;
+      //if(buf[strlen(buf)-2]!='>')continue;
       char name[20];
       int i=0;
       while(buf[i]!='('){
