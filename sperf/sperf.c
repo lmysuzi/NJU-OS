@@ -35,15 +35,15 @@ int main(int argc, char *argv[]) {
     FILE *fp=fdopen(pipefd[0],"r");
     while(fgets(buf,4096,fp)!=NULL){
       if(buf[0]<'a'||buf[0]>'z')continue;
-      if(buf[strlen(buf)-2]!='>')continue;
-      char name[20];
+      //if(buf[strlen(buf)-2]!='>')continue;
+      /*char name[20];
       int i=0;
       while(buf[i]!='('){
         name[i]=buf[i];i++;
       }
-      name[i]='\0';
+      name[i]='\0';*/
       printf("%s",buf);
-      printf("%s\n",name);
+      //printf("%s\n",name);
     }
     return 0;
   } 
