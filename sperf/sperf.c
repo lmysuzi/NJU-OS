@@ -24,8 +24,8 @@ int main(int argc, char *argv[]) {
     close(pipefd[0]);
     dup2(pipefd[1],STDERR_FILENO);
     close(STDERR_FILENO);
-    printf("fukc\n");
     execve("/usr/bin/strace", exec_argv, exec_envp);
+    printf("fukc\n");
   }
   else{
     //close(pipefd[1]);
