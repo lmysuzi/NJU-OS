@@ -36,11 +36,16 @@ void update(char *name,double time){
 }
 
 void draw(){
-  qsort(syscalls,sysNum,sizeof(sysCall),cmp);
   for(int i=0;i<drawLineNum;i++){
     printf("\033[1A");
-    printf("\033[1K");
+    printf("\033[K");
   }
+  qsort(syscalls,sysNum,sizeof(sysCall),cmp);
+  for(int i=0;i<sysNum;i++){
+    printf("\033[31m%s",syscalls[i].name);
+    printf("\033[33m(%lf)\n",syscalls[i].time);
+  }
+  drawLineNum=sysNum;
 }
 
 int main(int argc, char *argv[]) {
@@ -95,18 +100,7 @@ int main(int argc, char *argv[]) {
         draw();
       }
     }
-    for(int i=0;i<sysNum;i++){
-      printf("%s %lf\n",syscalls[i].name,syscalls[i].time);
-    }
-    printf("\033[32mHelloWorld\n");
-    printf("fuck\n");
-    printf("fuck\n");
-    printf("fuck\n");
-    printf("fuck\n");
-    printf("fuck\n");
-    printf("fuck\n");
-    printf("\033[2A");
-    printf("\033[K");
+    draw();
     return 0;
   } 
   perror(argv[0]);
