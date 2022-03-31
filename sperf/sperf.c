@@ -105,7 +105,8 @@ int main(int argc, char *argv[]) {
     printf("fuck\n");
     printf("fuck\n");
     printf("fuck\n");
-    printf("\033[2AK");
+    printf("\033[2A");
+    printf("\033[K");
     return 0;
   } 
   perror(argv[0]);
