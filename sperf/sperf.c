@@ -45,7 +45,7 @@ void draw(){
   qsort(syscalls,sysNum,sizeof(sysCall),cmp);
   for(int i=0;i<sysNum;i++){
     printf("\033[31m%s",syscalls[i].name);
-    printf("\033[33m(%d%%)\n",syscalls[i].time*100/totalTime);
+    printf("\033[33m(%d%%)\n",(int)(syscalls[i].time*100/totalTime));
   }
   for(int i=0;i<80;i++)printf("%c",'\0');
   drawLineNum=sysNum;
