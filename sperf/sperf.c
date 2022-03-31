@@ -102,6 +102,7 @@ int main(int argc, char *argv[]) {
       update(name,timeNum);
       totalTime+=timeNum;
       gettimeofday(&now,NULL);
+      sleep(1);
       if(now.tv_sec!=prev.tv_sec){
         second++;
         prev=now;
@@ -114,6 +115,3 @@ int main(int argc, char *argv[]) {
   perror(argv[0]);
   exit(EXIT_FAILURE);
 }
-
-  //execve("strace",          exec_argv, exec_envp);
-  //execve("/bin/strace",     exec_argv, exec_envp);
