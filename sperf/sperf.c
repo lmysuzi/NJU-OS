@@ -12,6 +12,7 @@ typedef struct sysCall{
 sysCall syscalls[100];
 int sysNum=0;
 int drawLineNum=0;
+double totalTime=0;
 
 int cmp(const void *a,const void *b){
   return ((sysCall*)b)->time>((sysCall*)a)->time?1:-1;
@@ -44,7 +45,7 @@ void draw(){
   qsort(syscalls,sysNum,sizeof(sysCall),cmp);
   for(int i=0;i<sysNum;i++){
     printf("\033[31m%s",syscalls[i].name);
-    printf("\033[33m(%lf)\n",syscalls[i].time);
+    printf("\033[33m(%d%%)\n",syscalls[i].time*100/totalTime);
   }
   for(int i=0;i<80;i++)printf("%c",'\0');
   drawLineNum=sysNum;
@@ -96,6 +97,7 @@ int main(int argc, char *argv[]) {
       double timeNum;
       sscanf(time,"%lf",&timeNum);
       update(name,timeNum);
+      totalTime+=timeNum;
       gettimeofday(&now,NULL);
       if(now.tv_sec!=prev.tv_sec){
         prev=now;
