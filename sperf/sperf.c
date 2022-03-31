@@ -36,6 +36,7 @@ void update(char *name,double time){
 }
 
 void draw(){
+  printf("\r\033[K");
   for(int i=0;i<drawLineNum;i++){
     printf("\033[1A");
     printf("\033[K");
@@ -45,6 +46,7 @@ void draw(){
     printf("\033[31m%s",syscalls[i].name);
     printf("\033[33m(%lf)\n",syscalls[i].time);
   }
+  for(int i=0;i<80;i++)printf("\0");
   drawLineNum=sysNum;
 }
 
