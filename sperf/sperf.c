@@ -38,7 +38,8 @@ void update(char *name,double time){
 void draw(){
   qsort(syscalls,sysNum,sizeof(sysCall),cmp);
   for(int i=0;i<drawLineNum;i++){
-    printf("\033[1AK");
+    printf("\033[1A");
+    printf("\033[K");
   }
 }
 
