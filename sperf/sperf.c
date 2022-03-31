@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <assert.h>
+#include <sys/time.h>
 
 typedef struct sysCall{
   double time;
@@ -33,6 +34,10 @@ void update(char *name,double time){
   sysNum++;
 }
 
+void draw(){
+  qsort(syscalls,sysNum,sizeof(sysCall),cmp);
+}
+
 int main(int argc, char *argv[]) {
   char *exec_envp[] = { "PATH=/bin", NULL, };
   char *exec_argv[]={"strace","-T","ls",">","/dev/null",NULL};
@@ -56,6 +61,8 @@ int main(int argc, char *argv[]) {
     close(pipefd[1]);
     char buf[4096];
     FILE *fp=fdopen(pipefd[0],"r");
+    struct timeval prev,now;
+    gettimeofday(&prev,NULL);
     while(fgets(buf,4096,fp)!=NULL){
       if(buf[0]<'a'||buf[0]>'z')continue;
       if(buf[strlen(buf)-2]!='>')continue;
@@ -77,14 +84,18 @@ int main(int argc, char *argv[]) {
       double timeNum;
       sscanf(time,"%lf",&timeNum);
       update(name,timeNum);
+      gettimeofday(&now,NULL);
+      if(now.tv_sec!=prev.tv_sec){
+        prev=now;
+        draw();
+      }
     }
-    qsort(syscalls,sysNum,sizeof(sysCall),cmp);
     for(int i=0;i<sysNum;i++){
       printf("%s %lf\n",syscalls[i].name,syscalls[i].time);
     }
     printf("\033[32mHelloWorld\n");
     printf("fuck");
-    printf("\033[1AmK");
+    printf("\033[2J");
     return 0;
   } 
   perror(argv[0]);
