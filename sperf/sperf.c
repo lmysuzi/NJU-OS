@@ -46,7 +46,7 @@ void draw(){
     printf("\033[31m%s",syscalls[i].name);
     printf("\033[33m(%lf)\n",syscalls[i].time);
   }
-  for(int i=0;i<80;i++)printf("\0");
+  for(int i=0;i<80;i++)printf("%c",'\0');
   drawLineNum=sysNum;
 }
 
