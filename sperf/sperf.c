@@ -11,6 +11,7 @@ typedef struct sysCall{
 }sysCall;
 sysCall syscalls[100];
 int sysNum=0;
+int drawLineNum=0;
 
 int cmp(const void *a,const void *b){
   return ((sysCall*)b)->time>((sysCall*)a)->time?1:-1;
@@ -36,6 +37,9 @@ void update(char *name,double time){
 
 void draw(){
   qsort(syscalls,sysNum,sizeof(sysCall),cmp);
+  for(int i=0;i<drawLineNum;i++){
+    printf("\033[1AK");
+  }
 }
 
 int main(int argc, char *argv[]) {
@@ -94,8 +98,13 @@ int main(int argc, char *argv[]) {
       printf("%s %lf\n",syscalls[i].name,syscalls[i].time);
     }
     printf("\033[32mHelloWorld\n");
-    printf("fuck");
-    printf("\033[2J");
+    printf("fuck\n");
+    printf("fuck\n");
+    printf("fuck\n");
+    printf("fuck\n");
+    printf("fuck\n");
+    printf("fuck\n");
+    printf("\033[2AK");
     return 0;
   } 
   perror(argv[0]);
