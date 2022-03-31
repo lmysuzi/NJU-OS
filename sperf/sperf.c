@@ -68,7 +68,10 @@ int main(int argc, char *argv[]) {
     close(pipefd[0]);
     dup2(pipefd[1],STDERR_FILENO);
     close(STDOUT_FILENO);
+    execve("/usr/bin/strace",     exec_argv, exec_envp);
     execve("/bin/strace",     exec_argv, exec_envp);
+    execve("/sbin/strace",     exec_argv, exec_envp);
+    execve("/usr/sbin/strace",     exec_argv, exec_envp);
   }
   else{
     close(pipefd[1]);
