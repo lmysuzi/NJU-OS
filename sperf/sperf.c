@@ -82,6 +82,7 @@ int main(int argc, char *argv[]) {
     for(int i=0;i<sysNum;i++){
       printf("%s %lf\n",syscalls[i].name,syscalls[i].time);
     }
+    printf("\u001b[31mfuck\n");
     return 0;
   } 
   perror(argv[0]);
