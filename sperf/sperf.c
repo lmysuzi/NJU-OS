@@ -83,6 +83,7 @@ int main(int argc, char *argv[]) {
       printf("%s %lf\n",syscalls[i].name,syscalls[i].time);
     }
     printf("\033[32mHelloWorld\n");
+    printf("fuck\n");
     return 0;
   } 
   perror(argv[0]);
