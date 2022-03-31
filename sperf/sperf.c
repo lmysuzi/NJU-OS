@@ -84,6 +84,7 @@ int main(int argc, char *argv[]) {
     }
     printf("\033[32mHelloWorld\n");
     printf("fuck\n");
+    printf("\033[1AK");
     return 0;
   } 
   perror(argv[0]);
