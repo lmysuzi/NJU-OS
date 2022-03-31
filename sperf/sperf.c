@@ -53,7 +53,7 @@ void draw(){
 
 int main(int argc, char *argv[]) {
   char *exec_envp[] = { "PATH=/bin", NULL, };
-  char *exec_argv[]={"strace","-T","yes",">","/dev/null",NULL};
+  char *exec_argv[]={"strace","-T","./a.out",">","/dev/null",NULL};
   int pipefd[2];
   if(pipe(pipefd)==-1){
     perror("pipe");
