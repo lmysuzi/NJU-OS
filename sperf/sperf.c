@@ -39,7 +39,7 @@ void draw(){
   qsort(syscalls,sysNum,sizeof(sysCall),cmp);
   for(int i=0;i<drawLineNum;i++){
     printf("\033[1A");
-    printf("\033[K");
+    printf("\033[1K");
   }
 }
 
