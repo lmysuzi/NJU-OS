@@ -50,10 +50,14 @@ void draw(){
   for(int i=0;i<80;i++)printf("%c",'\0');
   drawLineNum=sysNum;
 }
-
 int main(int argc, char *argv[]) {
   char *exec_envp[] = { "PATH=/bin", NULL, };
-  char *exec_argv[]={"strace","-T","ls",">","/dev/null",NULL};
+  char *exec_argv[argc+4];
+  exec_argv[0]="strace",exec_argv[1]="-T";
+  for(int i=1;i<argc;i++){
+    exec_argv[i+1]=argv[i];
+  }
+  exec_argv[argc+1]=">",exec_argvl[argc+2]="/dev/null",exec_argv[argc+3]=NULL;
   int pipefd[2];
   if(pipe(pipefd)==-1){
     perror("pipe");
