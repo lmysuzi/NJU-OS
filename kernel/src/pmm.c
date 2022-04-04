@@ -1,7 +1,5 @@
 #include <common.h>
 
-#define mark printf("fuck\n")
-
 #define PAGENUM  131073
 #define PAGESIZE (4096)
 #define MINSIZE  (32)
@@ -301,11 +299,6 @@ static void *slab_alloc(size_t size){
 }
 
 
-
-
-
-
-
 static void *kalloc(size_t size) {
   size=tableSizeFor(size);
   if(size<MINSIZE)size=MINSIZE;
@@ -320,6 +313,21 @@ static void kfree(void *ptr){
   if(size<=PAGESIZE&&size>=MINSIZE)slab_free(ptr,size);
   else if(size>PAGESIZE)memory_free(ptr,size);
 }
+
+/*static void *kalloc_safe(size_t size) {
+  bool i = ienabled();
+  iset(false);
+  void *ret = kalloc(size);
+  if (i) iset(true);
+  return ret;
+}
+
+static void kfree_safe(void *ptr) {
+  int i = ienabled();
+  iset(false);
+  kfree(ptr);
+  if (i) iset(true);
+}*/
 
 static void pmm_init() {
   uintptr_t pmsize = ((uintptr_t)heap.end - (uintptr_t)heap.start);

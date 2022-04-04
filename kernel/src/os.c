@@ -2,6 +2,7 @@
 
 static void os_init() {
   pmm->init();
+  //kmt->init();
 }
 
 static void os_run() {
