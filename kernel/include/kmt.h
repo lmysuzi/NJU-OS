@@ -8,4 +8,8 @@ struct spinlock{
   const char *name;
 };
 
+struct semaphore{
+
+};
+
 #endif 
