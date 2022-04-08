@@ -314,7 +314,7 @@ static void kfree(void *ptr){
   else if(size>PAGESIZE)memory_free(ptr,size);
 }
 
-/*static void *kalloc_safe(size_t size) {
+static void *kalloc_safe(size_t size) {
   bool i = ienabled();
   iset(false);
   void *ret = kalloc(size);
@@ -327,7 +327,7 @@ static void kfree_safe(void *ptr) {
   iset(false);
   kfree(ptr);
   if (i) iset(true);
-}*/
+}
 
 static void pmm_init() {
   uintptr_t pmsize = ((uintptr_t)heap.end - (uintptr_t)heap.start);
@@ -341,4 +341,6 @@ MODULE_DEF(pmm) = {
   .init  = pmm_init,
   .alloc = kalloc,
   .free  = kfree,
+  .alloc_safe = kalloc_safe,
+  .free_safe = kfree_safe,
 };
