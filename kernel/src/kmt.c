@@ -1,5 +1,5 @@
 #include <kmt.h>
-
+#include <common.h>
 
     
 static void spin_init(spinlock_t *lk, const char *name){
@@ -8,7 +8,9 @@ static void spin_init(spinlock_t *lk, const char *name){
 
 static void spin_lock(spinlock_t *lk){
   bool prev_status=ienabled();
-  if(prev_status)return;
+  iset(false);
+  while(atomic_xchg(&lk->flag,1)==1);
+  if(prev_status)iset(true);
 }
 static void spin_unlock(spinlock_t *lk){
 
