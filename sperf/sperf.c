@@ -77,7 +77,7 @@ int main(int argc, char *argv[]) {
         char str[100];
         strncpy(str,path+begin,end-begin);
         str[end-begin]='\0';
-        strcat(str,"strace");
+        strcat(str,"/strace");
         printf("%s\n",str);
         begin=end+1;
       }
@@ -85,7 +85,7 @@ int main(int argc, char *argv[]) {
         char str[100];
         strncpy(str,path+begin,end-begin+1);
         str[end-begin+1]='\0';
-        strcat(str,"strace");
+        strcat(str,"/strace");
         printf("%s\n",str);
       }
     }
