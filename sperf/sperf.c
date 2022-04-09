@@ -7,9 +7,9 @@
 
 typedef struct sysCall{
   double time;
-  char name[20];
+  char name[100];
 }sysCall;
-sysCall syscalls[100];
+sysCall syscalls[500];
 int sysNum=0;
 double totalTime=0;
 int second=0;
@@ -47,7 +47,8 @@ void draw(){
   for(int i=0;i<80;i++)printf("%c",'\0');
 }
 int main(int argc, char *argv[]) {
-  char *exec_envp[] = { "PATH=/bin", NULL, };
+  extern char **environ;
+  //char *exec_envp[] = { "PATH=/bin", NULL, };
   char *exec_argv[argc+4];
   exec_argv[0]="strace",exec_argv[1]="-T";
   for(int i=1;i<argc;i++){
@@ -76,14 +77,14 @@ int main(int argc, char *argv[]) {
         str[end-begin]='\0';
         strcat(str,"/strace");
         begin=end+1;
-        execve(str,exec_argv,exec_envp);
+        execve(str,exec_argv,environ);
       }
       else if(end==strlen(path)-1){
         char str[100];
         strncpy(str,path+begin,end-begin+1);
         str[end-begin+1]='\0';
         strcat(str,"/strace");
-        execve(str,exec_argv,exec_envp);
+        execve(str,exec_argv,environ);
       }
     }
     /*execve("/usr/bin/strace",     exec_argv, exec_envp);
@@ -100,14 +101,14 @@ int main(int argc, char *argv[]) {
     while(fgets(buf,4096,fp)!=NULL){
       if(buf[0]<'a'||buf[0]>'z')continue;
       if(buf[strlen(buf)-2]!='>')continue;
-      char name[20];
+      char name[100];
       int i=0;
       while(buf[i]!='('){
         name[i]=buf[i];i++;
       }
       name[i]='\0';
       i=strlen(buf)-2;
-      char time[20];
+      char time[100];
       while(buf[i]!='<')i--;
       i++;
       int j=0;
