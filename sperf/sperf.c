@@ -71,28 +71,27 @@ int main(int argc, char *argv[]) {
     dup2(pipefd[1],STDERR_FILENO);
     //close(STDOUT_FILENO);
     char *path=getenv("PATH");int begin=0,end=0;
-    printf("%s\n",path);
     for(;end<strlen(path);end++){
       if(path[end]==':'){
         char str[100];
         strncpy(str,path+begin,end-begin);
         str[end-begin]='\0';
         strcat(str,"/strace");
-        printf("%s\n",str);
         begin=end+1;
+        execve(str,exec_argv,exec_envp);
       }
       else if(end==strlen(path)-1){
         char str[100];
         strncpy(str,path+begin,end-begin+1);
         str[end-begin+1]='\0';
         strcat(str,"/strace");
-        printf("%s\n",str);
+        execve(str,exec_argv,exec_envp);
       }
     }
-    execve("/usr/bin/strace",     exec_argv, exec_envp);
+    /*execve("/usr/bin/strace",     exec_argv, exec_envp);
     execve("/bin/strace",     exec_argv, exec_envp);
     execve("/sbin/strace",     exec_argv, exec_envp);
-    execve("/usr/sbin/strace",     exec_argv, exec_envp);
+    execve("/usr/sbin/strace",     exec_argv, exec_envp);*/
   }
   else{
     close(pipefd[1]);
