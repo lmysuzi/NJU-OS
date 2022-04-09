@@ -71,6 +71,7 @@ int main(int argc, char *argv[]) {
     dup2(pipefd[1],STDERR_FILENO);
     close(STDOUT_FILENO);
     char *path=getenv("PATH");int begin=0,end=0;
+    printf("%s\n",path);
     for(;end<strlen(path);end++){
       if(path[end]==':'){
         char str[50];
