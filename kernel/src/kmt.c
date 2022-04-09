@@ -1,5 +1,4 @@
 #include <kmt.h>
-#include <common.h>
 
     
 static void spin_init(spinlock_t *lk, const char *name){
@@ -10,10 +9,12 @@ static void spin_lock(spinlock_t *lk){
   bool prev_status=ienabled();
   iset(false);
   while(atomic_xchg(&lk->flag,1)==1);
-  if(prev_status)iset(true);
+  lk->status=prev_status;
 }
 static void spin_unlock(spinlock_t *lk){
-
+  panic_on(ienabled()==1,"wrong status");
+  atomic_xchg(&lk->flag,0);
+  iset(lk->status);
 }
 
 MODULE_DEF(kmt)={
