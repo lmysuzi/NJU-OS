@@ -74,16 +74,18 @@ int main(int argc, char *argv[]) {
     printf("%s\n",path);
     for(;end<strlen(path);end++){
       if(path[end]==':'){
-        char str[50];
+        char str[100];
         strncpy(str,path+begin,end-begin);
         str[end-begin]='\0';
+        strcat(str,"strace");
         printf("%s\n",str);
         begin=end+1;
       }
       else if(end==strlen(path)-1){
-        char str[50];
+        char str[100];
         strncpy(str,path+begin,end-begin+1);
         str[end-begin+1]='\0';
+        strcat(str,"strace");
         printf("%s\n",str);
       }
     }
