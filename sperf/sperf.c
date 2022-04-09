@@ -47,8 +47,6 @@ void draw(){
   for(int i=0;i<80;i++)printf("%c",'\0');
 }
 int main(int argc, char *argv[]) {
-  char *a=getenv("PATH");
-  printf("%s\n",a);
   char *exec_envp[] = { "PATH=/bin", NULL, };
   char *exec_argv[argc+4];
   exec_argv[0]="strace",exec_argv[1]="-T";
