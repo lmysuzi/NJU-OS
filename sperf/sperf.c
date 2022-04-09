@@ -73,7 +73,7 @@ int main(int argc, char *argv[]) {
     char *path=getenv("PATH");int begin=0,end=0;
     printf("%s\n",path);
     for(;end<strlen(path);end++){
-      if(path[end]==':'){
+      if(path[end]==':'||end==strlen(path)-1){
         char str[50];
         strncpy(str,path+begin,end-begin);
         str[end-begin]='\0';
