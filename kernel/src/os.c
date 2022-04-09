@@ -1,7 +1,10 @@
 #include <common.h>
 #include <os.h>
 
+irq_t *irq_head;
+
 static void os_init() {
+  irq_head=NULL;
   pmm->init();
   //kmt->init();
 }
@@ -10,6 +13,7 @@ static void os_run() {
   for (const char *s = "Hello World from CPU #*\n"; *s; s++) {
     putch(*s == '*' ? '0' + cpu_current() : *s);
   }
+  printf("%d\n",sizeof(irq_t));
   while (1) ;
 }
 
