@@ -5,7 +5,6 @@ irq_t *irq_head;
 
 static void os_init() {
   irq_head=NULL;
-  dev->init();
   pmm->init();
   kmt->init();
 }
