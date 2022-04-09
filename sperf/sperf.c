@@ -48,7 +48,7 @@ void draw(){
 }
 int main(int argc, char *argv[]) {
   char *a=getenv("PATH");
-  printf("%s\n",a);
+  printf("%d\n",strlen(a));
   char *exec_envp[] = { "PATH=/bin", NULL, };
   char *exec_argv[argc+4];
   exec_argv[0]="strace",exec_argv[1]="-T";
@@ -70,6 +70,10 @@ int main(int argc, char *argv[]) {
     close(pipefd[0]);
     dup2(pipefd[1],STDERR_FILENO);
     close(STDOUT_FILENO);
+    char *path=getenv("PATH");int begin=0,end=0;
+    while(1){
+
+    }
     execve("/usr/bin/strace",     exec_argv, exec_envp);
     execve("/bin/strace",     exec_argv, exec_envp);
     execve("/sbin/strace",     exec_argv, exec_envp);
