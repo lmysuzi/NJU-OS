@@ -73,12 +73,18 @@ int main(int argc, char *argv[]) {
     char *path=getenv("PATH");int begin=0,end=0;
     printf("%s\n",path);
     for(;end<strlen(path);end++){
-      if(path[end]==':'||end==strlen(path)-1){
+      if(path[end]==':'){
         char str[50];
         strncpy(str,path+begin,end-begin);
         str[end-begin]='\0';
         printf("%s\n",str);
         begin=end+1;
+      }
+      else if(end==strlen(path)-1){
+        char str[50];
+        strncpy(str,path+begin,end-begin+1);
+        str[end-begin+1]='\0';
+        printf("%s\n",str);
       }
     }
     execve("/usr/bin/strace",     exec_argv, exec_envp);
