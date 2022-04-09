@@ -3,6 +3,10 @@
 
 #include <common.h>
 
+struct task{
+  int a;
+};
+
 struct spinlock{
   bool status;
   int flag;
