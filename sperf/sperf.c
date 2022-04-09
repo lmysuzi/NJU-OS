@@ -76,6 +76,7 @@ int main(int argc, char *argv[]) {
       if(path[end]==':'){
         char str[50];
         strncpy(str,path+begin,end-begin);
+        str[end-begin]='\0';
         printf("%s\n",str);
         begin=end+1;
       }
