@@ -14,8 +14,8 @@ int sysNum=0;
 double totalTime=0;
 int second=0;
 char buf[1024];
-char name[50];
-char time[50];
+char name[1024];
+char time[1024];
 char str[1000];
 struct timeval prev,now;
 
@@ -106,22 +106,20 @@ int main(int argc, char *argv[]) {
       if(strlen(buf)<=2)continue;
       if(buf[strlen(buf)-2]!='>')continue;
       int t;
-                        for (t = 0; t < strlen(buf); ++t) {
-                                if (buf[t] == '(')
-                                        break;
-                        }
-                        if (t == strlen(buf))
-                                continue;
-                        strncpy(name, buf, t);
-                        name[t] = '\0';
-
-                        // parse time
-                        for (t = strlen(buf) - 1; t >= 0; --t) {
-                                if (buf[t] == '<')
-                                        break;
-                        }
-                        if (t < 0)
-                                continue;
+      for (t = 0; t < strlen(buf); ++t) {
+        if (buf[t] == '(')
+        break;
+      }
+      if (t == strlen(buf))
+        continue;
+      strncpy(name, buf, t);
+      name[t] = '\0';
+      for (t = strlen(buf) - 1; t >= 0; --t) {
+        if (buf[t] == '<')
+        break;
+      }
+      if (t < 0)
+      continue;
       double timeNum;
       sscanf(time,"%lf",&timeNum);
       sscanf(buf+ t + 1, "%lf", &timeNum);
