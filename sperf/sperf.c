@@ -106,23 +106,18 @@ int main(int argc, char *argv[]) {
       if(strlen(buf)<=2)continue;
       if(buf[strlen(buf)-2]!='>')continue;
       int t;
-      for (t = 0; t < strlen(buf); ++t) {
-        if (buf[t] == '(')
-        break;
+      for (t=0;t<strlen(buf);++t){
+        if(buf[t]=='(')break;
       }
-      if (t == strlen(buf))
-        continue;
-      strncpy(name, buf, t);
-      name[t] = '\0';
-      for (t = strlen(buf) - 1; t >= 0; --t) {
-        if (buf[t] == '<')
-        break;
+      if (t==strlen(buf))continue;
+      strncpy(name,buf,t);
+      name[t]='\0';
+      for(t=strlen(buf)-1;t>=0;--t){
+        if(buf[t]=='<')break;
       }
-      if (t < 0)
-      continue;
+      if(t<0)continue;
       double timeNum;
-      sscanf(time,"%lf",&timeNum);
-      sscanf(buf+ t + 1, "%lf", &timeNum);
+      sscanf(buf+t+1,"%lf",&timeNum);
       update(name,timeNum);
       totalTime+=timeNum;
       gettimeofday(&now,NULL);
