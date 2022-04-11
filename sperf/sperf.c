@@ -102,7 +102,7 @@ int main(int argc, char *argv[]) {
     gettimeofday(&now,NULL);
     memset(buf,0,1024);
     while(1){
-      if(fgets(buf,1024,fp)==NULL)goto fuck;
+      if(fgets(buf,1024,fp)==NULL)break;
       if(buf[0]=='\0')goto fuck;
       if(buf[0]<'a'||buf[0]>'z')continue;
       if(strlen(buf)<=2)continue;
