@@ -78,6 +78,7 @@ int main(int argc, char *argv[]) {
       if(path[end]==':'){
         char str[1000];
         strncpy(str,path+begin,end-begin);
+        if(end<begin)continue;
         str[end-begin]='\0';
         strcat(str,"/strace");
         begin=end+1;
@@ -86,6 +87,7 @@ int main(int argc, char *argv[]) {
       else if(end==strlen(path)-1){
         char str[1000];
         strncpy(str,path+begin,end-begin+1);
+        if(end<=begin)continue;
         str[end-begin+1]='\0';
         strcat(str,"/strace");
         execve(str,exec_argv,environ);
@@ -102,6 +104,7 @@ int main(int argc, char *argv[]) {
       if(buf[0]<'a'||buf[0]>'z')continue;
       if(strlen(buf)<=2)continue;
       if(buf[strlen(buf)-2]!='>')continue;
+      printf("%d\n",strlen(buf));
       memset(time,0,50);
       memset(name,0,50);
       int i=0;
