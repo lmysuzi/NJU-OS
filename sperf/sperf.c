@@ -99,10 +99,11 @@ int main(int argc, char *argv[]) {
     close(pipefd[1]);
     FILE *fp=fdopen(pipefd[0],"r");
     gettimeofday(&prev,NULL);
+    gettimeofday(&now,NULL);
     memset(buf,0,1024);
     while(1){
       fgets(buf,1024,fp);
-      if(buf==NULL)continue;
+      if(buf==NULL);goto fuck;
       if(buf[0]<'a'||buf[0]>'z')continue;
       if(strlen(buf)<=2)continue;
       if(buf[strlen(buf)-2]!='>')continue;
@@ -121,6 +122,7 @@ int main(int argc, char *argv[]) {
       sscanf(buf+t+1,"%lf",&timeNum);
       update(name,timeNum);
       totalTime+=timeNum;
+      fuck:
       gettimeofday(&now,NULL);
       if(now.tv_sec!=prev.tv_sec){
         second++;
