@@ -95,6 +95,7 @@ int main(int argc, char *argv[]) {
     struct timeval prev,now;
     gettimeofday(&prev,NULL);
     while(fgets(buf,4096,fp)!=NULL){
+      if(buf==NULL)continue;
       if(buf[0]<'a'||buf[0]>'z')continue;
       if(strlen(buf)<=2)continue;
       if(buf[strlen(buf)-2]!='>')continue;
