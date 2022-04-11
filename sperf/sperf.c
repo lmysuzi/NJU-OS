@@ -101,6 +101,7 @@ int main(int argc, char *argv[]) {
       int i=0;
       while(buf[i]!='('){
         name[i]=buf[i];i++;
+        if(i>=100||i>=strlen(buf))goto fuck;
       }
       name[i]='\0';
       i=strlen(buf)-2;
@@ -110,6 +111,7 @@ int main(int argc, char *argv[]) {
       int j=0;
       while(buf[i]!='>'){
         time[j]=buf[i];i++;j++;
+        if(j>=100||i>=strlen(buf))goto fuck;
       }
       time[j]='\0';
       double timeNum;
@@ -122,6 +124,7 @@ int main(int argc, char *argv[]) {
         prev=now;
         draw();
       }
+      fuck:
     }
     draw();
     return 0;
