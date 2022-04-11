@@ -104,6 +104,7 @@ int main(int argc, char *argv[]) {
     while(1){
       fgets(buf,1024,fp);
       if(buf==NULL)goto fuck;
+      if(buf[0]=='\0')goto fuck;
       if(buf[0]<'a'||buf[0]>'z')continue;
       if(strlen(buf)<=2)continue;
       if(buf[strlen(buf)-2]!='>')continue;
