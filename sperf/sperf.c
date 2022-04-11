@@ -105,7 +105,6 @@ int main(int argc, char *argv[]) {
       if(strlen(buf)<=2)continue;
       if(buf[strlen(buf)-2]!='>')continue;
       memset(time,0,50);
-      printf("%d\n",(int)strlen(time));
       memset(name,0,50);
       int i=0;
       while(buf[i]!='('){
@@ -125,6 +124,7 @@ int main(int argc, char *argv[]) {
         if(j>=50||i>=strlen(buf))goto fuck;
       }
       time[j]='\0';
+      printf("%d\n",(int)strlen(time));
       double timeNum;
       sscanf(time,"%lf",&timeNum);
       update(name,timeNum);
