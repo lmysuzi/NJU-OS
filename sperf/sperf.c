@@ -116,7 +116,6 @@ int main(int argc, char *argv[]) {
                         name[t] = '\0';
 
                         // parse time
-                        double dur;
                         for (t = strlen(buf) - 1; t >= 0; --t) {
                                 if (buf[t] == '<')
                                         break;
@@ -128,7 +127,6 @@ int main(int argc, char *argv[]) {
       sscanf(buf+ t + 1, "%lf", &timeNum);
       update(name,timeNum);
       totalTime+=timeNum;
-      fuck:
       gettimeofday(&now,NULL);
       if(now.tv_sec!=prev.tv_sec){
         second++;
