@@ -124,7 +124,7 @@ int main(int argc, char *argv[]) {
         if(j>=50||i>=strlen(buf))goto fuck;
       }
       time[j]='\0';
-      printf("%d\n",(int)strlen(time));
+      printf("%d\n",(int)strlen(name));
       double timeNum;
       sscanf(time,"%lf",&timeNum);
       update(name,timeNum);
