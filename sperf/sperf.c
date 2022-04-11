@@ -100,16 +100,17 @@ int main(int argc, char *argv[]) {
     FILE *fp=fdopen(pipefd[0],"r");
     gettimeofday(&prev,NULL);
     memset(buf,0,1024);
-    while(fgets(buf,1024,fp)!=NULL){
+    while(1){
+      fgets(buf,1024,fp);
       if(buf==NULL)continue;
       if(buf[0]<'a'||buf[0]>'z')continue;
       if(strlen(buf)<=2)continue;
       if(buf[strlen(buf)-2]!='>')continue;
       int t;
-      for (t=0;t<strlen(buf);++t){
+      for(t=0;t<strlen(buf);++t){
         if(buf[t]=='(')break;
       }
-      if (t==strlen(buf))continue;
+      if(t==strlen(buf))continue;
       strncpy(name,buf,t);
       name[t]='\0';
       for(t=strlen(buf)-1;t>=0;--t){
