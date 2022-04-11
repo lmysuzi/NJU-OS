@@ -119,12 +119,12 @@ int main(int argc, char *argv[]) {
       }    
       i++;
       int j=0;
+      if(i>=strlen(buf))goto fuck;
       while(buf[i]!='>'){
         time[j]=buf[i];i++;j++;
         if(j>=50||i>=strlen(buf))goto fuck;
       }
       time[j]='\0';
-      printf("%d\n",(int)strlen(name));
       double timeNum;
       sscanf(time,"%lf",&timeNum);
       update(name,timeNum);
