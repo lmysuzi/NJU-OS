@@ -9,7 +9,7 @@ typedef struct sysCall{
   double time;
   char name[100];
 }sysCall;
-sysCall syscalls[500];
+sysCall syscalls[1000];
 int sysNum=0;
 double totalTime=0;
 int second=0;
@@ -30,7 +30,7 @@ void update(char *name,double time){
       syscalls[i].time+=time;return;
     }
   }
-  assert(sysNum<100);
+  assert(sysNum<1000);
   strcpy(syscalls[sysNum].name,name);
   syscalls[sysNum].time=time;
   sysNum++;
@@ -87,10 +87,6 @@ int main(int argc, char *argv[]) {
         execve(str,exec_argv,environ);
       }
     }
-    /*execve("/usr/bin/strace",     exec_argv, exec_envp);
-    execve("/bin/strace",     exec_argv, exec_envp);
-    execve("/sbin/strace",     exec_argv, exec_envp);
-    execve("/usr/sbin/strace",     exec_argv, exec_envp);*/
   }
   else{
     close(pipefd[1]);
