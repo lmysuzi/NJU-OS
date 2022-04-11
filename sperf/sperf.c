@@ -96,6 +96,7 @@ int main(int argc, char *argv[]) {
     gettimeofday(&prev,NULL);
     while(fgets(buf,4096,fp)!=NULL){
       if(buf[0]<'a'||buf[0]>'z')continue;
+      if(strlen(buf)<=2)continue;
       if(buf[strlen(buf)-2]!='>')continue;
       char name[100];
       int i=0;
@@ -106,7 +107,10 @@ int main(int argc, char *argv[]) {
       name[i]='\0';
       i=strlen(buf)-2;
       char time[100];
-      while(buf[i]!='<')i--;
+      while(buf[i]!='<'){
+        i--;
+        if(i<0)goto fuck;
+      }    
       i++;
       int j=0;
       while(buf[i]!='>'){
