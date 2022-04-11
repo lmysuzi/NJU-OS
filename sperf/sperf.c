@@ -104,7 +104,7 @@ int main(int argc, char *argv[]) {
       if(buf[0]<'a'||buf[0]>'z')continue;
       if(strlen(buf)<=2)continue;
       if(buf[strlen(buf)-2]!='>')continue;
-      printf("%d\n",strlen(buf));
+      printf("%d\n",(int)strlen(buf));
       memset(time,0,50);
       memset(name,0,50);
       int i=0;
