@@ -72,7 +72,7 @@ int main(int argc, char *argv[]) {
     char *path=getenv("PATH");int begin=0,end=0;
     for(;end<strlen(path);end++){
       if(path[end]==':'){
-        char str[100];
+        char str[1000];
         strncpy(str,path+begin,end-begin);
         str[end-begin]='\0';
         strcat(str,"/strace");
@@ -80,7 +80,7 @@ int main(int argc, char *argv[]) {
         execve(str,exec_argv,environ);
       }
       else if(end==strlen(path)-1){
-        char str[100];
+        char str[1000];
         strncpy(str,path+begin,end-begin+1);
         str[end-begin+1]='\0';
         strcat(str,"/strace");
