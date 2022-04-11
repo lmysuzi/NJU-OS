@@ -13,6 +13,10 @@ sysCall syscalls[1000];
 int sysNum=0;
 double totalTime=0;
 int second=0;
+char buf[1024];
+char name[50];
+char time[50];
+struct timeval prev,now;
 
 int cmp(const void *a,const void *b){
   return ((sysCall*)b)->time>((sysCall*)a)->time?1:-1;
@@ -90,24 +94,23 @@ int main(int argc, char *argv[]) {
   }
   else{
     close(pipefd[1]);
-    char buf[4096];
     FILE *fp=fdopen(pipefd[0],"r");
-    struct timeval prev,now;
     gettimeofday(&prev,NULL);
-    while(fgets(buf,4096,fp)!=NULL){
+    memset(buf,0,1024);
+    while(fgets(buf,1024,fp)!=NULL){
       if(buf==NULL)continue;
       if(buf[0]<'a'||buf[0]>'z')continue;
       if(strlen(buf)<=2)continue;
       if(buf[strlen(buf)-2]!='>')continue;
-      char name[100];
+      memset(time,0,50);
+      memset(name,0,50);
       int i=0;
       while(buf[i]!='('){
         name[i]=buf[i];i++;
-        if(i>=100||i>=strlen(buf))goto fuck;
+        if(i>=50||i>=strlen(buf))goto fuck;
       }
       name[i]='\0';
       i=strlen(buf)-2;
-      char time[100];
       while(buf[i]!='<'){
         i--;
         if(i<0)goto fuck;
@@ -116,7 +119,7 @@ int main(int argc, char *argv[]) {
       int j=0;
       while(buf[i]!='>'){
         time[j]=buf[i];i++;j++;
-        if(j>=100||i>=strlen(buf))goto fuck;
+        if(j>=50||i>=strlen(buf))goto fuck;
       }
       time[j]='\0';
       double timeNum;
@@ -130,6 +133,7 @@ int main(int argc, char *argv[]) {
         prev=now;
         draw();
       }
+      memset(buf,0,1024);
     }
     draw();
     return 0;
