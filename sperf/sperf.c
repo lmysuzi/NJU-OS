@@ -16,6 +16,7 @@ int second=0;
 char buf[1024];
 char name[50];
 char time[50];
+char str[1000];
 struct timeval prev,now;
 
 int cmp(const void *a,const void *b){
@@ -76,18 +77,18 @@ int main(int argc, char *argv[]) {
     char *path=getenv("PATH");int begin=0,end=0;
     for(;end<strlen(path);end++){
       if(path[end]==':'){
-        char str[1000];
-        strncpy(str,path+begin,end-begin);
+        memset(str,0,1000);
         if(end<begin)continue;
+        strncpy(str,path+begin,end-begin);
         str[end-begin]='\0';
         strcat(str,"/strace");
         begin=end+1;
         execve(str,exec_argv,environ);
       }
       else if(end==strlen(path)-1){
-        char str[1000];
-        strncpy(str,path+begin,end-begin+1);
+        memset(str,0,1000);
         if(end<=begin)continue;
+        strncpy(str,path+begin,end-begin+1);
         str[end-begin+1]='\0';
         strcat(str,"/strace");
         execve(str,exec_argv,environ);
@@ -104,29 +105,27 @@ int main(int argc, char *argv[]) {
       if(buf[0]<'a'||buf[0]>'z')continue;
       if(strlen(buf)<=2)continue;
       if(buf[strlen(buf)-2]!='>')continue;
-      memset(time,0,50);
-      memset(name,0,50);
-      int i=0;
-      while(buf[i]!='('){
-        name[i]=buf[i];i++;
-        if(i>=50||i>=strlen(buf))goto fuck;
-      }
-      name[i]='\0';
-      i=strlen(buf)-2;
-      while(buf[i]!='<'){
-        i--;
-        if(i<0)goto fuck;
-      }    
-      i++;
-      int j=0;
-      if(i>=strlen(buf))goto fuck;
-      while(buf[i]!='>'){
-        time[j]=buf[i];i++;j++;
-        if(j>=50||i>=strlen(buf))goto fuck;
-      }
-      time[j]='\0';
+      int t;
+                        for (t = 0; t < strlen(buf); ++t) {
+                                if (buf[t] == '(')
+                                        break;
+                        }
+                        if (t == strlen(buf))
+                                continue;
+                        strncpy(name, buf, t);
+                        name[t] = '\0';
+
+                        // parse time
+                        double dur;
+                        for (t = strlen(buf) - 1; t >= 0; --t) {
+                                if (buf[t] == '<')
+                                        break;
+                        }
+                        if (t < 0)
+                                continue;
       double timeNum;
       sscanf(time,"%lf",&timeNum);
+      sscanf(buf+ t + 1, "%lf", &timeNum);
       update(name,timeNum);
       totalTime+=timeNum;
       fuck:
