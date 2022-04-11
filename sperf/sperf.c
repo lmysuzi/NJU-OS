@@ -118,13 +118,13 @@ int main(int argc, char *argv[]) {
       sscanf(time,"%lf",&timeNum);
       update(name,timeNum);
       totalTime+=timeNum;
+      fuck:
       gettimeofday(&now,NULL);
       if(now.tv_sec!=prev.tv_sec){
         second++;
         prev=now;
         draw();
       }
-      fuck:
     }
     draw();
     return 0;
