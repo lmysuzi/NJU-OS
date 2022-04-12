@@ -116,7 +116,7 @@ int main(int argc, char *argv[]) {
       name[t]='\0';
       for(t=strlen(buf)-2;t>=0;--t){
         if(buf[t]=='<')break;
-        else if((buf[t]<'0'||buf[t]>'9')&&buf[t]!='.')goto fuck;
+        //else if((buf[t]<'0'||buf[t]>'9')&&buf[t]!='.')goto fuck;
       }
       if(t<0)continue;
       double timeNum;
