@@ -114,7 +114,7 @@ int main(int argc, char *argv[]) {
       if(t==strlen(buf))continue;
       strncpy(name,buf,t);
       name[t]='\0';
-      for(t=strlen(buf)-1;t>=0;--t){
+      for(t=strlen(buf)-2;t>=0;--t){
         if(buf[t]=='<')break;
         //else if((buf[t]<'0'||buf[t]>'9')&&buf[t]!='.')goto fuck;
       }
