@@ -17,6 +17,7 @@ char buf[1024];
 char name[1024];
 char time[1024];
 char str[1000];
+char *exec_argv[1024];
 struct timeval prev,now;
 
 int cmp(const void *a,const void *b){
@@ -35,7 +36,7 @@ void update(char *name,double time){
       syscalls[i].time+=time;return;
     }
   }
-  assert(sysNum<1000);
+  if(sysNum>=1000)return;
   strcpy(syscalls[sysNum].name,name);
   syscalls[sysNum].time=time;
   sysNum++;
@@ -54,7 +55,6 @@ void draw(){
 int main(int argc, char *argv[]) {
   extern char **environ;
   //char *exec_envp[] = { "PATH=/bin", NULL, };
-  char *exec_argv[argc+4];
   exec_argv[0]="strace",exec_argv[1]="-T";
   for(int i=1;i<argc;i++){
     exec_argv[i+1]=argv[i];
@@ -116,6 +116,7 @@ int main(int argc, char *argv[]) {
       name[t]='\0';
       for(t=strlen(buf)-1;t>=0;--t){
         if(buf[t]=='<')break;
+        if((buf[t]<'0'||buf[t]>'9')&&buf[t]!='.')goto fuck;
       }
       if(t<0)continue;
       double timeNum;
