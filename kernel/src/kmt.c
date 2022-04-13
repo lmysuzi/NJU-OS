@@ -5,10 +5,14 @@ static void init(){
 
 }
     
-int create(task_t *task, const char *name, void (*entry)(void *arg), void *arg){
+static int create(task_t *task, const char *name, void (*entry)(void *arg), void *arg){
   panic_on(task==NULL,"task is NULL");
 
   task->name=name;
+  task->kstack=pmm->alloc_safe(KSTACK_SIZE);
+
+  panic_on(task->kstack==NULL,"not enough space for kstack");
+
   Area kstack={
     .start=(void *)task->kstack,
     .end=((void *)task->kstack)+KSTACK_SIZE,
@@ -18,7 +22,7 @@ int create(task_t *task, const char *name, void (*entry)(void *arg), void *arg){
   return 0;
 }
 
-void teardown(task_t *task){
+static void teardown(task_t *task){
 
 }
 
