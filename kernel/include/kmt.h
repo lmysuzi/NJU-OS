@@ -3,14 +3,14 @@
 
 #include <common.h>
 
-#define STACK_SIZE 4096
+#define KSTACK_SIZE 4000
 
 struct task{
   int status;
   const char *name;
   Context *context;
   struct task *next;
-  uint8_t stack[STACK_SIZE];
+  uint8_t kstack[KSTACK_SIZE];
 };
 
 struct spinlock{

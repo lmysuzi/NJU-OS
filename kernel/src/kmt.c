@@ -5,6 +5,23 @@ static void init(){
 
 }
     
+int create(task_t *task, const char *name, void (*entry)(void *arg), void *arg){
+  panic_on(task==NULL,"task is NULL");
+
+  task->name=name;
+  Area kstack={
+    .start=(void *)task->kstack,
+    .end=((void *)task->kstack)+KSTACK_SIZE,
+  };
+  task->context=kcontext(kstack,entry,arg);
+
+  return 0;
+}
+
+void teardown(task_t *task){
+
+}
+
 static void spin_init(spinlock_t *lk, const char *name){
   lk->flag=0;lk->name=name;
 }
@@ -23,6 +40,8 @@ static void spin_unlock(spinlock_t *lk){
 
 MODULE_DEF(kmt)={
   .init=init,
+  .create=create,
+  .teardown=teardown,
   .spin_init=spin_init,
   .spin_lock=spin_lock,
   .spin_unlock=spin_unlock,
