@@ -5,7 +5,7 @@ task_t *task_head=NULL;
 spinlock_t task_lock;
 
 static void init(){
-  kmt->spin_lock(&task_lock);
+  kmt->spin_init(&task_lock,"task_lock");
   printf("%d\n",task_lock.flag);
 }
     
