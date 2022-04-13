@@ -6,6 +6,7 @@ spinlock_t task_lock;
 
 static void init(){
   kmt->spin_lock(&task_lock);
+  printf("%d\n",task_lock.flag);
 }
     
 static int create(task_t *task, const char *name, void (*entry)(void *arg), void *arg){
