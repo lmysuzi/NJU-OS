@@ -7,7 +7,7 @@
 
 typedef struct sysCall{
   double time;
-  char name[100];
+  char name[1024];
 }sysCall;
 sysCall syscalls[1000];
 int sysNum=0;
@@ -36,13 +36,14 @@ void update(char *name,double time){
       syscalls[i].time+=time;return;
     }
   }
-  if(sysNum>=1000)return;
+  if(sysNum>=999)return;
   strcpy(syscalls[sysNum].name,name);
   syscalls[sysNum].time=time;
   sysNum++;
 }
 
 void draw(){
+  if(!sysNum)return;
   qsort(syscalls,sysNum,sizeof(sysCall),cmp);
   printf("\033[34m==========================================\n");
   printf("\033[32mTime: %ds\n",second);
@@ -51,6 +52,7 @@ void draw(){
     printf("\033[33m(%d%%)\n",(int)(syscalls[i].time*100/totalTime));
   }
   for(int i=0;i<80;i++)printf("%c",'\0');
+  fflush(stdout);
 }
 int main(int argc, char *argv[]) {
   extern char **environ;
@@ -71,7 +73,7 @@ int main(int argc, char *argv[]) {
     exit(EXIT_FAILURE);
   }
   if(pid==0){
-    close(pipefd[0]);
+    //close(pipefd[0]);
     dup2(pipefd[1],STDERR_FILENO);
     close(STDOUT_FILENO);
     char *path=getenv("PATH");int begin=0,end=0;
