@@ -1,8 +1,11 @@
 #include <common.h>
 #include <kmt.h>
 
-static void init(){
+task_t *task_head=NULL;
+spinlock_t task_lock;
 
+static void init(){
+  kmt->spin_lock(&task_lock);
 }
     
 static int create(task_t *task, const char *name, void (*entry)(void *arg), void *arg){
@@ -18,7 +21,7 @@ static int create(task_t *task, const char *name, void (*entry)(void *arg), void
     .end=((void *)task->kstack)+KSTACK_SIZE,
   };
   task->context=kcontext(kstack,entry,arg);
-
+  
   return 0;
 }
 
