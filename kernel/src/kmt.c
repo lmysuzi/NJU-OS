@@ -36,11 +36,11 @@ static void spin_unlock(spinlock_t *lk){
 
 static void init(){
   spin_init(&task_lock,"task_lock");
-  printf("%d\n",INT_MIN);
   os->on_irq(INT_MIN,EVENT_NULL,kmt_context_save);
   os->on_irq(INT_MAX,EVENT_NULL,kmt_schedule);
 }
     
+
 static int create(task_t *task, const char *name, void (*entry)(void *arg), void *arg){
   panic_on(task==NULL,"task is NULL");
 
@@ -56,11 +56,25 @@ static int create(task_t *task, const char *name, void (*entry)(void *arg), void
   task->context=kcontext(kstack,entry,arg);
 
   spin_lock(&task_lock);
+  task->prev=NULL,task->next=task_head;
+  if(task_head!=NULL)task_head->prev=task;
+  task_head=task;
   spin_unlock(&task_lock);
+
   return 0;
 }
 
+
 static void teardown(task_t *task){
+  panic_on(task==NULL,"task is NULL");
+
+  pmm->free_safe(task->kstack);
+
+  spin_lock(&task_lock);
+  if(task->next)task->next->prev=task->prev;
+  if(task->prev)task->prev->next=task->next;
+  if(task==task_head)task=task->next;
+  spin_unlock(&task_lock);
 
 }
 

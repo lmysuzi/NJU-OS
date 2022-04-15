@@ -9,7 +9,7 @@ struct task{
   int status;
   const char *name;
   Context *context;
-  struct task *next;
+  struct task *next,*prev;
   uint8_t *kstack;
 };
 
