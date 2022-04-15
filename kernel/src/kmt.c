@@ -1,9 +1,19 @@
 #include <common.h>
 #include <kmt.h>
 
+#define INT_MAX 2147483647
+#define INT_MIN (-INT_MAX-1)
+
 task_t *task_head=NULL;
 spinlock_t task_lock;
 
+static Context *kmt_context_save(Event ev,Context *context){
+  return NULL;
+}
+
+static Context *kmt_schedule(Event ev,Context *context){
+  return NULL;
+}
 
 static void spin_init(spinlock_t *lk, const char *name){
   lk->flag=0;lk->name=name;
@@ -15,6 +25,8 @@ static void spin_lock(spinlock_t *lk){
   while(atomic_xchg(&lk->flag,1)==1);
   lk->status=prev_status;
 }
+
+
 static void spin_unlock(spinlock_t *lk){
   panic_on(ienabled()==1,"wrong status");
   atomic_xchg(&lk->flag,0);
@@ -24,6 +36,9 @@ static void spin_unlock(spinlock_t *lk){
 
 static void init(){
   spin_init(&task_lock,"task_lock");
+  printf("%d\n",INT_MIN);
+  os->on_irq(INT_MIN,EVENT_NULL,kmt_context_save);
+  os->on_irq(INT_MAX,EVENT_NULL,kmt_schedule);
 }
     
 static int create(task_t *task, const char *name, void (*entry)(void *arg), void *arg){
@@ -39,6 +54,9 @@ static int create(task_t *task, const char *name, void (*entry)(void *arg), void
     .end=((void *)task->kstack)+KSTACK_SIZE,
   };
   task->context=kcontext(kstack,entry,arg);
+
+  spin_lock(&task_lock);
+  spin_unlock(&task_lock);
   return 0;
 }
 
