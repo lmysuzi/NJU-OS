@@ -8,7 +8,6 @@ static void os_init() {
   irq_head=NULL;kmt->spin_init(&irq_lock,NULL);
   pmm->init();
   kmt->init();
-  dev->init();
 }
 
 
@@ -19,7 +18,7 @@ static void os_run() {
   }
 
   iset(true);
-  while (1) ;
+  while (1)printf("fuck\n") ;
 }
 
 
