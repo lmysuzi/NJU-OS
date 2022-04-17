@@ -38,7 +38,6 @@ static Context *os_trap(Event ev, Context *context){
       if(r)next=r;
     }
     irq=irq->next;
-    mark;
   }
   kmt->spin_unlock(&irq_lock);
   panic_on(!next, "returning NULL context");
