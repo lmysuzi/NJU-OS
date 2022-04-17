@@ -12,7 +12,7 @@ task_t *currents[MAX_CPU];
 #define current currents[cpu_current()];
 
 
-static void task_insert(task_t *task){
+static void inline task_insert(task_t *task){
   panic_on(task_lock.flag==0,"wrong lock");
 
   task->prev=NULL,task->next=task_head;
