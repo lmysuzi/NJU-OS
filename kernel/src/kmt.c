@@ -57,6 +57,14 @@ static void init(){
   os->on_irq(INT_MIN,EVENT_NULL,kmt_context_save);
   os->on_irq(INT_MAX,EVENT_NULL,kmt_schedule);
 
+  create(pmm->alloc(sizeof(task_t)),"fuck",NULL,NULL);
+  create(pmm->alloc(sizeof(task_t)),"shit",NULL,NULL);
+
+  while(task_head){
+    printf("%s\n",task_head->name);
+    task_head=task_head->next;
+  }
+
 }
     
 
