@@ -26,7 +26,7 @@ static void inline task_delete(task_t *task){
 
   if(task->next)task->next->prev=task->prev;
   if(task->prev)task->prev->next=task->next;
-  if(task==task_head)task=task->next;
+  else task_head=task_head->next;
   pmm->free_safe(task->kstack);
   pmm->free_safe(task);
 }
