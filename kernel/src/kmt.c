@@ -77,7 +77,7 @@ static void init(){
   create(c,"yingyingying",NULL,NULL);
 
   task_t *task=task_head;
-  while(task_head){
+  while(task){
     printf("%s\n",task->name);
     task=task->next;
   }
