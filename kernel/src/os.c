@@ -4,6 +4,8 @@
 static irq_t *irq_head;
 static spinlock_t irq_lock;
 
+#define mark printf("fuck\n")
+
 static void os_init() {
   irq_head=NULL;kmt->spin_init(&irq_lock,"irq_lock");
   pmm->init();
@@ -27,7 +29,7 @@ static Context *os_trap(Event ev, Context *context){
   panic_on(ienabled(),"wrong status");
   panic_on(context==NULL,"context is null");
   Context *next=NULL;
-
+  printf("fuck\n");
   kmt->spin_lock(&irq_lock);
   irq_t *irq=irq_head;
   while(irq!=NULL){
