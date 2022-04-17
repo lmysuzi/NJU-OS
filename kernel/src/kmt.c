@@ -47,6 +47,7 @@ static void spin_unlock(spinlock_t *lk){
   iset(lk->status);
 }
 
+static int create(task_t *task, const char *name, void (*entry)(void *arg), void *arg);
 
 static void init(){
   spin_init(&task_lock,"task_lock");
@@ -55,6 +56,7 @@ static void init(){
 
   os->on_irq(INT_MIN,EVENT_NULL,kmt_context_save);
   os->on_irq(INT_MAX,EVENT_NULL,kmt_schedule);
+
 }
     
 
