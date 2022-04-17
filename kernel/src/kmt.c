@@ -5,14 +5,15 @@
 #define INT_MIN (-INT_MAX-1)
 #define MAX_CPU 8
 
-task_t *task_head=NULL;
-spinlock_t task_lock;
+static int task_num=0;
+static task_t *task_head=NULL;
+static spinlock_t task_lock;
 
-task_t *currents[MAX_CPU];
-#define current currents[cpu_current()];
+static task_t *currents[MAX_CPU];
+#define current currents[cpu_current()]
 
 enum{
-  TASK_NEW=1,TASK_READY,TASK_RUNNING,TASK_SLEEP,
+  TASK_READY=1,TASK_RUNNING,TASK_SLEEP,
 };
 
 static void inline task_insert(task_t *task){
@@ -21,6 +22,7 @@ static void inline task_insert(task_t *task){
   task->prev=NULL,task->next=task_head;
   if(task_head!=NULL)task_head->prev=task;
   task_head=task;
+  task_num++;
 }
 
 
@@ -32,15 +34,32 @@ static void inline task_delete(task_t *task){
   else task_head=task_head->next;
   pmm->free_safe(task->kstack);
   pmm->free_safe(task);
+  task_num--;
 }
 
 
 static Context *kmt_context_save(Event ev,Context *context){
+  if(current==NULL){
+
+  }
+  else current->context=context;
   return NULL;
 }
 
 static Context *kmt_schedule(Event ev,Context *context){
-  return NULL;
+  task_t *task=current;
+  while(1){
+    if(task->status==TASK_READY){
+      task->status=TASK_RUNNING;
+      break;
+    }
+    else{
+      if(task->next)task=task->next;
+      else task=task_head;
+    }
+  }
+  current=task;
+  return task->context;
 }
 
 static void spin_init(spinlock_t *lk, const char *name){
@@ -101,8 +120,8 @@ static int create(task_t *task, const char *name, void (*entry)(void *arg), void
   panic_on(task==NULL,"task is NULL");
 
   task->name=name;
+  task->status=TASK_READY;
   task->kstack=pmm->alloc_safe(KSTACK_SIZE);
-
   panic_on(task->kstack==NULL,"not enough space for kstack");
 
   Area kstack={
