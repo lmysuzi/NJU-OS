@@ -18,7 +18,7 @@ static void os_run() {
   }
 
   iset(true);
-  while (1)printf("fuck\n");
+  while (1);
 }
 
 
@@ -26,7 +26,7 @@ static void os_run() {
 static Context *os_trap(Event ev, Context *context){
   panic_on(ienabled(),"wrong status");
   panic_on(context==NULL,"context is null");
-
+  printf("fuck\n");
   Context *next=NULL;
 
   kmt->spin_lock(&irq_lock);
