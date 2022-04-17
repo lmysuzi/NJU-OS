@@ -11,6 +11,16 @@ spinlock_t task_lock;
 task_t *currents[MAX_CPU];
 #define current currents[cpu_current()];
 
+
+static void task_insert(task_t *task){
+  panic_on(task_lock.flag==0,"wrong lock");
+
+  task->prev=NULL,task->next=task_head;
+  if(task_head!=NULL)task_head->prev=task;
+  task_head=task;
+}
+
+
 static Context *kmt_context_save(Event ev,Context *context){
   return NULL;
 }
@@ -40,7 +50,9 @@ static void spin_unlock(spinlock_t *lk){
 
 static void init(){
   spin_init(&task_lock,"task_lock");
+
   for(int cpu=0;cpu<cpu_count();cpu++)currents[cpu]=NULL;
+
   os->on_irq(INT_MIN,EVENT_NULL,kmt_context_save);
   os->on_irq(INT_MAX,EVENT_NULL,kmt_schedule);
 }
@@ -61,9 +73,7 @@ static int create(task_t *task, const char *name, void (*entry)(void *arg), void
   task->context=kcontext(kstack,entry,arg);
 
   spin_lock(&task_lock);
-  task->prev=NULL,task->next=task_head;
-  if(task_head!=NULL)task_head->prev=task;
-  task_head=task;
+  task_insert(task);
   spin_unlock(&task_lock);
 
   return 0;
