@@ -3,9 +3,13 @@
 
 #define INT_MAX 2147483647
 #define INT_MIN (-INT_MAX-1)
+#define MAX_CPU 8
 
 task_t *task_head=NULL;
 spinlock_t task_lock;
+
+task_t *currents[MAX_CPU];
+#define current currents[cpu_current()];
 
 static Context *kmt_context_save(Event ev,Context *context){
   return NULL;
@@ -36,6 +40,7 @@ static void spin_unlock(spinlock_t *lk){
 
 static void init(){
   spin_init(&task_lock,"task_lock");
+  for(int cpu=0;cpu<cpu_count();cpu++)currents[cpu]=NULL;
   os->on_irq(INT_MIN,EVENT_NULL,kmt_context_save);
   os->on_irq(INT_MAX,EVENT_NULL,kmt_schedule);
 }
