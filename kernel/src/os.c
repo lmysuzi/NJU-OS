@@ -32,13 +32,12 @@ static Context *os_trap(Event ev, Context *context){
   kmt->spin_lock(&irq_lock);
   irq_t *irq=irq_head;
   while(irq!=NULL){
-    mark;
     if(irq->event==EVENT_NULL||irq->event==ev.event){
       Context *r=irq->handler(ev,context);
       panic_on(r&&next, "returning multiple contexts");
       if(r)next=r;
     }
-   // irq=irq->next;
+    irq=irq->next;
   }
   kmt->spin_unlock(&irq_lock);
 
