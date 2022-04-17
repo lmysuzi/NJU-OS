@@ -8,6 +8,7 @@ static void os_init() {
   irq_head=NULL;kmt->spin_init(&irq_lock,NULL);
   pmm->init();
   kmt->init();
+  dev->init();
 }
 
 
@@ -17,6 +18,7 @@ static void os_run() {
     putch(*s == '*' ? '0' + cpu_current() : *s);
   }
 
+  iset(true);
   while (1) ;
 }
 

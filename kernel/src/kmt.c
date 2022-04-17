@@ -5,7 +5,6 @@
 #define INT_MIN (-INT_MAX-1)
 #define MAX_CPU 8
 
-static int task_num=0;
 static task_t *task_head=NULL;
 static spinlock_t task_lock;
 
@@ -22,7 +21,6 @@ static void inline task_insert(task_t *task){
   task->prev=NULL,task->next=task_head;
   if(task_head!=NULL)task_head->prev=task;
   task_head=task;
-  task_num++;
 }
 
 
@@ -34,12 +32,13 @@ static void inline task_delete(task_t *task){
   else task_head=task_head->next;
   pmm->free_safe(task->kstack);
   pmm->free_safe(task);
-  task_num--;
 }
 
 
 static void spin_lock(spinlock_t *lk);
 static void spin_unlock(spinlock_t *lk);
+static int create(task_t *task, const char *name, void (*entry)(void *arg), void *arg);
+static void teardown(task_t *task);
 
 
 static Context *kmt_context_save(Event ev,Context *context){
@@ -89,8 +88,7 @@ static void spin_unlock(spinlock_t *lk){
   iset(lk->status);
 }
 
-static int create(task_t *task, const char *name, void (*entry)(void *arg), void *arg);
-static void teardown(task_t *task);
+
 
 static void init(){
   spin_init(&task_lock,"task_lock");
