@@ -82,8 +82,8 @@ static void init(){
     task=task->next;
   }
 
-  teardown(a);
   teardown(c);
+  teardown(b);
 
   task=task_head;
 
