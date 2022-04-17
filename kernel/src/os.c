@@ -5,7 +5,7 @@ static irq_t *irq_head;
 static spinlock_t irq_lock;
 
 static void os_init() {
-  irq_head=NULL;kmt->spin_init(&irq_lock,NULL);
+  irq_head=NULL;kmt->spin_init(&irq_lock,"irq_lock");
   pmm->init();
   kmt->init();
 }
