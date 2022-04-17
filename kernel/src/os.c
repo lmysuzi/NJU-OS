@@ -15,6 +15,9 @@ static void os_init() {
 
 
 static void os_run() {
+  int *a=(int *)0;
+  *a=1;
+
   for (const char *s = "Hello World from CPU #*\n"; *s; s++) {
     putch(*s == '*' ? '0' + cpu_current() : *s);
   }
