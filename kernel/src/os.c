@@ -29,7 +29,6 @@ static Context *os_trap(Event ev, Context *context){
   panic_on(ienabled(),"wrong status");
   panic_on(context==NULL,"context is null");
   Context *next=NULL;
-  printf("fuck\n");
   kmt->spin_lock(&irq_lock);
   irq_t *irq=irq_head;
   while(irq!=NULL){
@@ -41,6 +40,7 @@ static Context *os_trap(Event ev, Context *context){
   }
   kmt->spin_unlock(&irq_lock);
 
+  printf("fuck\n");
   panic_on(!next, "returning NULL context");
   return next;
 }
