@@ -76,17 +76,20 @@ static void init(){
   create(b,"shit",NULL,NULL);
   create(c,"yingyingying",NULL,NULL);
 
+  task_t *task=task_head;
   while(task_head){
-    printf("%s\n",task_head->name);
-    task_head=task_head->next;
+    printf("%s\n",task->name);
+    task=task->next;
   }
 
   teardown(a);
   teardown(c);
 
-  while(task_head){
-    printf("%s\n",task_head->name);
-    task_head=task_head->next;
+  task=task_head;
+
+  while(task){
+    printf("%s\n",task->name);
+    task=task->next;
   }
 }
     
