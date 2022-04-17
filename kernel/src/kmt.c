@@ -38,6 +38,10 @@ static void inline task_delete(task_t *task){
 }
 
 
+static void spin_lock(spinlock_t *lk);
+static void spin_unlock(spinlock_t *lk);
+
+
 static Context *kmt_context_save(Event ev,Context *context){
   if(current==NULL){
 
@@ -46,21 +50,26 @@ static Context *kmt_context_save(Event ev,Context *context){
   return NULL;
 }
 
+
 static Context *kmt_schedule(Event ev,Context *context){
-  task_t *task=current;
+  spin_lock(&task_lock);
+
+  task_t *task=current->next;
+  if(task==NULL)task=task_head;
+
+  current->status=TASK_READY;
   while(1){
-    if(task->status==TASK_READY){
-      task->status=TASK_RUNNING;
-      break;
-    }
-    else{
-      if(task->next)task=task->next;
-      else task=task_head;
-    }
+    if(task->status==TASK_READY)break;
+    if(task->next)task=task->next;
+    else task=task_head;
   }
   current=task;
-  return task->context;
+  current->status=TASK_RUNNING;
+
+  spin_unlock(&task_lock);
+  return current->context;
 }
+
 
 static void spin_init(spinlock_t *lk, const char *name){
   lk->flag=0;lk->name=name;
