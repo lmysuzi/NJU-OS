@@ -28,6 +28,7 @@ static void os_run() {
 static Context *os_trap(Event ev, Context *context){
   panic_on(ienabled(),"wrong status");
   panic_on(context==NULL,"context is null");
+  mark;
   Context *next=NULL;
   kmt->spin_lock(&irq_lock);
   irq_t *irq=irq_head;
@@ -40,7 +41,6 @@ static Context *os_trap(Event ev, Context *context){
     irq=irq->next;
   }
   kmt->spin_unlock(&irq_lock);
-  mark;
   panic_on(!next, "returning NULL context");
   return next;
 }
