@@ -51,6 +51,7 @@ static Context *kmt_context_save(Event ev,Context *context){
 
 
 static Context *kmt_schedule(Event ev,Context *context){
+  printf("ji\n");
   spin_lock(&task_lock);
   task_t *task=current->next;
   if(task==NULL)task=task_head;
@@ -65,7 +66,6 @@ static Context *kmt_schedule(Event ev,Context *context){
   current->status=TASK_RUNNING;
 
   spin_unlock(&task_lock);
-  printf("ji\n");
   return context;
 }
 
