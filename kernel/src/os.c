@@ -32,7 +32,6 @@ static Context *os_trap(Event ev, Context *context){
   kmt->spin_lock(&irq_lock);
   irq_t *irq=irq_head;
   while(irq!=NULL){
-    printf("fuck\n");
     if(irq->event==EVENT_NULL||irq->event==ev.event){
       Context *r=irq->handler(ev,context);
       panic_on(r&&next, "returning multiple contexts");
@@ -56,6 +55,7 @@ static void os_on_irq(int seq, int event, handler_t handler){
 
   kmt->spin_lock(&irq_lock);
 
+    printf("fuck\n");
   if(irq_head==NULL){
     new_irq->next=NULL;irq_head=new_irq;
     kmt->spin_unlock(&irq_lock);return;
