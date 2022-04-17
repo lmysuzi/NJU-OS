@@ -82,7 +82,6 @@ static void init(){
   }
 
   teardown(a);
-  teardown(b);
   teardown(c);
 
   while(task_head){
