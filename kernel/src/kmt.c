@@ -11,6 +11,9 @@ spinlock_t task_lock;
 task_t *currents[MAX_CPU];
 #define current currents[cpu_current()];
 
+enum{
+  TASK_NEW=1,TASK_READY,TASK_RUNNING,TASK_SLEEP,
+};
 
 static void inline task_insert(task_t *task){
   panic_on(task_lock.flag==0,"wrong lock");
