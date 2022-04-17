@@ -29,9 +29,9 @@ static Context *os_trap(Event ev, Context *context){
   Context *next=NULL;
 
   kmt->spin_lock(&irq_lock);
+    printf("fuck\n");
   irq_t *irq=irq_head;
   while(irq!=NULL){
-    printf("fuck\n");
     if(irq->event==EVENT_NULL||irq->event==ev.event){
       Context *r=irq->handler(ev,context);
       panic_on(r&&next, "returning multiple contexts");
