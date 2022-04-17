@@ -65,6 +65,7 @@ static Context *kmt_schedule(Event ev,Context *context){
   current->status=TASK_RUNNING;
 
   spin_unlock(&task_lock);
+  printf("ji\n");
   return context;
 }
 
