@@ -75,7 +75,6 @@ static void spin_init(spinlock_t *lk, const char *name){
 
 static void spin_lock(spinlock_t *lk){
   bool prev_status=ienabled();
-  printf("%s %d\n",lk->name,ienabled());
   iset(false);
   while(atomic_xchg(&lk->flag,1)==1);
   lk->status=prev_status;
