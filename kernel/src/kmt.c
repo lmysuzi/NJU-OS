@@ -21,6 +21,17 @@ static void inline task_insert(task_t *task){
 }
 
 
+static void inline task_delete(task_t *task){
+  panic_on(task_lock.flag==0,"wrong lock");
+
+  if(task->next)task->next->prev=task->prev;
+  if(task->prev)task->prev->next=task->next;
+  if(task==task_head)task=task->next;
+  pmm->free_safe(task->kstack);
+  pmm->free_safe(task);
+}
+
+
 static Context *kmt_context_save(Event ev,Context *context){
   return NULL;
 }
@@ -48,6 +59,7 @@ static void spin_unlock(spinlock_t *lk){
 }
 
 static int create(task_t *task, const char *name, void (*entry)(void *arg), void *arg);
+static void teardown(task_t *task);
 
 static void init(){
   spin_init(&task_lock,"task_lock");
@@ -57,14 +69,26 @@ static void init(){
   os->on_irq(INT_MIN,EVENT_NULL,kmt_context_save);
   os->on_irq(INT_MAX,EVENT_NULL,kmt_schedule);
 
-  create(pmm->alloc(sizeof(task_t)),"fuck",NULL,NULL);
-  create(pmm->alloc(sizeof(task_t)),"shit",NULL,NULL);
+  task_t *a=pmm->alloc(sizeof(task_t));
+  task_t *b=pmm->alloc(sizeof(task_t));
+  task_t *c=pmm->alloc(sizeof(task_t));
+  create(a,"fuck",NULL,NULL);
+  create(b,"shit",NULL,NULL);
+  create(c,"yingyingying",NULL,NULL);
 
   while(task_head){
     printf("%s\n",task_head->name);
     task_head=task_head->next;
   }
 
+  teardown(a);
+  teardown(b);
+  teardown(c);
+
+  while(task_head){
+    printf("%s\n",task_head->name);
+    task_head=task_head->next;
+  }
 }
     
 
@@ -93,14 +117,9 @@ static int create(task_t *task, const char *name, void (*entry)(void *arg), void
 static void teardown(task_t *task){
   panic_on(task==NULL,"task is NULL");
 
-  pmm->free_safe(task->kstack);
-
   spin_lock(&task_lock);
-  if(task->next)task->next->prev=task->prev;
-  if(task->prev)task->prev->next=task->next;
-  if(task==task_head)task=task->next;
+  task_delete(task);
   spin_unlock(&task_lock);
-
 }
 
 
