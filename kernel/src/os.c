@@ -20,7 +20,8 @@ static void os_run() {
   }
 
   iset(true);
-  while (1)printf("%d",cpu_current());
+  printf("%d",cpu_current());
+  while (1);
 }
 
 
