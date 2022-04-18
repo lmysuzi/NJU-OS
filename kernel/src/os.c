@@ -9,7 +9,7 @@ static int n=0;
 
 static void consumer(){
   while(1){
-  printf("shit");
+  printf("shit\n");
     if(n==0){
       printf("(");
       n=1;
@@ -21,7 +21,7 @@ static void consumer(){
 
 static void producer(){
   while(1){
-  printf("ji");
+  printf("ji\n");
     if(n==1){
       printf(")");
       n=0;
