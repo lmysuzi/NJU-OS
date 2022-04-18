@@ -22,6 +22,7 @@ enum{
 static void inline task_insert(task_t *task){
   panic_on(task_lock.flag==0,"wrong lock");
 
+  printf("fuck\n");
   task->prev=NULL,task->next=task_head;
   if(task_head!=NULL)task_head->prev=task;
   task_head=task;
