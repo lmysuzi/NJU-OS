@@ -61,6 +61,7 @@ static Context *kmt_schedule(Event ev,Context *context){
     printf("%s %d\n",temp->name,temp->status);
     temp=temp->next;
   }
+  printf("\n");
   spin_lock(&task_lock);
   if(task_head==NULL){
     panic_on(current!=idle,"wrong current");
