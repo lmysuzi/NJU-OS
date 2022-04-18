@@ -56,12 +56,12 @@ static Context *kmt_context_save(Event ev,Context *context){
 static Context *kmt_schedule(Event ev,Context *context){
   panic_on(current==NULL,"current is null");
 
-  task_t *temp=task_head;
+  /*task_t *temp=task_head;
   while(temp){
     printf("%s %d\n",temp->name,temp->status);
     temp=temp->next;
   }
-  printf("\n");
+  printf("\n");*/
   spin_lock(&task_lock);
   if(task_head==NULL){
     panic_on(current!=idle,"wrong current");
@@ -82,6 +82,7 @@ static Context *kmt_schedule(Event ev,Context *context){
     if(task->status==TASK_READY)break;
     if(task->next)task=task->next;
     else task=task_head;
+    mark;
   }while(task!=task_begin);
 
   current=task;
