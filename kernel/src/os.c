@@ -21,7 +21,7 @@ static void consumer(){
 static void producer(){
   while(1){
 
-    printf("%d\n",n);
+    //printf("%d\n",n);
     if(n==1){
       printf(")\n");
       n=0;
