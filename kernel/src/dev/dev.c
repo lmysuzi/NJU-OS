@@ -31,6 +31,19 @@ static device_t *dev_create(int size, const char* name, int id, devops_t *ops) {
   return dev;
 }
 
+static void tty_reader(void *arg) {
+  device_t *tty = dev->lookup(arg);
+  char cmd[128], resp[128], ps[16];
+  snprintf(ps, 16, "(%s) $ ", arg);
+  while (1) {
+    tty->ops->write(tty, 0, ps, strlen(ps));
+    int nread = tty->ops->read(tty, 0, cmd, sizeof(cmd) - 1);
+    cmd[nread] = '\0';
+    sprintf(resp, "tty reader task: got %d character(s).\n", strlen(cmd));
+    tty->ops->write(tty, 0, resp, strlen(resp));
+  }
+}
+
 void dev_input_task();
 void dev_tty_task();
 
@@ -41,8 +54,11 @@ static void dev_init() {
 
   DEVICES(INIT);
 
+
   kmt->create(pmm->alloc(sizeof(task_t)), "input-task", dev_input_task, NULL);
   kmt->create(pmm->alloc(sizeof(task_t)), "tty-task",   dev_tty_task,   NULL);
+  kmt->create(pmm->alloc(sizeof(task_t)), "tty_reader", tty_reader, "tty1");
+  kmt->create(pmm->alloc(sizeof(task_t)), "tty_reader", tty_reader, "tty2");
 }
 
 MODULE_DEF(dev) = {

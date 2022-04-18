@@ -65,7 +65,7 @@ static Context *kmt_schedule(Event ev,Context *context){
   if(task==NULL)task=task_head;
   task_t *task_begin=task;
 
-  current->status=TASK_READY;
+  if(current->status==TASK_RUNNING)current->status=TASK_READY;
 
   do{
     if(task->status==TASK_READY)break;
