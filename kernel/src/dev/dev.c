@@ -28,7 +28,7 @@ static device_t *dev_create(int size, const char* name, int id, devops_t *ops) {
     .ops  = ops,
   };
 
-  printf("fuck\n");
+  printf("%d\n",id);
   return dev;
 }
 
