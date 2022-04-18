@@ -83,9 +83,9 @@ static Context *kmt_schedule(Event ev,Context *context){
     else task=task_head;
   }while(task!=task_begin);
 
-  panic_on(current==task,"fuck");
   current=task;
   current->status=TASK_RUNNING;
+  panic_on(current==task,"fuck");
 
 //  if(current==task_head)current=task_head->next;
 //  else current=task_head;
