@@ -21,7 +21,6 @@ static void consumer(){
 
 
 static void producer(){
-  printf("shit");
   while(1){
     if(n==1){
       iset(false);
@@ -29,6 +28,7 @@ static void producer(){
       n=0;
       iset(true);
       yield();
+  printf("shit");
     }
   }
 }
