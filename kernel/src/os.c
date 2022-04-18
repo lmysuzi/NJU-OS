@@ -10,8 +10,10 @@ static int n=0;
 static void consumer(){
   while(1){
     if(n==0){
+      iset(false);
       printf("(");
       n=1;
+      iset(true);
       yield();
     }
   }
@@ -22,8 +24,10 @@ static void producer(){
   printf("shit");
   while(1){
     if(n==1){
+      iset(false);
       printf(")");
       n=0;
+      iset(true);
       yield();
     }
   }
