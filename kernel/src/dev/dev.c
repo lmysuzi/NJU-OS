@@ -41,8 +41,8 @@ static void dev_init() {
 
   //DEVICES(INIT);
   devices[0] = dev_create(sizeof(input_t), "input", 1, &input_ops); \
-  devices[0]->ops->init(devices[0]);
   printf("fuck\n");
+  devices[0]->ops->init(devices[0]);
 
   kmt->create(pmm->alloc(sizeof(task_t)), "input-task", dev_input_task, NULL);
   kmt->create(pmm->alloc(sizeof(task_t)), "tty-task",   dev_tty_task,   NULL);
