@@ -12,6 +12,7 @@ static void consumer(){
     if(n==0){
       n=1;
       printf("(\n");
+      printf("%d\n",n);
       yield();
     }
   }
