@@ -8,7 +8,6 @@ static spinlock_t irq_lock;
 static int n=0;
 
 static void consumer(){
-  printf("ai");
   while(1){
     if(n==0){
       iset(false);
@@ -54,7 +53,7 @@ static void os_run() {
   }
 
   iset(true);
-  while (1);
+  while (1)printf("ai");
 }
 
 
