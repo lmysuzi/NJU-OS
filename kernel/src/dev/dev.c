@@ -34,13 +34,13 @@ void dev_input_task();
 void dev_tty_task();
 
 static void dev_init() {
+  printf("fuck\n");
 #define INIT(id, device_type, dev_name, dev_id, dev_ops) \
   devices[id] = dev_create(sizeof(device_type), dev_name, dev_id, dev_ops); \
   devices[id]->ops->init(devices[id]);
 
   DEVICES(INIT);
 
-  printf("fuck\n");
   kmt->create(pmm->alloc(sizeof(task_t)), "input-task", dev_input_task, NULL);
   kmt->create(pmm->alloc(sizeof(task_t)), "tty-task",   dev_tty_task,   NULL);
 }
