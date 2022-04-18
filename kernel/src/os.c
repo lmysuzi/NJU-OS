@@ -10,8 +10,8 @@ static int n=0;
 static void consumer(){
   while(1){
     if(n==0){
-      printf("(\n");
       n=1;
+      printf("(\n");
       yield();
     }
   }
