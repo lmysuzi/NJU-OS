@@ -5,6 +5,7 @@
 #define INT_MIN (-INT_MAX-1)
 #define MAX_CPU 8
 
+
 static task_t *task_head=NULL;
 static spinlock_t task_lock;
 
@@ -15,6 +16,8 @@ static task_t *idles[MAX_CPU];
 enum{
   TASK_READY=1,TASK_RUNNING,TASK_SLEEP,
 };
+
+
 
 static void inline task_insert(task_t *task){
   panic_on(task_lock.flag==0,"wrong lock");
@@ -146,19 +149,73 @@ static void teardown(task_t *task){
 }
 
 
-static void sem_init(sem_t *sem, const char *name, int value){
+static void inline sem_task_insert(sem_t *sem, task_t *task){
+  panic_on(sem==NULL,"sem is null");
+  panic_on(task==NULL,"task is null");
 
+  sem_tasks_t *sem_task_node=pmm->alloc_safe(sizeof(sem_tasks_t));
+  panic_on(sem_task_node==NULL,"alloc fail");
+
+  sem_task_node->task=task;
+  sem_task_node->prev=NULL;
+  sem_task_node->next=sem->sem_tasks;
+  if(sem->sem_tasks!=NULL)sem->sem_tasks->prev=sem_task_node;
+  sem->sem_tasks=sem_task_node;
+}
+
+
+static void inline sem_task_delete(sem_t *sem){
+  panic_on(sem==NULL,"sem is null");
+  panic_on(sem->sem_tasks==NULL,"sem_tasks is null");
+
+  sem_tasks_t *sem_task_node=sem->sem_tasks;
+  while(sem_task_node->next!=NULL)sem_task_node=sem_task_node->next;
+  panic_on(sem_task_node->next!=NULL,"wrong task");
+  
+  if(sem_task_node->prev!=NULL)sem_task_node->next=NULL;
+  else sem->sem_tasks=NULL;
+
+  pmm->free_safe(sem_task_node);
+}
+
+static void sem_init(sem_t *sem, const char *name, int value){
+  panic_on(sem==NULL,"sem is null");
+  
+  sem->name=name;
+  sem->count=value;
+  sem->sem_tasks=NULL;
+  spin_init(&sem->lock,name);
 }
 
 
 static void sem_wait(sem_t *sem){
+  panic_on(sem==NULL,"sem is null");
+  spin_lock(&sem->lock);
+  sem->count--;
 
+  if(sem->count<0){
+    current->status=TASK_SLEEP;
+    sem_task_insert(sem,current);
+    spin_unlock(&sem->lock);
+    yield();
+  }
+  else spin_unlock(&sem->lock);
 }
 
 
 static void sem_signal(sem_t *sem){
+  panic_on(sem==NULL,"sem is null");
 
+  spin_lock(&sem->lock);
+  sem->count++;
+  
+  if(sem->sem_tasks!=NULL){
+    sem_task_delete(sem);
+  }
+
+  spin_unlock(&sem->lock);
 }
+
 
 MODULE_DEF(kmt)={
   .init=init,

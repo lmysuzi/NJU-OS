@@ -19,8 +19,16 @@ struct spinlock{
   const char *name;
 };
 
-struct semaphore{
+typedef struct sem_tasks{
+  task_t *task;
+  struct sem_tasks *prev,*next;
+}sem_tasks_t;
 
+struct semaphore{
+  spinlock_t lock;
+  int count;
+  const char *name;
+  sem_tasks_t *sem_tasks;
 };
 
 #endif 
