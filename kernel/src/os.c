@@ -9,10 +9,10 @@ static int n=0;
 
 static void consumer(){
   while(1){
+  printf("shit");
     if(n==0){
       printf("(");
       n=1;
-  printf("shit");
       yield();
     }
   }
