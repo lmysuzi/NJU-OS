@@ -69,7 +69,6 @@ static Context *kmt_schedule(Event ev,Context *context){
   }
   task_t *task=current->next;//if current == idle , then task is NULL too
   if(task==NULL){
-    mark;
     task=task_head;
   }
   task_t *task_begin=task;
@@ -86,7 +85,7 @@ static Context *kmt_schedule(Event ev,Context *context){
   current->status=TASK_RUNNING;
 
   spin_unlock(&task_lock);
-  return context;
+  return current->context;
 }
 
 
