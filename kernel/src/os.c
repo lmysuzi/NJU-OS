@@ -57,6 +57,8 @@ static void os_run() {
 
 
 static Context *os_trap(Event ev, Context *context){
+  printf("%d\n",n);
+
   panic_on(ienabled(),"wrong status");
   panic_on(context==NULL,"context is null");
   Context *next=NULL;
