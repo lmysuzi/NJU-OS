@@ -98,7 +98,7 @@ static void spin_init(spinlock_t *lk, const char *name){
 static void spin_lock(spinlock_t *lk){
   bool prev_status=ienabled();
   iset(false);
-  while(atomic_xchg(&lk->flag,1)==1);
+  while(atomic_xchg(&lk->flag,1)==1)printf("%s\n",lk->name);
   lk->status=prev_status;
 }
 
