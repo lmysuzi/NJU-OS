@@ -9,8 +9,9 @@ static task_t *task_head=NULL;
 static spinlock_t task_lock;
 
 static task_t *currents[MAX_CPU];
+static task_t *idles[MAX_CPU];
 #define current currents[cpu_current()]
-
+#define idle idles[cpu_current()]
 enum{
   TASK_READY=1,TASK_RUNNING,TASK_SLEEP,
 };
@@ -42,18 +43,22 @@ static void teardown(task_t *task);
 
 
 static Context *kmt_context_save(Event ev,Context *context){
-  if(current==NULL){
-
-  }
-  else current->context=context;
+  panic_on(current==NULL,"current is null");
+  current->context=context;
   return NULL;
 }
 
 
 static Context *kmt_schedule(Event ev,Context *context){
-  return context;
+  panic_on(current==NULL,"current is null");
+
   spin_lock(&task_lock);
-  task_t *task=current->next;
+  if(task_head==NULL){
+    panic_on(current!=idle,"wrong current");
+    spin_unlock(&task_lock);
+    return current->context;
+  }
+  task_t *task=current->next;//if current == idle , then task is NULL too
   if(task==NULL)task=task_head;
 
   current->status=TASK_READY;
@@ -93,11 +98,17 @@ static void spin_unlock(spinlock_t *lk){
 static void init(){
   spin_init(&task_lock,"task_lock");
 
-  for(int cpu=0;cpu<cpu_count();cpu++)currents[cpu]=NULL;
+  for(int cpu=0;cpu<cpu_count();cpu++){
+    idles[cpu]=pmm->alloc(sizeof(task_t));
+
+    panic_on(idles[cpu]==NULL,"alloc fail");
+
+    idles[cpu]->next=idles[cpu]->prev=NULL;
+    currents[cpu]=idles[cpu];
+  }
 
   os->on_irq(INT_MIN,EVENT_NULL,kmt_context_save);
   os->on_irq(INT_MAX,EVENT_NULL,kmt_schedule);
-  printf("%d\n",sizeof(task_t));
   /*task_t *a=pmm->alloc(sizeof(task_t));
   task_t *b=pmm->alloc(sizeof(task_t));
   task_t *c=pmm->alloc(sizeof(task_t));
