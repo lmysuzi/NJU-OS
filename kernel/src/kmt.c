@@ -123,6 +123,7 @@ static void init(){
     panic_on(idles[cpu]==NULL,"alloc fail");
 
     idles[cpu]->next=idles[cpu]->prev=NULL;
+    idles[cpu]->status=TASK_RUNNING;
     currents[cpu]=idles[cpu];
   }
 
