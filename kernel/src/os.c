@@ -6,14 +6,36 @@ static spinlock_t irq_lock;
 
 #define mark printf("fuck\n")
 
+static int n=0;
+
+static void consumer(){
+  while(1){
+    if(n==0){
+      printf("(");
+      yield();
+    }
+  }
+}
+
+
+static void producer(){
+  while(1){
+    if(n==1){
+      printf(")");
+      yield();
+    }
+  }
+}
+
+
 static void os_init() {
   irq_head=NULL;kmt->spin_init(&irq_lock,"irq_lock");
   pmm->init();
   kmt->init();
-  dev->init();
+  //dev->init();
+  kmt->create(pmm->alloc(sizeof(task_t)),NULL,consumer,NULL);
+  kmt->create(pmm->alloc(sizeof(task_t)),NULL,producer,NULL);
 }
-
-
 
 
 
