@@ -65,11 +65,13 @@ static Context *kmt_schedule(Event ev,Context *context){
   if(task_head==NULL){
     panic_on(current!=idle,"wrong current");
     spin_unlock(&task_lock);
-    mark;
     return current->context;
   }
   task_t *task=current->next;//if current == idle , then task is NULL too
-  if(task==NULL)task=task_head;
+  if(task==NULL){
+    mark;
+    task=task_head;
+  }
   task_t *task_begin=task;
 
   if(current->status==TASK_RUNNING)current->status=TASK_READY;
