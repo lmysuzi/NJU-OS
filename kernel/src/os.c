@@ -39,8 +39,10 @@ static void os_init() {
   pmm->init();
   kmt->init();
   //dev->init();
-  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",consumer,NULL);
-  kmt->create(pmm->alloc(sizeof(task_t)),"producer",producer,NULL);
+  task_t *a=pmm->alloc(sizeof(task_t));
+  task_t *b=pmm->alloc(sizeof(task_t));
+  kmt->create(a,"consumer",consumer,NULL);
+  kmt->create(b,"producer",producer,NULL);
 }
 
 
@@ -57,8 +59,6 @@ static void os_run() {
 
 
 static Context *os_trap(Event ev, Context *context){
-  printf("%d\n",n);
-
   panic_on(ienabled(),"wrong status");
   panic_on(context==NULL,"context is null");
   Context *next=NULL;

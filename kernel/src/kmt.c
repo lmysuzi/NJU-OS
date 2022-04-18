@@ -73,6 +73,7 @@ static Context *kmt_schedule(Event ev,Context *context){
     task=task_head;
   }
   task_t *task_begin=task;
+  if(current!=task)printf("yes\n");
 
   if(current->status==TASK_RUNNING){
     current->status=TASK_READY;
@@ -82,7 +83,6 @@ static Context *kmt_schedule(Event ev,Context *context){
     if(task->status==TASK_READY)break;
     if(task->next)task=task->next;
     else task=task_head;
-    mark;
   }while(task!=task_begin);
 
   current=task;
