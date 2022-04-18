@@ -33,8 +33,8 @@ static void os_init() {
   pmm->init();
   kmt->init();
   //dev->init();
-  kmt->create(pmm->alloc(sizeof(task_t)),NULL,consumer,NULL);
-  kmt->create(pmm->alloc(sizeof(task_t)),NULL,producer,NULL);
+  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",consumer,NULL);
+  kmt->create(pmm->alloc(sizeof(task_t)),"producer",producer,NULL);
 }
 
 
