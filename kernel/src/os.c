@@ -4,7 +4,6 @@
 static irq_t *irq_head;
 static spinlock_t irq_lock;
 
-#define mark printf("fuck\n")
 
 static int n=0;
 

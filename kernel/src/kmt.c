@@ -5,6 +5,7 @@
 #define INT_MIN (-INT_MAX-1)
 #define MAX_CPU 8
 
+#define mark printf("fuck\n")
 
 static task_t *task_head=NULL;
 static spinlock_t task_lock;
@@ -55,15 +56,16 @@ static Context *kmt_context_save(Event ev,Context *context){
 static Context *kmt_schedule(Event ev,Context *context){
   panic_on(current==NULL,"current is null");
 
-  task_t *temp=task_head;
+  /*task_t *temp=task_head;
   while(temp){
     printf("%s\n",temp->name);
     temp=temp->next;
-  }
+  }*/
   spin_lock(&task_lock);
   if(task_head==NULL){
     panic_on(current!=idle,"wrong current");
     spin_unlock(&task_lock);
+    mark;
     return current->context;
   }
   task_t *task=current->next;//if current == idle , then task is NULL too
