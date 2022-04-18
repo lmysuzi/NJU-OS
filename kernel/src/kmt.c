@@ -112,28 +112,6 @@ static void init(){
 
   os->on_irq(INT_MIN,EVENT_NULL,kmt_context_save);
   os->on_irq(INT_MAX,EVENT_NULL,kmt_schedule);
-  /*task_t *a=pmm->alloc(sizeof(task_t));
-  task_t *b=pmm->alloc(sizeof(task_t));
-  task_t *c=pmm->alloc(sizeof(task_t));
-  create(a,"fuck",NULL,NULL);
-  create(b,"shit",NULL,NULL);
-  create(c,"yingyingying",NULL,NULL);
-
-  task_t *task=task_head;
-  while(task){
-    printf("%s\n",task->name);
-    task=task->next;
-  }
-
-  teardown(c);
-  teardown(b);
-
-  task=task_head;
-
-  while(task){
-    printf("%s\n",task->name);
-    task=task->next;
-  }*/
 }
     
 
@@ -168,6 +146,19 @@ static void teardown(task_t *task){
 }
 
 
+static void sem_init(sem_t *sem, const char *name, int value){
+
+}
+
+
+static void sem_wait(sem_t *sem){
+
+}
+
+
+static void sem_signal(sem_t *sem){
+
+}
 
 MODULE_DEF(kmt)={
   .init=init,
@@ -176,4 +167,7 @@ MODULE_DEF(kmt)={
   .spin_init=spin_init,
   .spin_lock=spin_lock,
   .spin_unlock=spin_unlock,
+  .sem_init=sem_init,
+  .sem_wait=sem_wait,
+  .sem_signal=sem_signal,
 };
