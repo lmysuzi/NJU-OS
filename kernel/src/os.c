@@ -19,6 +19,7 @@ static void consumer(){
 
 
 static void producer(){
+  printf("shit");
   while(1){
     if(n==1){
       printf(")");
