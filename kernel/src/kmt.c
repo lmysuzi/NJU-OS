@@ -86,8 +86,10 @@ static Context *kmt_schedule(Event ev,Context *context){
   current=task;
   current->status=TASK_RUNNING;
 
+  if(current==task_head)current=task_head->next;
+  else current=task_head;
   spin_unlock(&task_lock);
-  return task->context;
+  return current->context;
 }
 
 
