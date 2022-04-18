@@ -300,6 +300,7 @@ static void *slab_alloc(size_t size){
 
 
 static void *kalloc(size_t size) {
+  if(size<MINSIZE)size=MINSIZE;
   size=tableSizeFor(size);
   if(size<MINSIZE)size=MINSIZE;
   if(size>MAXSIZE)return NULL;
