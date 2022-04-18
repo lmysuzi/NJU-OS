@@ -12,6 +12,7 @@ static void consumer(){
     if(n==0){
       printf("(\n");
       n=1;
+      yield();
     }
   }
 }
@@ -22,6 +23,7 @@ static void producer(){
     if(n==1){
       printf(")\n");
       n=0;
+      yield();
     }
   }
 }
