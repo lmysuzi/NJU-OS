@@ -60,13 +60,16 @@ static Context *kmt_schedule(Event ev,Context *context){
   }
   task_t *task=current->next;//if current == idle , then task is NULL too
   if(task==NULL)task=task_head;
+  task_t *task_begin=task;
 
   current->status=TASK_READY;
-  while(1){
+
+  do{
     if(task->status==TASK_READY)break;
     if(task->next)task=task->next;
     else task=task_head;
-  }
+  }while(task!=task_begin);
+
   current=task;
   current->status=TASK_RUNNING;
 
