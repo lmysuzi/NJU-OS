@@ -22,7 +22,6 @@ enum{
 static void inline task_insert(task_t *task){
   panic_on(task_lock.flag==0,"wrong lock");
 
-  printf("fuck\n");
   task->prev=NULL,task->next=task_head;
   if(task_head!=NULL)task_head->prev=task;
   task_head=task;
@@ -56,6 +55,11 @@ static Context *kmt_context_save(Event ev,Context *context){
 static Context *kmt_schedule(Event ev,Context *context){
   panic_on(current==NULL,"current is null");
 
+  task_t *temp=task_head;
+  while(temp){
+    printf("%s\n",temp->name);
+    temp=temp->next;
+  }
   spin_lock(&task_lock);
   if(task_head==NULL){
     panic_on(current!=idle,"wrong current");
