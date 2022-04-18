@@ -20,8 +20,9 @@ static void consumer(){
 
 static void producer(){
   while(1){
-    if(n==1){
+
     printf("ji");
+    if(n==1){
       printf(")\n");
       n=0;
       yield();
