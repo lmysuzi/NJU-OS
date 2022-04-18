@@ -11,6 +11,7 @@ static void consumer(){
   while(1){
     if(n==0){
       printf("(");
+      n=1;
       yield();
     }
   }
@@ -21,6 +22,7 @@ static void producer(){
   while(1){
     if(n==1){
       printf(")");
+      n=0;
       yield();
     }
   }
