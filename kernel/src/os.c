@@ -21,6 +21,7 @@ static void consumer(){
 
 static void producer(){
   while(1){
+  printf("ji");
     if(n==1){
       printf(")");
       n=0;
