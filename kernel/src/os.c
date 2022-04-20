@@ -7,7 +7,7 @@ static spinlock_t irq_lock;
 
 //static int n=0;
 
-static void consumer(){
+static void consumer(void *arg){
   while(1){
       printf("(%d ",cpu_current());
       yield();
