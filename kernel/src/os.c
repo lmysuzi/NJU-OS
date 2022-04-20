@@ -9,7 +9,7 @@ static spinlock_t irq_lock;
 
 static void consumer(){
   while(1){
-      printf("(\n");
+      printf("(");
       yield();
   }
 }
@@ -19,7 +19,7 @@ static void producer(){
   while(1){
 
     //printf("%d\n",n);
-      printf(")\n");
+      printf(")");
       yield();
   }
 }
