@@ -20,7 +20,8 @@ enum{
 
 
 
-static void inline task_insert(task_t *task){
+static void inline 
+task_insert(task_t *task){
   panic_on(task_lock.flag==0,"wrong lock");
 
   task->prev=NULL,task->next=task_head;
@@ -29,7 +30,8 @@ static void inline task_insert(task_t *task){
 }
 
 
-static void inline task_delete(task_t *task){
+static void inline 
+task_delete(task_t *task){
   panic_on(task_lock.flag==0,"wrong lock");
 
   if(task->next)task->next->prev=task->prev;
@@ -46,22 +48,17 @@ static int create(task_t *task, const char *name, void (*entry)(void *arg), void
 static void teardown(task_t *task);
 
 
-static Context *kmt_context_save(Event ev,Context *context){
+static Context *
+kmt_context_save(Event ev,Context *context){
   panic_on(current==NULL,"current is null");
   current->context=context;
   return NULL;
 }
 
 
-static Context *kmt_schedule(Event ev,Context *context){
+static Context *
+kmt_schedule(Event ev,Context *context){
   panic_on(current==NULL,"current is null");
-
-  /*task_t *temp=task_head;
-  while(temp){
-    printf("%s %d\n",temp->name,temp->status);
-    temp=temp->next;
-  }
-  printf("\n");*/
 
   spin_lock(&task_lock);
   if(task_head==NULL){
@@ -93,11 +90,13 @@ static Context *kmt_schedule(Event ev,Context *context){
 }
 
 
-static void spin_init(spinlock_t *lk, const char *name){
+static void 
+spin_init(spinlock_t *lk, const char *name){
   lk->flag=0;lk->name=name;
 }
 
-static void spin_lock(spinlock_t *lk){
+static void 
+spin_lock(spinlock_t *lk){
   bool prev_status=ienabled();
   iset(false);
   while(atomic_xchg(&lk->flag,1)==1);//printf("%s\n",lk->name);
@@ -105,20 +104,25 @@ static void spin_lock(spinlock_t *lk){
 }
 
 
-static void spin_unlock(spinlock_t *lk){
+static void 
+spin_unlock(spinlock_t *lk){
   panic_on(ienabled()==1,"wrong status");
   atomic_xchg(&lk->flag,0);
   iset(lk->status);
 }
 
 
-static void idle_task(){
+static void 
+idle_task(){
   while(1);
   panic("should not reach");
 }
 
 
-static void init(){
+
+
+static void 
+init(){
   spin_init(&task_lock,"task_lock");
 
   for(int cpu=0;cpu<cpu_count();cpu++){
@@ -145,7 +149,10 @@ static void init(){
 }
     
 
-static int create(task_t *task, const char *name, void (*entry)(void *arg), void *arg){
+
+
+static int 
+create(task_t *task, const char *name, void (*entry)(void *arg), void *arg){
   panic_on(task==NULL,"task is NULL");
 
   task->name=name;
@@ -167,7 +174,10 @@ static int create(task_t *task, const char *name, void (*entry)(void *arg), void
 }
 
 
-static void teardown(task_t *task){
+
+
+static void 
+teardown(task_t *task){
   panic_on(task==NULL,"task is NULL");
 
   spin_lock(&task_lock);
@@ -176,7 +186,8 @@ static void teardown(task_t *task){
 }
 
 
-static void inline sem_task_insert(sem_t *sem, task_t *task){
+static void inline 
+sem_task_insert(sem_t *sem, task_t *task){
   panic_on(sem==NULL,"sem is null");
   panic_on(task==NULL,"task is null");
 
@@ -191,7 +202,9 @@ static void inline sem_task_insert(sem_t *sem, task_t *task){
 }
 
 
-static void inline sem_task_delete(sem_t *sem){
+
+static void inline 
+sem_task_delete(sem_t *sem){
   panic_on(sem==NULL,"sem is null");
   panic_on(sem->sem_tasks==NULL,"sem_tasks is null");
 
@@ -205,7 +218,10 @@ static void inline sem_task_delete(sem_t *sem){
   pmm->free_safe(sem_task_node);
 }
 
-static void sem_init(sem_t *sem, const char *name, int value){
+
+
+static void 
+sem_init(sem_t *sem, const char *name, int value){
   panic_on(sem==NULL,"sem is null");
   
   sem->name=name;
@@ -215,7 +231,9 @@ static void sem_init(sem_t *sem, const char *name, int value){
 }
 
 
-static void sem_wait(sem_t *sem){
+
+static void 
+sem_wait(sem_t *sem){
   panic_on(sem==NULL,"sem is null");
   spin_lock(&sem->lock);
   sem->count--;
@@ -230,7 +248,9 @@ static void sem_wait(sem_t *sem){
 }
 
 
-static void sem_signal(sem_t *sem){
+
+static void 
+sem_signal(sem_t *sem){
   panic_on(sem==NULL,"sem is null");
 
   spin_lock(&sem->lock);
