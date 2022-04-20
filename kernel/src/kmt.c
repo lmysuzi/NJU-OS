@@ -112,6 +112,11 @@ static void spin_unlock(spinlock_t *lk){
 }
 
 
+static void idle_task(){
+  while(1);
+  panic("should not reach");
+}
+
 
 static void init(){
   spin_init(&task_lock,"task_lock");
@@ -121,6 +126,15 @@ static void init(){
 
     panic_on(idles[cpu]==NULL,"alloc fail");
 
+    idles[cpu]->kstack=pmm->alloc(KSTACK_SIZE);
+    panic_on(idles[cpu]->kstack==NULL,"not enough space for kstack");
+
+    Area kstack={
+      .start=(void *)idles[cpu]->kstack,
+      .end=((void *)idles[cpu]->kstack)+KSTACK_SIZE,
+    };
+
+    idles[cpu]->context=kcontext(kstack,idle_task,NULL);
     idles[cpu]->next=idles[cpu]->prev=NULL;
     idles[cpu]->status=TASK_RUNNING;
     currents[cpu]=idles[cpu];
