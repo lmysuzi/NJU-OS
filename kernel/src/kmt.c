@@ -50,7 +50,6 @@ static void teardown(task_t *task);
 
 static Context *
 kmt_context_save(Event ev,Context *context){
-  panic_on(current==NULL,"current is null");
   if(!current)current=idle;
   else current->context=context;
   return NULL;
