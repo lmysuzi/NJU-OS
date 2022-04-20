@@ -86,6 +86,7 @@ static Context *kmt_schedule(Event ev,Context *context){
 
   //panic_on(current==task,"fuck");
   current=task;
+  if(current->status!=TASK_READY)current=idle;
   current->status=TASK_RUNNING;
 
   spin_unlock(&task_lock);
