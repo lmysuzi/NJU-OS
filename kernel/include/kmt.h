@@ -6,6 +6,7 @@
 #define KSTACK_SIZE 8192
 
 struct task{
+  int which_cpu;
   int status;
   const char *name;
   Context *context;

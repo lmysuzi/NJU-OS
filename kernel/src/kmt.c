@@ -7,13 +7,22 @@
 
 #define mark printf("fuck\n")
 
-static task_t *task_head=NULL;
-static spinlock_t task_lock;
+//static task_t *task_head=NULL;
+//static spinlock_t task_lock;
 
+static int cpu_sched; //下一个线程调动的cpu
+static spinlock_t lock_cpu_sched;
+static spinlock_t task_locks[MAX_CPU];
+static task_t *tasks[MAX_CPU];
 static task_t *currents[MAX_CPU];
 static task_t *idles[MAX_CPU];
+
 #define current currents[cpu_current()]
 #define idle idles[cpu_current()]
+#define task_lock task_locks[cpu_current()]
+#define head tasks[cpu_current()]
+#define inserted_head tasks[cpu_sched]
+
 enum{
   TASK_READY=1,TASK_RUNNING,TASK_SLEEP,
 };
@@ -24,9 +33,13 @@ static void inline
 task_insert(task_t *task){
   panic_on(task_lock.flag==0,"wrong lock");
 
-  task->prev=NULL,task->next=task_head;
-  if(task_head!=NULL)task_head->prev=task;
-  task_head=task;
+
+  task->prev=NULL,task->next=inserted_head;
+  task->which_cpu=cpu_sched;
+  if(inserted_head!=NULL)inserted_head->prev=task;
+  inserted_head=task;
+
+  cpu_sched=(cpu_sched+1)%cpu_count();
 }
 
 
@@ -36,7 +49,7 @@ task_delete(task_t *task){
 
   if(task->next)task->next->prev=task->prev;
   if(task->prev)task->prev->next=task->next;
-  else task_head=task_head->next;
+  else tasks[task->which_cpu]=tasks[task->which_cpu]->next;
   pmm->free_safe(task->kstack);
   pmm->free_safe(task);
 }
@@ -63,14 +76,14 @@ kmt_schedule(Event ev,Context *context){
 
   spin_lock(&task_lock);
 
-  if(task_head==NULL){
+  if(head==NULL){
     panic_on(current!=idle,"wrong current");
     spin_unlock(&task_lock);
     return current->context;
   }
 
   task_t *task=current->next;//if current == idle , then task is NULL too
-  if(task==NULL){task=task_head;}
+  if(task==NULL){task=head;}
   task_t *task_begin=task;
 
   if(current->status==TASK_RUNNING){
@@ -80,7 +93,7 @@ kmt_schedule(Event ev,Context *context){
   do{
     if(task->status==TASK_READY)break;
     if(task->next)task=task->next;
-    else task=task_head;
+    else task=head;
   }while(task!=task_begin);
 
   current=task;
@@ -126,8 +139,13 @@ idle_task(){
 static void 
 init(){
   spin_init(&task_lock,"task_lock");
+  cpu_sched=0;
+  spin_init(&lock_cpu_sched,"lock_cpu_sched");
 
   for(int cpu=0;cpu<cpu_count();cpu++){
+    spin_init(&task_locks[cpu],"task_lock");
+    tasks[cpu]=NULL;
+
     idles[cpu]=pmm->alloc(sizeof(task_t));
 
     panic_on(idles[cpu]==NULL,"alloc fail");
