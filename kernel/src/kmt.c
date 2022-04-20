@@ -7,8 +7,6 @@
 
 #define mark printf("fuck\n")
 
-//static task_t *task_head=NULL;
-//static spinlock_t task_lock;
 
 static int cpu_sched; //下一个线程调动的cpu
 static spinlock_t lock_cpu_sched;

@@ -34,6 +34,10 @@ static void os_init() {
   kmt->create(pmm->alloc(sizeof(task_t)),"consumer",consumer,(void*)1);
   kmt->create(pmm->alloc(sizeof(task_t)),"consumer",consumer,(void*)2);
   kmt->create(pmm->alloc(sizeof(task_t)),"consumer",consumer,(void*)3);
+  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",consumer,(void*)4);
+  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",consumer,(void*)5);
+  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",consumer,(void*)6);
+  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",consumer,(void*)7);
 }
 
 
