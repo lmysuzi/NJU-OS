@@ -114,7 +114,7 @@ spin_unlock(spinlock_t *lk){
 
 static void 
 idle_task(){
-  while(1);
+  while(1)printf("fuck\n");
   panic("should not reach");
 }
 
