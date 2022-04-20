@@ -5,14 +5,12 @@ static irq_t *irq_head;
 static spinlock_t irq_lock;
 
 
-static int n=0;
+//static int n=0;
 
 static void consumer(){
   while(1){
-    if(n==0){
-      n=1;
       printf("(\n");
-    }
+      yield();
   }
 }
 
@@ -21,10 +19,8 @@ static void producer(){
   while(1){
 
     //printf("%d\n",n);
-    if(n==1){
       printf(")\n");
-      n=0;
-    }
+      yield();
   }
 }
 
