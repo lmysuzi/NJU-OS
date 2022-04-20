@@ -10,7 +10,7 @@ static spinlock_t irq_lock;
 static void consumer(void *arg){
   size_t id=(size_t)arg;
   while(1){
-      printf("%d %d   ",id,cpu_current());
+      printf("(%d %d) ",id,cpu_current());
       yield();
   }
 }
