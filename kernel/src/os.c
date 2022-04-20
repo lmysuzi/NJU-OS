@@ -44,7 +44,7 @@ static void os_run() {
   }
 
   iset(true);
-  while (1)printf("ai");
+  while (1);
 }
 
 
