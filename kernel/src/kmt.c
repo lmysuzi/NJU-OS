@@ -52,6 +52,7 @@ static Context *
 kmt_context_save(Event ev,Context *context){
   if(!current)current=idle;
   else current->context=context;
+
   return NULL;
 }
 
@@ -61,16 +62,17 @@ kmt_schedule(Event ev,Context *context){
   panic_on(current==NULL,"current is null");
 
   spin_lock(&task_lock);
+
   if(task_head==NULL){
     panic_on(current!=idle,"wrong current");
     spin_unlock(&task_lock);
     return current->context;
   }
+
   task_t *task=current->next;//if current == idle , then task is NULL too
-  if(task==NULL){
-    task=task_head;
-  }
+  if(task==NULL){task=task_head;}
   task_t *task_begin=task;
+
   if(current->status==TASK_RUNNING){
     current->status=TASK_READY;
   }
@@ -114,7 +116,7 @@ spin_unlock(spinlock_t *lk){
 
 static void 
 idle_task(){
-  while(1)printf("fuck\n");
+  while(1);//printf("fuck\n");
   panic("should not reach");
 }
 
