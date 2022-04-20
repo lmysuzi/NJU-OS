@@ -51,7 +51,8 @@ static void teardown(task_t *task);
 static Context *
 kmt_context_save(Event ev,Context *context){
   panic_on(current==NULL,"current is null");
-  current->context=context;
+  if(!current)current=idle;
+  else current->context=context;
   return NULL;
 }
 
@@ -141,7 +142,6 @@ init(){
     idles[cpu]->context=kcontext(kstack,idle_task,NULL);
     idles[cpu]->next=idles[cpu]->prev=NULL;
     idles[cpu]->status=TASK_RUNNING;
-    currents[cpu]=idles[cpu];
   }
 
   os->on_irq(INT_MIN,EVENT_NULL,kmt_context_save);
