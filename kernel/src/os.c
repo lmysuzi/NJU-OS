@@ -29,7 +29,7 @@ static void os_init() {
   irq_head=NULL;kmt->spin_init(&irq_lock,"irq_lock");
   pmm->init();
   kmt->init();
-  dev->init();
+  //dev->init();
   task_t *a=pmm->alloc(sizeof(task_t));
   task_t *b=pmm->alloc(sizeof(task_t));
   kmt->create(a,"consumer",consumer,NULL);
