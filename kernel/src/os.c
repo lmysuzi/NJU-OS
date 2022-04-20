@@ -8,21 +8,22 @@ static spinlock_t irq_lock;
 //static int n=0;
 
 static void consumer(void *arg){
+  size_t id=(size_t)arg;
   while(1){
-      printf("(%d ",cpu_current());
+      printf("(%d %d   ",id,cpu_current());
       yield();
   }
 }
 
 
-static void producer(){
+/*static void producer(){
   while(1){
 
     //printf("%d\n",n);
       printf(")%d ",cpu_current());
       yield();
   }
-}
+}*/
 
 
 static void os_init() {
@@ -30,15 +31,7 @@ static void os_init() {
   pmm->init();
   kmt->init();
   //dev->init();
-  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",consumer,NULL);
-  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",producer,NULL);
-  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",consumer,NULL);
-  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",producer,NULL);
-  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",consumer,NULL);
-  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",producer,NULL);
-  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",consumer,NULL);
-  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",producer,NULL);
-  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",producer,NULL);
+  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",consumer,(void*)1);
 }
 
 
