@@ -30,14 +30,24 @@ static void os_init() {
   pmm->init();
   kmt->init();
   //dev->init();
-  task_t *a=pmm->alloc(sizeof(task_t));
-  task_t *c=pmm->alloc(sizeof(task_t));
-  task_t *d=pmm->alloc(sizeof(task_t));
-  task_t *b=pmm->alloc(sizeof(task_t));
-  kmt->create(a,"consumer",consumer,NULL);
-  kmt->create(b,"consumer",consumer,NULL);
-  kmt->create(c,"consumer",consumer,NULL);
-  kmt->create(d,"producer",producer,NULL);
+  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",consumer,NULL);
+  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",producer,NULL);
+  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",consumer,NULL);
+  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",producer,NULL);
+  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",consumer,NULL);
+  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",producer,NULL);
+  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",consumer,NULL);
+  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",producer,NULL);
+  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",consumer,NULL);
+  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",producer,NULL);
+  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",consumer,NULL);
+  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",producer,NULL);
+  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",consumer,NULL);
+  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",producer,NULL);
+  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",consumer,NULL);
+  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",producer,NULL);
+  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",consumer,NULL);
+  kmt->create(pmm->alloc(sizeof(task_t)),"consumer",producer,NULL);
 }
 
 
