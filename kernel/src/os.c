@@ -7,7 +7,7 @@ static spinlock_t irq_lock;
 
 //static int n=0;
 
-static void consumer(){
+/*static void consumer(){
   while(1){
       printf("(");
       yield();
@@ -22,18 +22,18 @@ static void producer(){
       printf(")");
       yield();
   }
-}
+}*/
 
 
 static void os_init() {
   irq_head=NULL;kmt->spin_init(&irq_lock,"irq_lock");
   pmm->init();
   kmt->init();
-  //dev->init();
-  task_t *a=pmm->alloc(sizeof(task_t));
+  dev->init();
+  /*task_t *a=pmm->alloc(sizeof(task_t));
   task_t *b=pmm->alloc(sizeof(task_t));
   kmt->create(a,"consumer",consumer,NULL);
-  kmt->create(b,"producer",producer,NULL);
+  kmt->create(b,"producer",producer,NULL);*/
 }
 
 
