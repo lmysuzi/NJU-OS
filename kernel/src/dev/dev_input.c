@@ -86,7 +86,6 @@ static void input_keydown(device_t *dev, AM_INPUT_KEYBRD_T key) {
 }
 
 static Context *input_notify(Event ev, Context *context) {
-  printf("fuck\n");
   kmt->sem_signal(&sem_kbdirq);
   return NULL;
 }

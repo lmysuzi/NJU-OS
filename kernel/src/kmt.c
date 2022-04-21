@@ -234,8 +234,10 @@ sem_task_delete(sem_t *sem){
   while(sem_task_node->next!=NULL)sem_task_node=sem_task_node->next;
   panic_on(sem_task_node->next!=NULL,"wrong task");
   
-  if(sem_task_node->prev!=NULL)sem_task_node->next=NULL;
+  if(sem_task_node->prev!=NULL)sem_task_node->prev->next=NULL;
   else sem->sem_tasks=NULL;
+  
+  sem_task_node->task->status=TASK_READY;
 
   pmm->free_safe(sem_task_node);
 }
