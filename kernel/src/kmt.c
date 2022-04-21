@@ -29,7 +29,7 @@ enum{
 
 static void inline 
 task_insert(task_t *task){
-  panic_on(task_lock.flag==0,"wrong lock");
+  panic_on(task_locks[task->which_cpu].flag==0,"wrong lock");
 
 
   task->prev=NULL,task->next=inserted_head;
@@ -43,7 +43,7 @@ task_insert(task_t *task){
 
 static void inline 
 task_delete(task_t *task){
-  panic_on(task_lock.flag==0,"wrong lock");
+  panic_on(task_locks[task->which_cpu].flag==0,"wrong lock");
 
   if(task->next)task->next->prev=task->prev;
   if(task->prev)task->prev->next=task->next;
@@ -197,9 +197,9 @@ static void
 teardown(task_t *task){
   panic_on(task==NULL,"task is NULL");
 
-  spin_lock(&task_lock);
+  spin_lock(&task_locks[task->which_cpu]);
   task_delete(task);
-  spin_unlock(&task_lock);
+  spin_unlock(&task_locks[task->which_cpu]);
 }
 
 
