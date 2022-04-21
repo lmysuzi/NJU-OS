@@ -19,7 +19,8 @@ static task_t *idles[MAX_CPU];
 #define idle idles[cpu_current()]
 #define task_lock task_locks[cpu_current()]
 #define head tasks[cpu_current()]
-#define inserted_head tasks[cpu_sched]
+#define head_for(_) tasks[_->which_cpu]
+#define lock_for(_) task_locks[_->which_cpu]
 
 enum{
   TASK_READY=1,TASK_RUNNING,TASK_SLEEP,
@@ -29,25 +30,24 @@ enum{
 
 static void inline 
 task_insert(task_t *task){
-  panic_on(task_locks[task->which_cpu].flag==0,"wrong lock");
+  panic_on(lock_for(task).flag==0,"wrong lock");
 
 
-  task->prev=NULL,task->next=inserted_head;
+  task->prev=NULL,task->next=head_for(task);
   task->which_cpu=cpu_sched;
-  if(inserted_head!=NULL)inserted_head->prev=task;
-  inserted_head=task;
+  if(head_for(task)!=NULL)head_for(task)->prev=task;
+  head_for(task)=task;
 
-  cpu_sched=(cpu_sched+1)%cpu_count();
 }
 
 
 static void inline 
 task_delete(task_t *task){
-  panic_on(task_locks[task->which_cpu].flag==0,"wrong lock");
+  panic_on(lock_for(task).flag==0,"wrong lock");
 
   if(task->next)task->next->prev=task->prev;
   if(task->prev)task->prev->next=task->next;
-  else tasks[task->which_cpu]=tasks[task->which_cpu]->next;
+  else head_for(task)=head_for(task)->next;
   pmm->free_safe(task->kstack);
   pmm->free_safe(task);
 }
@@ -183,9 +183,14 @@ create(task_t *task, const char *name, void (*entry)(void *arg), void *arg){
   };
   task->context=kcontext(kstack,entry,arg);
 
-  spin_lock(&task_lock);
+  spin_lock(&lock_cpu_sched);
+  task->which_cpu=cpu_sched;
+  cpu_sched=(cpu_sched+1)%cpu_count();
+  spin_unlock(&lock_cpu_sched);
+
+  spin_lock(&lock_for(task));
   task_insert(task);
-  spin_unlock(&task_lock);
+  spin_unlock(&lock_for(task));
 
   return 0;
 }
