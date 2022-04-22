@@ -222,9 +222,9 @@ sem_task_insert(sem_t *sem, task_t *task){
   if(sem->sem_tasks!=NULL)sem->sem_tasks->prev=sem_task_node;
   sem->sem_tasks=sem_task_node;
 
-  spin_lock(&lock_for(task));
+//  spin_lock(&lock_for(task));
   task->status=TASK_SLEEP;
-  spin_unlock(&lock_for(task));
+ // spin_unlock(&lock_for(task));
 }
 
 
