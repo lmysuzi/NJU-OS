@@ -221,6 +221,10 @@ sem_task_insert(sem_t *sem, task_t *task){
   sem_task_node->next=sem->sem_tasks;
   if(sem->sem_tasks!=NULL)sem->sem_tasks->prev=sem_task_node;
   sem->sem_tasks=sem_task_node;
+
+  spin_lock(&lock_for(task));
+  task->status=TASK_SLEEP;
+  spin_unlock(&lock_for(task));
 }
 
 
@@ -237,7 +241,9 @@ sem_task_delete(sem_t *sem){
   if(sem_task_node->prev!=NULL)sem_task_node->prev->next=NULL;
   else sem->sem_tasks=NULL;
   
+  spin_lock(&lock_for(sem_task_node->task));
   sem_task_node->task->status=TASK_READY;
+  spin_unlock(&lock_for(sem_task_node->task));
 
   pmm->free_safe(sem_task_node);
 }
@@ -263,7 +269,6 @@ sem_wait(sem_t *sem){
   sem->count--;
 
   if(sem->count<0){
-    current->status=TASK_SLEEP;
     sem_task_insert(sem,current);
     spin_unlock(&sem->lock);
     yield();
