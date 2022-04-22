@@ -137,8 +137,8 @@ idle_task(){
 static void 
 init(){
   spin_init(&task_lock,"task_lock");
-  cpu_sched=0;
   spin_init(&lock_cpu_sched,"lock_cpu_sched");
+  cpu_sched=0;
 
   for(int cpu=0;cpu<cpu_count();cpu++){
     spin_init(&task_locks[cpu],"task_lock");
