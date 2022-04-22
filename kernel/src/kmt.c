@@ -241,9 +241,9 @@ sem_task_delete(sem_t *sem){
   if(sem_task_node->prev!=NULL)sem_task_node->prev->next=NULL;
   else sem->sem_tasks=NULL;
   
-  spin_lock(&lock_for(sem_task_node->task));
+  //spin_lock(&lock_for(sem_task_node->task));
   sem_task_node->task->status=TASK_READY;
-  spin_unlock(&lock_for(sem_task_node->task));
+  //spin_unlock(&lock_for(sem_task_node->task));
 
   pmm->free_safe(sem_task_node);
 }
