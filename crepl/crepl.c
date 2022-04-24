@@ -12,7 +12,8 @@ int main(int argc, char *argv[]) {
       break;
     }
     if(strncmp(line,"int",3)==0){
-      int file=mkstemp("fuck.cxxxxxx");
+      char name[]="fuck.cxxxxxx";
+      int file=mkstemp(name);
       printf("%d\n",file);
       FILE *fp=fdopen(file,"w");
 
