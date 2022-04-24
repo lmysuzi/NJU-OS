@@ -18,6 +18,7 @@ int main(int argc, char *argv[]) {
       FILE *fp=fdopen(file,"w");
       fwrite("fuck",1,4,fp);
       char buf[100];
+      fseek(fp,0,SEEK_SET);
       fread(buf,1,4,fp);
       printf("%s\n",buf);
 
