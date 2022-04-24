@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
       break;
     }
     if(strncmp(line,"int",3)==0){
-      int file=mkstemp("fuck.c");
+      int file=mkstemp("fuck.cxxxxxx");
       printf("%d\n",file);
       FILE *fp=fdopen(file,"w");
 
