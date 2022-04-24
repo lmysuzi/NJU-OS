@@ -13,8 +13,9 @@ int main(int argc, char *argv[]) {
     }
     if(strncmp(line,"int",3)==0){
       int file=mkstemp("fuck.c");
+      printf("%d\n",file);
       FILE *fp=fdopen(file,"w");
-      
+
 
     }
     printf("Got %zu chars.\n", strlen(line)); // ??
