@@ -16,6 +16,10 @@ int main(int argc, char *argv[]) {
       int file=mkstemp(name);
       printf("%d\n",file);
       FILE *fp=fdopen(file,"w");
+      fwrite("fuck",1,4,fp);
+      char buf[100];
+      fread(buf,1,4,fp);
+      printf("%s\n",buf);
 
 
     }
