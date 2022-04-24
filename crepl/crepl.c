@@ -7,10 +7,10 @@ int main(int argc, char *argv[]) {
   while (1) {
     printf("crepl> ");
     fflush(stdout);
-    sleep(1);
     if (!fgets(line, sizeof(line), stdin)) {
       break;
     }
+    if(strncmp(line,"int",3)==0)
     printf("Got %zu chars.\n", strlen(line)); // ??
   }
 }
