@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
       break;
     }
     if(strncmp(line,"int",3)==0){
-      char name[]="fuck.cxxxxxx";
+      char name[100]="fuck.cxxxxxx";
       name[0]='1';
       int file=mkstemp(name);
       printf("%d\n",file);
