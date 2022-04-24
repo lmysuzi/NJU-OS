@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
@@ -10,7 +11,12 @@ int main(int argc, char *argv[]) {
     if (!fgets(line, sizeof(line), stdin)) {
       break;
     }
-    if(strncmp(line,"int",3)==0)
+    if(strncmp(line,"int",3)==0){
+      int file=mkstemp("fuck.c");
+      FILE *fp=fdopen(file,"w");
+      
+
+    }
     printf("Got %zu chars.\n", strlen(line)); // ??
   }
 }
