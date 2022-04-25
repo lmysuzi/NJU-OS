@@ -21,6 +21,7 @@ int main(int argc, char *argv[]) {
       fseek(fp,0,SEEK_SET);
       fread(buf,1,4,fp);
       printf("%s\n",buf);
+      fclose(fp);
 
 
     }
