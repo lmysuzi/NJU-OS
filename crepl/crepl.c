@@ -2,9 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/wait.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <assert.h>
+#include <dlfcn.h>
 
 char *myArgv[]={
   "gcc",
@@ -48,7 +50,14 @@ int main(int argc, char *argv[],char *env[]) {
       myArgv[7]=so_path;
       myArgv[8]=c_path;
       if(fork()==0){
+        close(STDERR_FILENO);
         execve("/usr/bin/gcc",myArgv,env);
+      }
+      else{
+        wait(NULL);
+        void *handle=dlopen(so_path,RTLD_NOW);
+        int (*func)(void*)=dlsym(handle,"a");
+        printf("%d\n",func);
       }
     }
     printf("Got %zu chars.\n", strlen(line)); // ??
