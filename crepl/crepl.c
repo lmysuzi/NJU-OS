@@ -2,9 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 int main(int argc, char *argv[]) {
+  mkdir("/tmp/crepl_temp",S_IRWXU|S_IRWXG|S_IRWXO);
   static char line[4096];
+
   while (1) {
     printf("crepl> ");
     fflush(stdout);
