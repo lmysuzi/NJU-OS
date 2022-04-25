@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
       printf("%s\n",so_path);
       FILE *fp_c=fopen(c_path,"w+");
       FILE *fp_so=fopen(so_path,"w+");
-      fwrite(line,1,4096,fp_c);
+      fwrite(line,1,strlen(line),fp_c);
       assert(fp_so!=NULL);
       assert(fp_c!=NULL);
       
