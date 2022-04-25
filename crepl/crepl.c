@@ -56,7 +56,7 @@ int main(int argc, char *argv[],char *env[]) {
       else{
         wait(NULL);
         void *handle=dlopen(so_path,RTLD_NOW);
-        int (*func)(void*)=dlsym(handle,"a");
+        int (*func)(void)=dlsym(handle,"a");
         printf("%d\n",func());
       }
     }
