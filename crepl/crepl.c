@@ -37,8 +37,8 @@ int main(int argc, char *argv[]) {
       char c_path[100],so_path[100];
       memset(c_path,0,100*sizeof(char));
       memset(so_path,0,100*sizeof(char));
-      sprintf(c_path,"%sc",path);
-      sprintf(so_path,"%sso",path);
+      sprintf(c_path,"%s",path);
+      sprintf(so_path,"%s",path);
       printf("%s\n",c_path);
       printf("%s\n",so_path);
       FILE *fp=fopen(path,"w+");
