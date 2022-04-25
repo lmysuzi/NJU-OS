@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <assert.h>
 
 char *myArgv[]={
   "gcc",
@@ -34,9 +35,9 @@ int main(int argc, char *argv[]) {
       sprintf(filename,"file%d",file_num);
       strcat(path,filename);
       printf("%s\n",path);
-
-
-
+      FILE *fp=fopen(path,"w");
+      assert(fp!=NULL);
+      
     }
     printf("Got %zu chars.\n", strlen(line)); // ??
   }
