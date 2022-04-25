@@ -15,7 +15,9 @@ int main(int argc, char *argv[]) {
       char name[]="fuck.cXXXXXX";
       int file=mkstemp(name);
       printf("%d\n",file);
+      unlink(name);
       close(file);
+      fopen("/tmp/crepl_temp/fuck.txt","r");
 
 
     }
