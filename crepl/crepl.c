@@ -57,7 +57,7 @@ int main(int argc, char *argv[],char *env[]) {
         wait(NULL);
         void *handle=dlopen(so_path,RTLD_NOW);
         int (*func)(void*)=dlsym(handle,"a");
-        printf("%d\n",func);
+        printf("%d\n",func());
       }
     }
     printf("Got %zu chars.\n", strlen(line)); // ??
