@@ -43,8 +43,10 @@ int main(int argc, char *argv[]) {
       strcat(so_path,".so");
       printf("%s\n",c_path);
       printf("%s\n",so_path);
-      FILE *fp=fopen(path,"w+");
-      assert(fp!=NULL);
+      FILE *fp_c=fopen(c_path,"w+");
+      FILE *fp_so=fopen(so_path,"w+");
+      assert(fp_so!=NULL);
+      assert(fp_c!=NULL);
       
     }
     printf("Got %zu chars.\n", strlen(line)); // ??
