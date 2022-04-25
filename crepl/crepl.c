@@ -18,7 +18,7 @@ char *myArgv[]={
 
 static int file_num=0;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[],char *env[]) {
   mkdir("/tmp/crepl_temp",S_IRWXU|S_IRWXG|S_IRWXO);
   static char line[4096];
 
@@ -41,14 +41,15 @@ int main(int argc, char *argv[]) {
       sprintf(so_path,"%s",path);
       strcat(c_path,".c");
       strcat(so_path,".so");
-      printf("%s\n",c_path);
-      printf("%s\n",so_path);
-      FILE *fp_c=fopen(c_path,"w+");
-      FILE *fp_so=fopen(so_path,"w+");
-      fwrite(line,1,strlen(line),fp_c);
-      assert(fp_so!=NULL);
-      assert(fp_c!=NULL);
-      
+      FILE *fp=fopen(c_path,"w+");
+      fwrite(line,1,strlen(line),fp);
+      assert(fp!=NULL);
+      fclose(fp);
+      myArgv[7]=so_path;
+      myArgv[8]=c_path;
+      if(fork()==0){
+        execve("/usr/bin/gcc",myArgv,env);
+      }
     }
     printf("Got %zu chars.\n", strlen(line)); // ??
   }
