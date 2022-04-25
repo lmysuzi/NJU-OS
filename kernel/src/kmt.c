@@ -192,6 +192,8 @@ create(task_t *task, const char *name, void (*entry)(void *arg), void *arg){
   task_insert(task);
   spin_unlock(&lock_for(task));
 
+  printf("Task %s has been created on the cpu %d\n",name,task->which_cpu);
+
   return 0;
 }
 
