@@ -32,13 +32,15 @@ int main(int argc, char *argv[]) {
       char path[100]="/tmp/crepl_temp/";
       char filename[100];
       memset(filename,0,100*sizeof(char));
-      sprintf(filename,"file%d.",file_num);
+      sprintf(filename,"file%d",file_num);
       strcat(path,filename);
       char c_path[100],so_path[100];
       memset(c_path,0,100*sizeof(char));
       memset(so_path,0,100*sizeof(char));
       sprintf(c_path,"%s",path);
       sprintf(so_path,"%s",path);
+      strcat(c_path,".c");
+      strcat(so_path,".so");
       printf("%s\n",c_path);
       printf("%s\n",so_path);
       FILE *fp=fopen(path,"w+");
