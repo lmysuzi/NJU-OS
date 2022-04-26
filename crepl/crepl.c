@@ -69,7 +69,6 @@ int main(int argc, char *argv[],char *env[]) {
       memset(expresion,0,4096*sizeof(char));
       char func_name[20];
       sprintf(func_name,"wrapper%d",wrapper_num++);
-      printf("%s\n",func_name);
       fwrite("int ",1,4,fp);
       fwrite(func_name,1,strlen(func_name),fp);
       strcat(expresion,"()\n{return ");
@@ -83,7 +82,7 @@ int main(int argc, char *argv[],char *env[]) {
       }
       else{
         wait(NULL);
-        void *handle=dlopen(so_path,RTLD_NOW);
+        void *handle=dlopen(so_path,RTLD_NOW|RTLD_GLOBAL);
         if(handle==NULL){
           printf("wrong expression\n");continue;
         }
@@ -95,6 +94,6 @@ int main(int argc, char *argv[],char *env[]) {
 
       }
     }
-    printf("Got %zu chars.\n", strlen(line)); // ??
+    //printf("Got %zu chars.\n", strlen(line)); // ??
   }
 }
