@@ -60,6 +60,7 @@ int main(int argc, char *argv[],char *env[]) {
       else{
         wait(NULL);
         void *handle=dlopen(so_path,RTLD_NOW);
+        if(handle==NULL)printf("wrong function\n");
         assert(handle!=NULL);
         int (*func)(void)=dlsym(handle,"a");
         printf("%d\n",func());
@@ -69,15 +70,32 @@ int main(int argc, char *argv[],char *env[]) {
       line[strlen(line)-1]=0;
       memset(expresion,0,4096*sizeof(char));
       char func_name[20];
-      sprintf(func_name,"wrapper%d()",wrapper_num++);
+      sprintf(func_name,"wrapper%d",wrapper_num++);
       printf("%s\n",func_name);
       fwrite("int ",1,4,fp);
       fwrite(func_name,1,strlen(func_name),fp);
-      strcat(expresion,"\n{return ");
+      strcat(expresion,"()\n{return ");
       strcat(expresion,line);
       strcat(expresion,";}");
       fwrite(expresion,1,strlen(expresion),fp);
       fclose(fp);
+
+      if(fork()==0){
+        execve("/usr/bin/gcc",myArgv,env);
+      }
+      else{
+        wait(NULL);
+        void *handle=dlopen(so_path,RTLD_NOW);
+        if(handle==NULL){
+          printf("wrong expression\n");continue;
+        }
+        int (*func)(void)=dlsym(handle,func_name);
+
+        assert(func);
+
+        printf("%d\n",func());
+
+      }
     }
     printf("Got %zu chars.\n", strlen(line)); // ??
   }
