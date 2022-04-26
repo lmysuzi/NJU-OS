@@ -10,12 +10,8 @@
 
 char *myArgv[]={
   "gcc",
-  #if __X86_64__
-  "-m64",
-  #else
-  "-m32",
-  #endif
-  "-w","-xc","-fPIC","-shared","-o",NULL,NULL,NULL
+  sizeof(void *)==8?"-m64":"-m32"
+  ,"-w","-xc","-fPIC","-shared","-o",NULL,NULL,NULL
 };
 
 static int file_num=0;
