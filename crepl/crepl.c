@@ -54,7 +54,7 @@ int main(int argc, char *argv[],char *env[]) {
       assert(fp!=NULL);
       fclose(fp);
       if(fork()==0){
-        close(STDERR_FILENO);
+        //close(STDERR_FILENO);
         execve("/usr/bin/gcc",myArgv,env);
       }
       else{
