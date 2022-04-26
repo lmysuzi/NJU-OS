@@ -66,7 +66,7 @@ int main(int argc, char *argv[],char *env[]) {
       }
     }
     else{
-      line[strlen(line)]=0;
+      line[strlen(line)-1]=0;
       memset(expresion,0,4096*sizeof(char));
       char func_name[20];
       sprintf(func_name,"wrapper%d()",wrapper_num++);
