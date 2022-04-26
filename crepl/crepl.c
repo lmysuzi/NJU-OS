@@ -66,7 +66,7 @@ int main(int argc, char *argv[],char *env[]) {
     }
     else{
       char func_name[20];
-      sprintf(func_name,"wrapper%d",wrapper_num++);
+      sprintf(func_name,"wrapper%d()",wrapper_num++);
       printf("%s\n",func_name);
     }
     printf("Got %zu chars.\n", strlen(line)); // ??
