@@ -59,7 +59,7 @@ int main(int argc, char *argv[],char *env[]) {
       }
       else{
         wait(NULL);
-        void *handle=dlopen(so_path,RTLD_NOW);
+        void *handle=dlopen(so_path,RTLD_NOW|RTLD_GLOBAL);
         if(handle==NULL){printf("wrong function\n");continue;}
         else printf("OK\n");
         assert(handle!=NULL);
