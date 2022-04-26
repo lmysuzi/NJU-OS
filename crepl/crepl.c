@@ -61,6 +61,7 @@ int main(int argc, char *argv[],char *env[]) {
         wait(NULL);
         void *handle=dlopen(so_path,RTLD_NOW);
         if(handle==NULL){printf("wrong function\n");continue;}
+        else printf("OK\n");
         assert(handle!=NULL);
       }
     }
