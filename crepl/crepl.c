@@ -60,10 +60,8 @@ int main(int argc, char *argv[],char *env[]) {
       else{
         wait(NULL);
         void *handle=dlopen(so_path,RTLD_NOW);
-        if(handle==NULL)printf("wrong function\n");
+        if(handle==NULL){printf("wrong function\n");continue;}
         assert(handle!=NULL);
-        int (*func)(void)=dlsym(handle,"a");
-        printf("%d\n",func());
       }
     }
     else{
