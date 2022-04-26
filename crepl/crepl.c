@@ -20,6 +20,7 @@ char *myArgv[]={
 
 static int file_num=0;
 static int wrapper_num=0;
+static char expresion[4096];
 
 int main(int argc, char *argv[],char *env[]) {
   mkdir("/tmp/crepl_temp",S_IRWXU|S_IRWXG|S_IRWXO);
@@ -65,9 +66,15 @@ int main(int argc, char *argv[],char *env[]) {
       }
     }
     else{
+      memset(expresion,0,4096*sizeof(char));
       char func_name[20];
       sprintf(func_name,"wrapper%d()",wrapper_num++);
       printf("%s\n",func_name);
+      fwrite(func_name,1,strlen(func_name),fp);
+      strcat(expresion,"\n{return ");
+      strcat(expresion,line);
+      strcat(expresion,";}");
+      printf("%s\n",expresion);
     }
     printf("Got %zu chars.\n", strlen(line)); // ??
   }
