@@ -71,6 +71,7 @@ int main(int argc, char *argv[],char *env[]) {
       char func_name[20];
       sprintf(func_name,"wrapper%d()",wrapper_num++);
       printf("%s\n",func_name);
+      fwrite("int ",1,4,fp);
       fwrite(func_name,1,strlen(func_name),fp);
       strcat(expresion,"\n{return ");
       strcat(expresion,line);
