@@ -75,7 +75,8 @@ int main(int argc, char *argv[],char *env[]) {
       strcat(expresion,"\n{return ");
       strcat(expresion,line);
       strcat(expresion,";}");
-      printf("%s\n",expresion);
+      fwrite(expresion,1,strlen(expresion),fp);
+      fclose(fp);
     }
     printf("Got %zu chars.\n", strlen(line)); // ??
   }
