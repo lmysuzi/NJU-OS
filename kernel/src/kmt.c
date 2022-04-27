@@ -1,5 +1,6 @@
 #include <common.h>
 #include <kmt.h>
+#include <os.h>
 
 #define INT_MAX 2147483647
 #define INT_MIN (-INT_MAX-1)
