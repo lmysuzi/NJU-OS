@@ -47,7 +47,7 @@ task_delete(task_t *task){
 
   if(task->next)task->next->prev=task->prev;
   if(task->prev)task->prev->next=task->next;
-  else head_for(task)=head_for(task)->next;
+  else head_for(task)=task->next;
   pmm->free(task->kstack);
   pmm->free(task);
 }
@@ -183,16 +183,16 @@ create(task_t *task, const char *name, void (*entry)(void *arg), void *arg){
   };
   task->context=kcontext(kstack,entry,arg);
 
-  spin_lock(&lock_cpu_sched);
+  //spin_lock(&lock_cpu_sched);
   task->which_cpu=0;
-  cpu_sched=(cpu_sched+1)%cpu_count();
-  spin_unlock(&lock_cpu_sched);
+  //cpu_sched=(cpu_sched+1)%cpu_count();
+  //spin_unlock(&lock_cpu_sched);
 
   spin_lock(&lock_for(task));
   task_insert(task);
   spin_unlock(&lock_for(task));
 
-  printf("Task %s has been created on the cpu %d\n",name,task->which_cpu);
+  //printf("Task %s has been created on the cpu %d\n",name,task->which_cpu);
 
   return 0;
 }
