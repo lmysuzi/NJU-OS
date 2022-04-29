@@ -96,6 +96,7 @@ kmt_schedule(Event ev,Context *context){
 
 
   int round=rand()%task_num;
+  printf("%d\n",round);
   for(int i=0;i<round;i++){
     if(task->next)task=task->next;
     else task=head;
