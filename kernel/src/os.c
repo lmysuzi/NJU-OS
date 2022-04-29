@@ -10,8 +10,8 @@ sem_t empty, fill;
 #define P kmt->sem_wait
 #define V kmt->sem_signal
 
-void producer(void *arg) { while (1) { P(&empty); putch('('); V(&fill);  } }
-void consumer(void *arg) { while (1) { P(&fill);  putch(')'); V(&empty); } }
+void producer(void *arg) { while (1) { P(&empty); printf("%d\n",(size_t)arg)/*putch('(')*/; V(&fill);  } }
+void consumer(void *arg) { while (1) { P(&fill);  /*putch(')');*/ V(&empty); } }
 
 
 static void os_init() {
@@ -22,7 +22,7 @@ static void os_init() {
   kmt->sem_init(&empty, "empty", 2);  // 缓冲区大小为 5
   kmt->sem_init(&fill,  "fill",  0);
   for (int i = 0; i < 1; i++) // 4 个生产者
-    kmt->create(pmm->alloc(sizeof(task_t)), "producer", producer, NULL);
+    kmt->create(pmm->alloc(sizeof(task_t)), "producer", producer, (void*)1);
   for (int i = 0; i < 1; i++) // 5 个消费者
     kmt->create(pmm->alloc(sizeof(task_t)), "consumer", consumer, NULL);
 }

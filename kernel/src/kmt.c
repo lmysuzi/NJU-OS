@@ -35,7 +35,6 @@ task_insert(task_t *task){
 
 
   task->prev=NULL,task->next=head_for(task);
-  task->which_cpu=cpu_sched;
   if(head_for(task)!=NULL)head_for(task)->prev=task;
   head_for(task)=task;
 
@@ -185,7 +184,7 @@ create(task_t *task, const char *name, void (*entry)(void *arg), void *arg){
   task->context=kcontext(kstack,entry,arg);
 
   spin_lock(&lock_cpu_sched);
-  task->which_cpu=cpu_sched;
+  task->which_cpu=0;
   cpu_sched=(cpu_sched+1)%cpu_count();
   spin_unlock(&lock_cpu_sched);
 
