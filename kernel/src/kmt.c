@@ -49,8 +49,8 @@ task_delete(task_t *task){
   if(task->next)task->next->prev=task->prev;
   if(task->prev)task->prev->next=task->next;
   else head_for(task)=head_for(task)->next;
-  pmm->free_safe(task->kstack);
-  pmm->free_safe(task);
+  pmm->free(task->kstack);
+  pmm->free(task);
 }
 
 
@@ -175,7 +175,7 @@ create(task_t *task, const char *name, void (*entry)(void *arg), void *arg){
 
   task->name=name;
   task->status=TASK_READY;
-  task->kstack=pmm->alloc_safe(KSTACK_SIZE);
+  task->kstack=pmm->alloc(KSTACK_SIZE);
   panic_on(task->kstack==NULL,"not enough space for kstack");
 
   Area kstack={
@@ -216,7 +216,7 @@ sem_task_insert(sem_t *sem, task_t *task){
   panic_on(sem==NULL,"sem is null");
   panic_on(task==NULL,"task is null");
 
-  sem_tasks_t *sem_task_node=pmm->alloc_safe(sizeof(sem_tasks_t));
+  sem_tasks_t *sem_task_node=pmm->alloc(sizeof(sem_tasks_t));
   panic_on(sem_task_node==NULL,"alloc fail");
 
   sem_task_node->task=task;
@@ -248,7 +248,7 @@ sem_task_delete(sem_t *sem){
   sem_task_node->task->status=TASK_READY;
   //spin_unlock(&lock_for(sem_task_node->task));
 
-  pmm->free_safe(sem_task_node);
+  pmm->free(sem_task_node);
 }
 
 

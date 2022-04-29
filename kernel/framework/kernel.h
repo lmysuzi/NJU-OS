@@ -26,8 +26,6 @@ MODULE(pmm) {
   void  (*init)();
   void *(*alloc)(size_t size);
   void  (*free)(void *ptr);
-  void *(*alloc_safe)(size_t size);
-  void  (*free_safe)(void *ptr);
 };
 
 typedef struct task task_t;

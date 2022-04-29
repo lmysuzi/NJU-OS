@@ -299,7 +299,7 @@ static void *slab_alloc(size_t size){
 }
 
 
-static void *kalloc(size_t size) {
+static void *kkalloc(size_t size) {
   if(size<MINSIZE)size=MINSIZE;
   size=tableSizeFor(size);
   if(size<MINSIZE)size=MINSIZE;
@@ -309,24 +309,24 @@ static void *kalloc(size_t size) {
   return NULL;
 }
 
-static void kfree(void *ptr){
+static void kkfree(void *ptr){
   size_t size=1<<sizeOfPage[orderOfPage(ptr)];
   if(size<=PAGESIZE&&size>=MINSIZE)slab_free(ptr,size);
   else if(size>PAGESIZE)memory_free(ptr,size);
 }
 
-static void *kalloc_safe(size_t size) {
+static void *kalloc(size_t size) {
   bool i = ienabled();
   iset(false);
-  void *ret = kalloc(size);
+  void *ret = kkalloc(size);
   if (i) iset(true);
   return ret;
 }
 
-static void kfree_safe(void *ptr) {
+static void kfree(void *ptr) {
   int i = ienabled();
   iset(false);
-  kfree(ptr);
+  kkfree(ptr);
   if (i) iset(true);
 }
 
@@ -342,6 +342,4 @@ MODULE_DEF(pmm) = {
   .init  = pmm_init,
   .alloc = kalloc,
   .free  = kfree,
-  .alloc_safe = kalloc_safe,
-  .free_safe = kfree_safe,
 };
