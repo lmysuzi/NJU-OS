@@ -15,13 +15,16 @@ static spinlock_t task_locks[MAX_CPU];
 static task_t *tasks[MAX_CPU];
 static task_t *currents[MAX_CPU];
 static task_t *idles[MAX_CPU];
+static int task_nums[MAX_CPU];
 
 #define current currents[cpu_current()]
 #define idle idles[cpu_current()]
 #define task_lock task_locks[cpu_current()]
 #define head tasks[cpu_current()]
+#define task_num task_nums[cpu_current()]
 #define head_for(_) tasks[_->which_cpu]
 #define lock_for(_) task_locks[_->which_cpu]
+#define task_num_for(_) task_nums[_->which_cpu]
 
 enum{
   TASK_READY=1,TASK_RUNNING,TASK_SLEEP,
@@ -37,6 +40,7 @@ task_insert(task_t *task){
   task->prev=NULL,task->next=head_for(task);
   if(head_for(task)!=NULL)head_for(task)->prev=task;
   head_for(task)=task;
+  task_num_for(task)++;
 
 }
 
@@ -44,6 +48,8 @@ task_insert(task_t *task){
 static void inline 
 task_delete(task_t *task){
   panic_on(lock_for(task).flag==0,"wrong lock");
+  
+  task_num_for(task)--;
 
   if(task->next)task->next->prev=task->prev;
   if(task->prev)task->prev->next=task->next;
@@ -89,7 +95,8 @@ kmt_schedule(Event ev,Context *context){
   }
 
 
-  int round=rand()%10;
+  int round=rand()%task_num;
+  printf("%d\n",task_num);
   for(int i=0;i<round;i++){
     if(task->next)task=task->next;
     else task=head;
