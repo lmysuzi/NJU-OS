@@ -10,8 +10,8 @@ sem_t empty, fill;
 #define P kmt->sem_wait
 #define V kmt->sem_signal
 
-void producer(void *arg) { while (1) { P(&empty); printf("\n%d",(size_t)arg);putch('('); V(&fill);  } }
-void consumer(void *arg) { while (1) { P(&fill);  printf("\n%d",(size_t)arg);putch(')'); V(&empty); } }
+void producer(void *arg) { while (1) { P(&empty); printf(" %d",(size_t)arg);putch('('); V(&fill);  } }
+void consumer(void *arg) { while (1) { P(&fill);  printf(" %d",(size_t)arg);putch(')'); V(&empty); } }
 
 
 static void os_init() {
