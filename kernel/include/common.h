@@ -5,5 +5,6 @@
 #include <klib.h>
 #include <klib-macros.h>
 #include <kmt.h>
+#include <os.h>
 
 #endif
