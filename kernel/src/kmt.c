@@ -96,21 +96,21 @@ kmt_schedule(Event ev,Context *context){
 
 
   int round=rand()%task_num;
-  printf("%d\n",task_num);
   for(int i=0;i<round;i++){
     if(task->next)task=task->next;
     else task=head;
   }
 
-  task_t *task_begin=task;
-  do{
-    if(task->status==TASK_READY)break;
-    if(task->next)task=task->next;
-    else task=head;
-  }while(task!=task_begin);
+  if(task->status==TASK_READY)current=task;
+  else current=idle;
+  //task_t *task_begin=task;
+ // do{
+  //  if(task->status==TASK_READY)break;
+    //if(task->next)task=task->next;
+    //else task=head;
+  //}while(task!=task_begin);
 
-  current=task;
-  if(current->status!=TASK_READY)current=idle;
+ // if(current->status!=TASK_READY)current=idle;
   current->status=TASK_RUNNING;
 
   spin_unlock(&task_lock);
@@ -142,7 +142,7 @@ spin_unlock(spinlock_t *lk){
 
 static void 
 idle_task(){
-  while(1);//printf("fuck\n");
+  while(1)yield();//printf("fuck\n");
   panic("should not reach");
 }
 
