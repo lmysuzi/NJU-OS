@@ -94,6 +94,13 @@ kmt_schedule(Event ev,Context *context){
     current->status=TASK_READY;
   }
 
+  task_t *temp=head;
+  while(temp){
+    printf("%s\n",temp->name);
+    temp=temp->next;
+  }
+  printf("\n");
+
 
   int round=rand()%task_num;
   for(int i=0;i<round;i++){
@@ -105,6 +112,7 @@ kmt_schedule(Event ev,Context *context){
     if(task->next)task=task->next;
     else task=head;
   }
+
   if(task->status==TASK_READY)current=task;
   else current=idle;
   //task_t *task_begin=task;
