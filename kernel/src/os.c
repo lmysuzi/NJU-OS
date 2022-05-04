@@ -6,12 +6,12 @@ static spinlock_t irq_lock;
 
 
 
-sem_t empty, fill;
+/*sem_t empty, fill;
 #define P kmt->sem_wait
 #define V kmt->sem_signal
 
 void producer(void *arg) {printf("fuck\n"); while (1) { P(&empty); printf(" %d",(size_t)arg);putch('('); V(&fill);  } }
-void consumer(void *arg) { while (1) { P(&fill);  printf(" %d",(size_t)arg);putch(')'); V(&empty); } }
+void consumer(void *arg) { while (1) { P(&fill);  printf(" %d",(size_t)arg);putch(')'); V(&empty); } }*/
 
 //void f(){while(1);}
 
@@ -19,21 +19,13 @@ static void os_init() {
   irq_head=NULL;kmt->spin_init(&irq_lock,"irq_lock");
   pmm->init();
   kmt->init();
-  /*kmt->create(pmm->alloc(sizeof(task_t)),"1",f,NULL);
-  kmt->create(pmm->alloc(sizeof(task_t)),"2",f,NULL);
-  kmt->create(pmm->alloc(sizeof(task_t)),"3",f,NULL);
-  kmt->create(pmm->alloc(sizeof(task_t)),"4",f,NULL);
-  kmt->create(pmm->alloc(sizeof(task_t)),"5",f,NULL);
-  kmt->create(pmm->alloc(sizeof(task_t)),"6",f,NULL);
-  kmt->create(pmm->alloc(sizeof(task_t)),"7",f,NULL);
-  kmt->create(pmm->alloc(sizeof(task_t)),"8",f,NULL);*/
   //dev->init();
-  kmt->sem_init(&empty, "empty", 1);  // 缓冲区大小为 5
+  /*kmt->sem_init(&empty, "empty", 1);  // 缓冲区大小为 5
   kmt->sem_init(&fill,  "fill",  0);
   for (int i = 0; i < 1; i++) // 4 个生产者
     kmt->create(pmm->alloc(sizeof(task_t)), "producer", producer, (void*)(size_t)i);
   for (int i = 0; i < 1; i++) // 5 个消费者
-    kmt->create(pmm->alloc(sizeof(task_t)), "consumer", consumer, (void*)(size_t)i);
+    kmt->create(pmm->alloc(sizeof(task_t)), "consumer", consumer, (void*)(size_t)i);*/
 }
 
 
