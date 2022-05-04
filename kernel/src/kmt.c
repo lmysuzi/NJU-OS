@@ -95,11 +95,11 @@ kmt_schedule(Event ev,Context *context){
   }
 
 
-  int round=rand()%task_num;
+  /*int round=rand()%task_num;
   for(int i=0;i<round;i++){
     if(task->next)task=task->next;
     else task=head;
-  }
+  }*/
 
   /*while(task->status!=TASK_READY){
     if(task->next)task=task->next;
@@ -214,7 +214,7 @@ create(task_t *task, const char *name, void (*entry)(void *arg), void *arg){
   task_insert(task);
   spin_unlock(&lock_for(task));
 
-  printf("Task %s has been created on the cpu %d\n",name,task->which_cpu);
+  //printf("Task %s has been created on the cpu %d\n",name,task->which_cpu);
 
   return 0;
 }
