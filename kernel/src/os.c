@@ -10,19 +10,19 @@ sem_t empty, fill;
 #define P kmt->sem_wait
 #define V kmt->sem_signal
 
-void producer(void *arg) {printf("fuck\n"); while (1) { P(&empty); printf(" %d",(size_t)arg);putch('('); V(&fill);  } }
+void producer(void *arg) { while (1) { P(&empty); printf(" %d",(size_t)arg);putch('('); V(&fill);  } }
 void consumer(void *arg) { while (1) { P(&fill);  printf(" %d",(size_t)arg);putch(')'); V(&empty); } }
 
 void f(){
   for (int i = 0; i < 5; i++) // 4 个生产者
     kmt->create(pmm->alloc(sizeof(task_t)), "producer", producer, (void*)(size_t)i);
-  while(1);
+  while(1)yield();
 }
 
 void g(){
   for (int i = 0; i < 6; i++) // 5 个消费者
     kmt->create(pmm->alloc(sizeof(task_t)), "consumer", consumer, (void*)(size_t)i);
-  while(1);
+  while(1)yield();
 }
 
 static void os_init() {
