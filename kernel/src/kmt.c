@@ -157,7 +157,6 @@ idle_task(){
 
 static void 
 init(){
-  spin_init(&task_lock,"task_lock");
   spin_init(&lock_cpu_sched,"lock_cpu_sched");
   cpu_sched=0;
 
@@ -245,9 +244,9 @@ sem_task_insert(sem_t *sem, task_t *task){
   if(sem->sem_tasks!=NULL)sem->sem_tasks->prev=sem_task_node;
   sem->sem_tasks=sem_task_node;
 
-//  spin_lock(&lock_for(task));
+  spin_lock(&lock_for(task));
   task->status=TASK_SLEEP;
- // spin_unlock(&lock_for(task));
+  spin_unlock(&lock_for(task));
 }
 
 
@@ -264,9 +263,9 @@ sem_task_delete(sem_t *sem){
   if(sem_task_node->prev!=NULL)sem_task_node->prev->next=NULL;
   else sem->sem_tasks=NULL;
   
-  //spin_lock(&lock_for(sem_task_node->task));
+  spin_lock(&lock_for(sem_task_node->task));
   sem_task_node->task->status=TASK_READY;
-  //spin_unlock(&lock_for(sem_task_node->task));
+  spin_unlock(&lock_for(sem_task_node->task));
 
   pmm->free(sem_task_node);
 }
