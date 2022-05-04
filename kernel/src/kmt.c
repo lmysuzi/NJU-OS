@@ -204,10 +204,10 @@ create(task_t *task, const char *name, void (*entry)(void *arg), void *arg){
   };
   task->context=kcontext(kstack,entry,arg);
 
-  //spin_lock(&lock_cpu_sched);
-  task->which_cpu=0;
-  //cpu_sched=(cpu_sched+1)%cpu_count();
-  //spin_unlock(&lock_cpu_sched);
+  spin_lock(&lock_cpu_sched);
+  task->which_cpu=cpu_sched;
+  cpu_sched=(cpu_sched+1)%cpu_count();
+  spin_unlock(&lock_cpu_sched);
 
   spin_lock(&lock_for(task));
   task_insert(task);
