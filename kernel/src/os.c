@@ -14,13 +14,13 @@ void producer(void *arg) { while (1) { P(&empty); printf(" %d",(size_t)arg);putc
 void consumer(void *arg) { while (1) { P(&fill);  printf(" %d",(size_t)arg);putch(')'); V(&empty); } }
 
 void f(){
-  for (int i = 0; i < 5; i++) // 4 个生产者
+  for (int i = 0; i < 1; i++) // 4 个生产者
     kmt->create(pmm->alloc(sizeof(task_t)), "producer", producer, (void*)(size_t)i);
   while(1)yield();
 }
 
 void g(){
-  for (int i = 0; i < 6; i++) // 5 个消费者
+  for (int i = 0; i < 1; i++) // 5 个消费者
     kmt->create(pmm->alloc(sizeof(task_t)), "consumer", consumer, (void*)(size_t)i);
   while(1)yield();
 }
