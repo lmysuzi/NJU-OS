@@ -43,13 +43,13 @@ static void os_run() {
     putch(*s == '*' ? '0' + cpu_current() : *s);
   }*/
 
+  iset(true);
   while (1);
 }
 
 
 
 static Context *os_trap(Event ev, Context *context){
-  printf("fuck\n");
   panic_on(ienabled(),"wrong status");
   panic_on(context==NULL,"context is null");
   Context *next=NULL;
