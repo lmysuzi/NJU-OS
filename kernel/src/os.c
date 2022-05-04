@@ -43,6 +43,7 @@ static void os_run() {
     putch(*s == '*' ? '0' + cpu_current() : *s);
   }*/
 
+  printf("%d\n",ienabled());
   iset(true);
   while (1);
 }
