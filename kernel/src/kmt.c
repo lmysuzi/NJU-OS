@@ -34,7 +34,7 @@ enum{
 
 static void inline 
 task_insert(task_t *task){
-  panic_on(lock_for(task).flag==0,"wrong lock");
+  //panic_on(lock_for(task).flag==0,"wrong lock");
 
 
   task->prev=NULL,task->next=head_for(task);
@@ -47,7 +47,7 @@ task_insert(task_t *task){
 
 static void inline 
 task_delete(task_t *task){
-  panic_on(lock_for(task).flag==0,"wrong lock");
+  //panic_on(lock_for(task).flag==0,"wrong lock");
   
   task_num_for(task)--;
 
@@ -76,12 +76,12 @@ kmt_context_save(Event ev,Context *context){
 
 static Context *
 kmt_schedule(Event ev,Context *context){
-  panic_on(current==NULL,"current is null");
+  //panic_on(current==NULL,"current is null");
 
   spin_lock(&task_lock);
 
   if(head==NULL){
-    panic_on(current!=idle,"wrong current");
+   // panic_on(current!=idle,"wrong current");
     spin_unlock(&task_lock);
     return current->context;
   }
@@ -141,7 +141,7 @@ spin_lock(spinlock_t *lk){
 
 static void 
 spin_unlock(spinlock_t *lk){
-  panic_on(ienabled()==1,"wrong status");
+  //panic_on(ienabled()==1,"wrong status");
   atomic_xchg(&lk->flag,0);
   iset(lk->status);
 }
@@ -169,10 +169,10 @@ init(){
 
     idles[cpu]=pmm->alloc(sizeof(task_t));
 
-    panic_on(idles[cpu]==NULL,"alloc fail");
+    //panic_on(idles[cpu]==NULL,"alloc fail");
 
     idles[cpu]->kstack=pmm->alloc(KSTACK_SIZE);
-    panic_on(idles[cpu]->kstack==NULL,"not enough space for kstack");
+    //panic_on(idles[cpu]->kstack==NULL,"not enough space for kstack");
 
     Area kstack={
       .start=(void *)idles[cpu]->kstack,
@@ -198,7 +198,7 @@ create(task_t *task, const char *name, void (*entry)(void *arg), void *arg){
   task->name=name;
   task->status=TASK_READY;
   task->kstack=pmm->alloc(KSTACK_SIZE);
-  panic_on(task->kstack==NULL,"not enough space for kstack");
+  //panic_on(task->kstack==NULL,"not enough space for kstack");
 
   Area kstack={
     .start=(void *)task->kstack,
@@ -235,11 +235,11 @@ teardown(task_t *task){
 
 static void inline 
 sem_task_insert(sem_t *sem, task_t *task){
-  panic_on(sem==NULL,"sem is null");
-  panic_on(task==NULL,"task is null");
+  //panic_on(sem==NULL,"sem is null");
+  //panic_on(task==NULL,"task is null");
 
   sem_tasks_t *sem_task_node=pmm->alloc(sizeof(sem_tasks_t));
-  panic_on(sem_task_node==NULL,"alloc fail");
+  //panic_on(sem_task_node==NULL,"alloc fail");
 
   sem_task_node->task=task;
   sem_task_node->prev=NULL;
@@ -256,8 +256,8 @@ sem_task_insert(sem_t *sem, task_t *task){
 
 static void inline 
 sem_task_delete(sem_t *sem){
-  panic_on(sem==NULL,"sem is null");
-  panic_on(sem->sem_tasks==NULL,"sem_tasks is null");
+  //panic_on(sem==NULL,"sem is null");
+  //panic_on(sem->sem_tasks==NULL,"sem_tasks is null");
 
   sem_tasks_t *sem_task_node=sem->sem_tasks;
   while(sem_task_node->next!=NULL)sem_task_node=sem_task_node->next;
@@ -277,7 +277,7 @@ sem_task_delete(sem_t *sem){
 
 static void 
 sem_init(sem_t *sem, const char *name, int value){
-  panic_on(sem==NULL,"sem is null");
+  //panic_on(sem==NULL,"sem is null");
   
   sem->name=name;
   sem->count=value;
@@ -289,7 +289,7 @@ sem_init(sem_t *sem, const char *name, int value){
 
 static void 
 sem_wait(sem_t *sem){
-  panic_on(sem==NULL,"sem is null");
+  //panic_on(sem==NULL,"sem is null");
   spin_lock(&sem->lock);
   sem->count--;
 
@@ -305,7 +305,7 @@ sem_wait(sem_t *sem){
 
 static void 
 sem_signal(sem_t *sem){
-  panic_on(sem==NULL,"sem is null");
+  //panic_on(sem==NULL,"sem is null");
 
   spin_lock(&sem->lock);
   sem->count++;
