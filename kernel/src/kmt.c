@@ -163,6 +163,8 @@ init(){
   for(int cpu=0;cpu<cpu_count();cpu++){
     spin_init(&task_locks[cpu],"task_lock");
     tasks[cpu]=NULL;
+    currents[cpu]=NULL;
+    task_nums[cpu]=0;
 
     idles[cpu]=pmm->alloc(sizeof(task_t));
 
