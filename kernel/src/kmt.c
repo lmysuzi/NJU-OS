@@ -121,7 +121,7 @@ kmt_schedule(Event ev,Context *context){
   }while(task!=task_begin);*/
 
   //current=task;
-  if(current->status!=TASK_READY)current=idle;
+  //if(current->status!=TASK_READY)current=idle;
   current->status=TASK_RUNNING;
 
   spin_unlock(&task_lock);
