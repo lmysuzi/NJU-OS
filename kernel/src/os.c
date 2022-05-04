@@ -50,8 +50,9 @@ static void os_run() {
 
 
 static Context *os_trap(Event ev, Context *context){
-  panic_on(ienabled(),"wrong status");
-  panic_on(context==NULL,"context is null");
+  //panic_on(ienabled(),"wrong status");
+  //panic_on(context==NULL,"context is null");
+  iset(false);
   Context *next=NULL;
   kmt->spin_lock(&irq_lock);
   irq_t *irq=irq_head;
@@ -83,8 +84,8 @@ static void os_on_irq(int seq, int event, handler_t handler){
     kmt->spin_unlock(&irq_lock);return;
   }
 
-  if(irq_head->seq<seq){
-    new_irq->next=irq_head->next;irq_head->next=new_irq;
+  if(irq_head->seq>seq){
+    new_irq->next=irq_head;irq_head=new_irq;
     kmt->spin_unlock(&irq_lock);return;
   }
 
