@@ -28,7 +28,7 @@ static void os_init() {
   kmt->create(pmm->alloc(sizeof(task_t)),"7",f,NULL);
   kmt->create(pmm->alloc(sizeof(task_t)),"8",f,NULL);*/
   //dev->init();
-  kmt->sem_init(&empty, "empty", 2);  // 缓冲区大小为 5
+  kmt->sem_init(&empty, "empty", 1);  // 缓冲区大小为 5
   kmt->sem_init(&fill,  "fill",  0);
   for (int i = 0; i < 1; i++) // 4 个生产者
     kmt->create(pmm->alloc(sizeof(task_t)), "producer", producer, (void*)(size_t)i);
