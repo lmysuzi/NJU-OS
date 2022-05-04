@@ -13,20 +13,20 @@ static spinlock_t irq_lock;
 void producer(void *arg) { while (1) { P(&empty); printf(" %d",(size_t)arg);putch('('); V(&fill);  } }
 void consumer(void *arg) { while (1) { P(&fill);  printf(" %d",(size_t)arg);putch(')'); V(&empty); } }*/
 
-void f(){while(1);}
+//void f(){while(1);}
 
 static void os_init() {
   irq_head=NULL;kmt->spin_init(&irq_lock,"irq_lock");
   pmm->init();
   kmt->init();
-  kmt->create(pmm->alloc(sizeof(task_t)),"1",f,NULL);
+  /*kmt->create(pmm->alloc(sizeof(task_t)),"1",f,NULL);
   kmt->create(pmm->alloc(sizeof(task_t)),"2",f,NULL);
   kmt->create(pmm->alloc(sizeof(task_t)),"3",f,NULL);
   kmt->create(pmm->alloc(sizeof(task_t)),"4",f,NULL);
   kmt->create(pmm->alloc(sizeof(task_t)),"5",f,NULL);
   kmt->create(pmm->alloc(sizeof(task_t)),"6",f,NULL);
   kmt->create(pmm->alloc(sizeof(task_t)),"7",f,NULL);
-  kmt->create(pmm->alloc(sizeof(task_t)),"8",f,NULL);
+  kmt->create(pmm->alloc(sizeof(task_t)),"8",f,NULL);*/
   //dev->init();
  /* kmt->sem_init(&empty, "empty", 1);  // 缓冲区大小为 5
   kmt->sem_init(&fill,  "fill",  0);
@@ -39,11 +39,10 @@ static void os_init() {
 
 
 static void os_run() {
-  for (const char *s = "Hello World from CPU #*\n"; *s; s++) {
+  /*for (const char *s = "Hello World from CPU #*\n"; *s; s++) {
     putch(*s == '*' ? '0' + cpu_current() : *s);
-  }
+  }*/
 
-  iset(true);
   while (1);
 }
 
