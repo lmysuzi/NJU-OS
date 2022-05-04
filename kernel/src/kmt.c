@@ -101,21 +101,21 @@ kmt_schedule(Event ev,Context *context){
     else task=head;
   }
 
-  /*while(task->status!=TASK_READY){
+  while(task->status!=TASK_READY){
     if(task->next)task=task->next;
     else task=head;
-  }*/
+  }
 
-  //if(task->status==TASK_READY)current=task;
-  //else current=idle;
-  task_t *task_begin=task;
+  if(task->status==TASK_READY)current=task;
+  else current=idle;
+  /*task_t *task_begin=task;
   do{
     if(task->status==TASK_READY)break;
     if(task->next)task=task->next;
     else task=head;
-  }while(task!=task_begin);
+  }while(task!=task_begin);*/
 
-  current=task;
+  //current=task;
   if(current->status!=TASK_READY)current=idle;
   current->status=TASK_RUNNING;
 
@@ -213,7 +213,6 @@ create(task_t *task, const char *name, void (*entry)(void *arg), void *arg){
   task_insert(task);
   spin_unlock(&lock_for(task));
 
-  printf("Task %s has been created on the cpu %d\n",name,task->which_cpu);
 
   return 0;
 }
