@@ -42,11 +42,6 @@ task_insert(task_t *task){
   head_for(task)=task;
   task_num_for(task)++;
 
-  task_t *temp=head;
-  while(temp){
-    printf("%s\n",temp->name);
-    temp=temp->next;
-  }
 }
 
 
@@ -91,7 +86,7 @@ kmt_schedule(Event ev,Context *context){
     return current->context;
   }
 
-  task_t *task=head;//if current == idle , then task is NULL too
+  task_t *task=current;//if current == idle , then task is NULL too
 
   if(task==idle)task=head;
 
@@ -106,22 +101,22 @@ kmt_schedule(Event ev,Context *context){
     else task=head;
   }
 
-  while(task->status!=TASK_READY){
+  /*while(task->status!=TASK_READY){
     if(task->next)task=task->next;
     else task=head;
-  }
+  }*/
 
-  if(task->status==TASK_READY)current=task;
-  else current=idle;
-  /*task_t *task_begin=task;
+  //if(task->status==TASK_READY)current=task;
+  //else current=idle;
+  task_t *task_begin=task;
   do{
     if(task->status==TASK_READY)break;
     if(task->next)task=task->next;
     else task=head;
-  }while(task!=task_begin);*/
+  }while(task!=task_begin);
 
-  //current=task;
-  //if(current->status!=TASK_READY)current=idle;
+  current=task;
+  if(current->status!=TASK_READY)current=idle;
   current->status=TASK_RUNNING;
 
   spin_unlock(&task_lock);
@@ -218,6 +213,7 @@ create(task_t *task, const char *name, void (*entry)(void *arg), void *arg){
   task_insert(task);
   spin_unlock(&lock_for(task));
 
+  //printf("Task %s has been created on the cpu %d\n",name,task->which_cpu);
 
   return 0;
 }
