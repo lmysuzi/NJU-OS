@@ -90,9 +90,6 @@ kmt_schedule(Event ev,Context *context){
 
   if(task==NULL)task=head;
 
-  if(current->status==TASK_RUNNING){
-    current->status=TASK_READY;
-  }
 
 
   /*int round=rand()%task_num;
@@ -114,6 +111,10 @@ kmt_schedule(Event ev,Context *context){
     if(task->next)task=task->next;
     else task=head;
   }while(task!=task_begin);
+
+  if(current->status==TASK_RUNNING){
+    current->status=TASK_READY;
+  }
 
   current=task;
   if(current->status!=TASK_READY)current=idle;
@@ -148,7 +149,7 @@ spin_unlock(spinlock_t *lk){
 
 static void 
 idle_task(){
-  while(1);//printf("fuck\n");
+  while(1)yield();//printf("fuck\n");
   panic("should not reach");
 }
 
