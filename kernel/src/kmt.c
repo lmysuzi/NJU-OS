@@ -81,7 +81,6 @@ kmt_context_save(Event ev,Context *context){
 
 static Context *
 kmt_schedule(Event ev,Context *context){
-  printf("fuck\n");
   panic_on(current==NULL,"current is null");
 
   spin_lock(&task_lock);
