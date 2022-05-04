@@ -42,6 +42,11 @@ task_insert(task_t *task){
   head_for(task)=task;
   task_num_for(task)++;
 
+  task_t *temp=head;
+  while(temp){
+    printf("%s\n",temp->name);
+    temp=temp->next;
+  }
 }
 
 
