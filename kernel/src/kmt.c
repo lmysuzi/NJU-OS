@@ -95,11 +95,11 @@ kmt_schedule(Event ev,Context *context){
   }
 
 
-  /*int round=rand()%task_num;
+  int round=rand()%task_num;
   for(int i=0;i<round;i++){
     if(task->next)task=task->next;
     else task=head;
-  }*/
+  }
 
   /*while(task->status!=TASK_READY){
     if(task->next)task=task->next;
