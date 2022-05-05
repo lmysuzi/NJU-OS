@@ -109,7 +109,6 @@ kmt_schedule(Event ev,Context *context){
 
   if(head==NULL){
    // panic_on(current!=idle,"wrong current");
-   mark;
 
     spin_unlock(&task_lock);
 
@@ -119,6 +118,7 @@ kmt_schedule(Event ev,Context *context){
     return current->context;
   }
 
+   mark;
   task=current->next;//if current == idle , then task is NULL too
 
   if(task==NULL)task=head;
