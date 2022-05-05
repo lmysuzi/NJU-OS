@@ -151,6 +151,7 @@ kmt_schedule(Event ev,Context *context){
   current=task;
   if(current->status!=TASK_READY){
     spin_unlock(&task_lock);
+    mark;
     current=task_steal();
   }
   current->status=TASK_RUNNING;
@@ -260,7 +261,7 @@ create(task_t *task, const char *name, void (*entry)(void *arg), void *arg){
   task_insert(task);
   spin_unlock(&lock_for(task));
 
-  printf("Task %s has been created on the cpu %d\n",name,task->which_cpu);
+  //printf("Task %s has been created on the cpu %d\n",name,task->which_cpu);
 
   return 0;
 }
