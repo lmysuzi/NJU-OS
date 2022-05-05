@@ -78,6 +78,7 @@ kmt_context_save(Event ev,Context *context){
 static task_t * 
 task_steal(){
   for(int i=0;i<cpu_count();i++){
+    mark;
     if(i==cpu_current())continue;
     if(spin_acquire(&task_locks[i])==false){
 
