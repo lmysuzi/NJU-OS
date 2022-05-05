@@ -81,7 +81,6 @@ task_steal(){
     if(i==cpu_current())continue;
     if(spin_acquire(&task_locks[i])==false){
 
-      mark;
       task_t *task=tasks[i];
 
       if(task!=NULL&&task->status==TASK_READY){
