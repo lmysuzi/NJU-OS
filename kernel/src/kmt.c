@@ -109,16 +109,44 @@ task_steal(){
   return idle;
 }
 
-/*static void 
+static void 
 task_exchange(){
-}*/
+  for(int i=0;i<cpu_count();i++){
+    if(i==cpu_current())continue;
+    if(spin_acquire(&task_locks[i])==false){
+      task_t *temp=head;
+      while(temp){
+        temp->which_cpu=i;
+        temp=temp->next;
+      }
+      temp=tasks[i];
+      while(temp){
+        temp->which_cpu=cpu_current();
+        temp=temp->next;
+      }
+      temp=tasks[i];
+      tasks[i]=tasks[cpu_current()];
+      tasks[cpu_current()]=temp;
+
+      spin_unlock(&task_locks[i]);
+      break;
+    }
+  }
+}
+
+static int round=0;
 
 static Context *
 kmt_schedule(Event ev,Context *context){
   //panic_on(current==NULL,"current is null");
+  spin_lock(&task_lock);
+  round++;
+  if(round>=100){
+    task_exchange();
+    round=0;
+  }
   task_t *task;
 
-  spin_lock(&task_lock);
 
   if(head==NULL){
    // panic_on(current!=idle,"wrong current");
@@ -164,8 +192,8 @@ kmt_schedule(Event ev,Context *context){
   current=task;
   if(current->status!=TASK_READY){
     spin_unlock(&task_lock);
-    current=task_steal();
-    //current=idle;
+    //current=task_steal();
+    current=idle;
   }
   else{
     current->status=TASK_RUNNING;
