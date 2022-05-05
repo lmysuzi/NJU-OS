@@ -9,7 +9,7 @@
 #define mark printf("fuck\n")
 
 
-/*static int cpu_sched; //下一个线程调动的cpu
+static int cpu_sched; //下一个线程调动的cpu
 static spinlock_t lock_cpu_sched;
 static spinlock_t task_locks[MAX_CPU];
 static task_t *tasks[MAX_CPU];
@@ -24,18 +24,12 @@ static int task_nums[MAX_CPU];
 #define task_num task_nums[cpu_current()]
 #define head_for(_) tasks[_->which_cpu]
 #define lock_for(_) task_locks[_->which_cpu]
-#define task_num_for(_) task_nums[_->which_cpu]*/
-
-static spinlock_t task_lock;
-static task_t *currents[MAX_CPU];
-static task_t *idles[MAX_CPU];
-static task_t *task_head;
-#define current currents[cpu_current()]
-#define idle idles[cpu_current()]
+#define task_num_for(_) task_nums[_->which_cpu]
 
 enum{
   TASK_READY=1,TASK_RUNNING,TASK_SLEEP,
 };
+
 
 
 
@@ -44,9 +38,11 @@ task_insert(task_t *task){
   //panic_on(lock_for(task).flag==0,"wrong lock");
 
 
-  task->prev=NULL,task->next=task_head;
-  if(task_head!=NULL)task_head->prev=task;
-  task_head=task;
+  task->prev=NULL,task->next=head_for(task);
+  if(head_for(task)!=NULL)head_for(task)->prev=task;
+  head_for(task)=task;
+  task_num_for(task)++;
+
 }
 
 
@@ -54,10 +50,11 @@ static void inline
 task_delete(task_t *task){
   //panic_on(lock_for(task).flag==0,"wrong lock");
   
+  task_num_for(task)--;
 
   if(task->next)task->next->prev=task->prev;
   if(task->prev)task->prev->next=task->next;
-  else task_head=task->next;
+  else head_for(task)=task->next;
   pmm->free(task->kstack);
   pmm->free(task);
 }
@@ -65,6 +62,7 @@ task_delete(task_t *task){
 
 static void spin_lock(spinlock_t *lk);
 static void spin_unlock(spinlock_t *lk);
+static bool spin_acquire(spinlock_t *lk);
 static int create(task_t *task, const char *name, void (*entry)(void *arg), void *arg);
 static void teardown(task_t *task);
 
@@ -77,22 +75,52 @@ kmt_context_save(Event ev,Context *context){
   return NULL;
 }
 
+static task_t * 
+task_steal(){
+
+  for(int i=0;i<cpu_count();i++){
+    if(spin_acquire(&task_locks[i])==0){
+
+      task_t *task=tasks[i];
+
+      while(task!=NULL){
+        if(task->status==TASK_READY){
+          task->status=TASK_RUNNING;
+          spin_unlock(&task_locks[i]);
+          return task;
+        }
+        task=task->next;
+      }
+
+      spin_unlock(&task_locks[i]);
+
+    }
+
+  }
+  return idle;
+}
 
 static Context *
 kmt_schedule(Event ev,Context *context){
   //panic_on(current==NULL,"current is null");
+  task_t *task;
 
   spin_lock(&task_lock);
 
-  if(task_head==NULL){
+  if(head==NULL){
    // panic_on(current!=idle,"wrong current");
+
     spin_unlock(&task_lock);
+
+    task=task_steal();
+    current=task;
+
     return current->context;
   }
 
-  task_t *task=current->next;//if current == idle , then task is NULL too
+  task=current->next;//if current == idle , then task is NULL too
 
-  if(task==NULL)task=task_head;
+  if(task==NULL)task=head;
 
 
 
@@ -109,27 +137,24 @@ kmt_schedule(Event ev,Context *context){
 
   //if(task->status==TASK_READY)current=task;
   //else current=idle;
-  //task_t *task_begin=task;
-  for(int i=0;i<2;i++){
+  task_t *task_begin=task;
+  do{
     if(task->status==TASK_READY)break;
     if(task->next)task=task->next;
-    else task=task_head;
-  }
-  /*do{
-    if(task->status==TASK_READY)break;
-    if(task->next)task=task->next;
-    else task=task_head;
-  }while(task!=task_begin);*/
+    else task=head;
+  }while(task!=task_begin);
 
   if(current->status==TASK_RUNNING){
     current->status=TASK_READY;
   }
 
   current=task;
-  if(current->status!=TASK_READY)current=idle;
+  if(current->status!=TASK_READY){
+    spin_unlock(&task_lock);
+    current=task_steal();
+  }
   current->status=TASK_RUNNING;
 
-  spin_unlock(&task_lock);
   return current->context;
 }
 
@@ -147,6 +172,17 @@ spin_lock(spinlock_t *lk){
   lk->status=prev_status;
 }
 
+static bool
+spin_acquire(spinlock_t *lk){
+  bool prev_status=ienabled();
+  iset(false);
+  if(atomic_xchg(&lk->flag,1)==0){
+    lk->status=prev_status;
+    return false;
+  };//printf("%s\n",lk->name);
+  iset(prev_status);
+  return true;
+}
 
 static void 
 spin_unlock(spinlock_t *lk){
@@ -167,10 +203,14 @@ idle_task(){
 
 static void 
 init(){
-  spin_init(&task_lock,"task_lock");
+  spin_init(&lock_cpu_sched,"lock_cpu_sched");
+  cpu_sched=0;
 
   for(int cpu=0;cpu<cpu_count();cpu++){
+    spin_init(&task_locks[cpu],"task_lock");
+    tasks[cpu]=NULL;
     currents[cpu]=NULL;
+    task_nums[cpu]=0;
 
     idles[cpu]=pmm->alloc(sizeof(task_t));
 
@@ -211,10 +251,14 @@ create(task_t *task, const char *name, void (*entry)(void *arg), void *arg){
   };
   task->context=kcontext(kstack,entry,arg);
 
+  spin_lock(&lock_cpu_sched);
+  task->which_cpu=cpu_sched;
+  cpu_sched=(cpu_sched+1)%cpu_count();
+  spin_unlock(&lock_cpu_sched);
 
-  spin_lock(&task_lock);
+  spin_lock(&lock_for(task));
   task_insert(task);
-  spin_unlock(&task_lock);
+  spin_unlock(&lock_for(task));
 
   //printf("Task %s has been created on the cpu %d\n",name,task->which_cpu);
 
@@ -228,9 +272,9 @@ static void
 teardown(task_t *task){
   panic_on(task==NULL,"task is NULL");
 
-  spin_lock(&task_lock);
+  spin_lock(&task_locks[task->which_cpu]);
   task_delete(task);
-  spin_unlock(&task_lock);
+  spin_unlock(&task_locks[task->which_cpu]);
 }
 
 
@@ -248,9 +292,9 @@ sem_task_insert(sem_t *sem, task_t *task){
   if(sem->sem_tasks!=NULL)sem->sem_tasks->prev=sem_task_node;
   sem->sem_tasks=sem_task_node;
 
-  spin_lock(&task_lock);
+  spin_lock(&lock_for(task));
   task->status=TASK_SLEEP;
-  spin_unlock(&task_lock);
+  spin_unlock(&lock_for(task));
 }
 
 
@@ -267,9 +311,9 @@ sem_task_delete(sem_t *sem){
   if(sem_task_node->prev!=NULL)sem_task_node->prev->next=NULL;
   else sem->sem_tasks=NULL;
   
-  spin_lock(&task_lock);
+  spin_lock(&lock_for(sem_task_node->task));
   sem_task_node->task->status=TASK_READY;
-  spin_unlock(&task_lock);
+  spin_unlock(&lock_for(sem_task_node->task));
 
   pmm->free(sem_task_node);
 }
