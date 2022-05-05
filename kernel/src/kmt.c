@@ -109,6 +109,7 @@ kmt_schedule(Event ev,Context *context){
 
   if(head==NULL){
    // panic_on(current!=idle,"wrong current");
+   mark;
 
     spin_unlock(&task_lock);
 
