@@ -20,7 +20,6 @@ void f(){
 }
 
 void g(){
-  printf("fuck\n");
   for (int i = 0; i < 2; i++) // 5 个消费者
     kmt->create(pmm->alloc(sizeof(task_t)), "consumer", consumer, (void*)(size_t)i);
   while(1)yield();
