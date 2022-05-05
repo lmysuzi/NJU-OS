@@ -16,6 +16,7 @@ static task_t *tasks[MAX_CPU];
 static task_t *currents[MAX_CPU];
 static task_t *idles[MAX_CPU];
 static int task_nums[MAX_CPU];
+//static bool exchanged[MAX_CPU];
 
 #define current currents[cpu_current()]
 #define idle idles[cpu_current()]
