@@ -78,6 +78,7 @@ kmt_context_save(Event ev,Context *context){
 static task_t * 
 task_steal(){
   for(int i=0;i<cpu_count();i++){
+    if(i==cpu_current())continue;
     if(spin_acquire(&task_locks[i])==false){
 
       task_t *task=tasks[i];
@@ -107,6 +108,10 @@ task_steal(){
   }
   return idle;
 }
+
+/*static void 
+task_exchange(){
+}*/
 
 static Context *
 kmt_schedule(Event ev,Context *context){
