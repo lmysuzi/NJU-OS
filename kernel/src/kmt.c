@@ -159,7 +159,8 @@ kmt_schedule(Event ev,Context *context){
   current=task;
   if(current->status!=TASK_READY){
     spin_unlock(&task_lock);
-    current=task_steal();
+    //current=task_steal();
+    current=idle;
   }
   else{
     current->status=TASK_RUNNING;
