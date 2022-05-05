@@ -115,7 +115,6 @@ task_exchange(){
     if(i==cpu_current())continue;
     if(spin_acquire(&task_locks[i])==false){
 
-    mark;
       task_t *temp=head;
       while(temp){
         temp->which_cpu=i;
@@ -143,7 +142,7 @@ kmt_schedule(Event ev,Context *context){
   //panic_on(current==NULL,"current is null");
   spin_lock(&task_lock);
   round++;
-  if(round>=100){
+  if(round>=1000){
     task_exchange();
     round=0;
     current=idle;
