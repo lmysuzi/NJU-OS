@@ -147,6 +147,7 @@ kmt_schedule(Event ev,Context *context){
     task_exchange();
     round=0;
     current=idle;
+  spin_unlock(&task_lock);
     return idle->context;
   }
   task_t *task;
@@ -169,12 +170,12 @@ kmt_schedule(Event ev,Context *context){
 
 
 
-  task=head;
+  /*task=head;
   int round=rand()%10;
   for(int i=0;i<round;i++){
     if(task->next)task=task->next;
     else task=head;
-  }
+  }*/
 
   /*while(task->status!=TASK_READY){
     if(task->next)task=task->next;
