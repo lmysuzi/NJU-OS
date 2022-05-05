@@ -155,7 +155,6 @@ kmt_schedule(Event ev,Context *context){
   }
   current->status=TASK_RUNNING;
 
-    mark;
 
   return current->context;
 }
