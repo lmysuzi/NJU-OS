@@ -151,10 +151,11 @@ kmt_schedule(Event ev,Context *context){
   current=task;
   if(current->status!=TASK_READY){
     spin_unlock(&task_lock);
-    mark;
     current=task_steal();
   }
   current->status=TASK_RUNNING;
+
+    mark;
 
   return current->context;
 }
