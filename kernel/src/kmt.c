@@ -78,20 +78,29 @@ kmt_context_save(Event ev,Context *context){
 static task_t * 
 task_steal(){
   for(int i=0;i<cpu_count();i++){
-    if(spin_acquire(&task_locks[i])==0){
+    if(spin_acquire(&task_locks[i])==false){
 
       task_t *task=tasks[i];
 
-      while(task!=NULL){
+      if(task->status==TASK_READY){
+        task->status=TASK_RUNNING;
+        spin_unlock(&task_locks[i]);
+        return task;
+      }
+      else{
+        spin_unlock(&task_locks[i]);
+      }
+
+      /*while(task!=NULL){
         if(task->status==TASK_READY){
           task->status=TASK_RUNNING;
           spin_unlock(&task_locks[i]);
           return task;
         }
         task=task->next;
-      }
+      }*/
 
-      spin_unlock(&task_locks[i]);
+      //spin_unlock(&task_locks[i]);
 
     }
 
