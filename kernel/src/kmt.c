@@ -153,7 +153,10 @@ kmt_schedule(Event ev,Context *context){
     spin_unlock(&task_lock);
     current=task_steal();
   }
-  current->status=TASK_RUNNING;
+  else{
+    current->status=TASK_RUNNING;
+    spin_unlock(&task_lock);
+  }
 
 
   return current->context;
@@ -241,7 +244,6 @@ static int
 create(task_t *task, const char *name, void (*entry)(void *arg), void *arg){
   panic_on(task==NULL,"task is NULL");
 
-  mark;
   task->name=name;
   task->status=TASK_READY;
   task->kstack=pmm->alloc(KSTACK_SIZE);
