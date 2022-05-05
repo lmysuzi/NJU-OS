@@ -78,7 +78,6 @@ kmt_context_save(Event ev,Context *context){
 static task_t * 
 task_steal(){
 
-  mark;
   for(int i=0;i<cpu_count();i++){
     if(spin_acquire(&task_locks[i])==0){
 
@@ -170,7 +169,7 @@ static void
 spin_lock(spinlock_t *lk){
   bool prev_status=ienabled();
   iset(false);
-  while(atomic_xchg(&lk->flag,1)==1);//printf("%s\n",lk->name);
+  while(atomic_xchg(&lk->flag,1)==1)printf("%s\n",lk->name);
   lk->status=prev_status;
 }
 
