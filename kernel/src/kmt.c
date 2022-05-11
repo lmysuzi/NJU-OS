@@ -26,15 +26,15 @@ static int task_nums[MAX_CPU];
 #define lock_for(_) task_locks[_->which_cpu]
 #define task_num_for(_) task_nums[_->which_cpu]*/
 
-/*static spinlock_t task_lock;
+static spinlock_t task_lock;
 static task_t *currents[MAX_CPU];
 static task_t *idles[MAX_CPU];
 static task_t *task_head;
 #define current currents[cpu_current()]
-#define idle idles[cpu_current()]*/
+#define idle idles[cpu_current()]
 
 enum{
-  TASK_READY=1,TASK_RUNNING,TASK_SLEEP,
+  TASK_READY=1,TASK_RUNNING,TASK_SLEEP,TASK_LOAD,
 };
 
 
@@ -122,11 +122,14 @@ kmt_schedule(Event ev,Context *context){
   }while(task!=task_begin);*/
 
   if(current->status==TASK_RUNNING){
-    current->status=TASK_READY;
+    current->status=TASK_LOAD;
   }
 
   current=task;
-  if(current->status!=TASK_READY)current=idle;
+  if(current->status!=TASK_READY){
+    if(current->status==TASK_LOAD)current->status=TASK_READY;
+    current=idle;
+  }
   current->status=TASK_RUNNING;
 
   spin_unlock(&task_lock);
@@ -268,7 +271,7 @@ sem_task_delete(sem_t *sem){
   else sem->sem_tasks=NULL;
   
   spin_lock(&task_lock);
-  sem_task_node->task->status=TASK_READY;
+  sem_task_node->task->status=TASK_LOAD;
   spin_unlock(&task_lock);
 
   pmm->free(sem_task_node);
