@@ -90,7 +90,8 @@ kmt_schedule(Event ev,Context *context){
   }printf("\n");*/
 
   if(current!=idle){
-    last=current;
+    if(current->status!=TASK_SLEEP)last=current;
+    else last=NULL;
     current=idle;
     return current->context;
   }
