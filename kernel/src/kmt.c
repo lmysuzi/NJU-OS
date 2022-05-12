@@ -125,12 +125,12 @@ kmt_schedule(Event ev,Context *context){
 
   //if(task->status==TASK_READY)current=task;
   //else current=idle;
-  /*task_t *task_begin=task;
+  task_t *task_begin=task;
   do{
     if(task->status==TASK_READY)break;
     if(task->next)task=task->next;
     else task=task_head;
-  }while(task!=task_begin);*/
+  }while(task!=task_begin);
 
   current=task;
   if(current->status!=TASK_READY){
