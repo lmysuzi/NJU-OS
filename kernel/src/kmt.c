@@ -83,6 +83,11 @@ kmt_context_save(Event ev,Context *context){
 static Context *
 kmt_schedule(Event ev,Context *context){
   //panic_on(current==NULL,"current is null");
+  task_t *temp=task_head;
+  while(temp){
+    printf("%d ",temp->status);
+    temp=temp->next;
+  }printf("\n");
 
   if(current!=idle){
     last=current;
