@@ -110,7 +110,7 @@ kmt_schedule(Event ev,Context *context){
 
   //if(task==NULL)task=task_head;
   task_t *task=task_head;
-  int round=rand()%5;
+  int round=rand()%8;
   for(int i=0;i<round;i++){
     if(task->next)task=task->next;
     else task=task_head;
@@ -123,18 +123,18 @@ kmt_schedule(Event ev,Context *context){
 
   //if(task->status==TASK_READY)current=task;
   //else current=idle;
-  task_t *task_begin=task;
+  /*task_t *task_begin=task;
   do{
     if(task->status==TASK_READY)break;
     if(task->next)task=task->next;
     else task=task_head;
-  }while(task!=task_begin);
+  }while(task!=task_begin);*/
 
   current=task;
   if(current->status!=TASK_READY){
     current=idle;
   }
-  else last=current;
+  last=current;
   current->status=TASK_RUNNING;
 
   spin_unlock(&task_lock);
