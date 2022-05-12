@@ -102,7 +102,10 @@ kmt_schedule(Event ev,Context *context){
     return current->context;
   }
 
-  if(last->status==TASK_RUNNING)last->status=TASK_READY;
+  if(last!=NULL&&last->status==TASK_RUNNING){
+    last->status=TASK_READY;
+    last=NULL;
+  }
   //task_t *task=current->next;//if current == idle , then task is NULL too
 
   //if(task==NULL)task=task_head;
