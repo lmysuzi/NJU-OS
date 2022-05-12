@@ -258,9 +258,9 @@ sem_task_insert(sem_t *sem, task_t *task){
   if(sem->sem_tasks!=NULL)sem->sem_tasks->prev=sem_task_node;
   sem->sem_tasks=sem_task_node;
 
-  spin_lock(&task_lock);
+  //spin_lock(&task_lock);
   task->status=TASK_SLEEP;
-  spin_unlock(&task_lock);
+  //spin_unlock(&task_lock);
 }
 
 
@@ -277,9 +277,9 @@ sem_task_delete(sem_t *sem){
   if(sem_task_node->prev!=NULL)sem_task_node->prev->next=NULL;
   else sem->sem_tasks=NULL;
   
-  spin_lock(&task_lock);
+  //spin_lock(&task_lock);
   sem_task_node->task->status=TASK_READY;
-  spin_unlock(&task_lock);
+  //spin_unlock(&task_lock);
 
   pmm->free(sem_task_node);
 }
