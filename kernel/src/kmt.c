@@ -29,9 +29,11 @@ static int task_nums[MAX_CPU];
 static spinlock_t task_lock;
 static task_t *currents[MAX_CPU];
 static task_t *idles[MAX_CPU];
+static task_t *lasts[MAX_CPU];
 static task_t *task_head;
 #define current currents[cpu_current()]
 #define idle idles[cpu_current()]
+#define last lasts[cpu_current()]
 
 enum{
   TASK_READY=1,TASK_RUNNING,TASK_SLEEP,TASK_LOAD,
@@ -82,6 +84,11 @@ static Context *
 kmt_schedule(Event ev,Context *context){
   //panic_on(current==NULL,"current is null");
 
+  if(current!=idle){
+    last=current;
+    current=idle;
+    return current->context;
+  }
   spin_lock(&task_lock);
 
   if(task_head==NULL){
@@ -90,17 +97,16 @@ kmt_schedule(Event ev,Context *context){
     return current->context;
   }
 
-  task_t *task=current->next;//if current == idle , then task is NULL too
+  if(last->status==TASK_RUNNING)last->status=TASK_READY;
+  //task_t *task=current->next;//if current == idle , then task is NULL too
 
-  if(task==NULL)task=task_head;
-
-
-
-  /*int round=rand()%task_num;
+  //if(task==NULL)task=task_head;
+  task_t *task=task_head;
+  int round=rand()%5;
   for(int i=0;i<round;i++){
     if(task->next)task=task->next;
-    else task=head;
-  }*/
+    else task=task_head;
+  }
 
   /*while(task->status!=TASK_READY){
     if(task->next)task=task->next;
@@ -109,23 +115,12 @@ kmt_schedule(Event ev,Context *context){
 
   //if(task->status==TASK_READY)current=task;
   //else current=idle;
-  //task_t *task_begin=task;
-  for(int i=0;i<5;i++){
+  task_t *task_begin=task;
+  do{
     if(task->status==TASK_READY)break;
-    if(task->status==TASK_LOAD)task->status=TASK_READY;
     if(task->next)task=task->next;
     else task=task_head;
-  }
-  /*do{
-    if(task->status==TASK_READY)break;
-    if(task->status==TASK_LOAD)task->status=TASK_READY;
-    if(task->next)task=task->next;
-    else task=task_head;
-  }while(task!=task_begin);*/
-
-  if(current->status==TASK_RUNNING){
-    current->status=TASK_LOAD;
-  }
+  }while(task!=task_begin);
 
   current=task;
   if(current->status!=TASK_READY){
@@ -191,6 +186,8 @@ init(){
     idles[cpu]->context=kcontext(kstack,idle_task,NULL);
     idles[cpu]->next=idles[cpu]->prev=NULL;
     idles[cpu]->status=TASK_RUNNING;
+
+    lasts[cpu]=idles[cpu];
   }
 
   os->on_irq(INT_MIN,EVENT_NULL,kmt_context_save);
@@ -272,7 +269,7 @@ sem_task_delete(sem_t *sem){
   else sem->sem_tasks=NULL;
   
   //spin_lock(&task_lock);
-  sem_task_node->task->status=TASK_LOAD;
+  sem_task_node->task->status=TASK_RUNNING;
   //spin_unlock(&task_lock);
 
   pmm->free(sem_task_node);
