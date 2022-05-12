@@ -95,7 +95,6 @@ kmt_schedule(Event ev,Context *context){
     current=idle;
     return current->context;
   }*/
-  mark;
   spin_lock(&task_lock);
 
   if(task_head==NULL){
