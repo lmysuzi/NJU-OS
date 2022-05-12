@@ -122,6 +122,7 @@ kmt_schedule(Event ev,Context *context){
   task_t *task_begin=task;
   do{
     if(task->status==TASK_READY)break;
+    if(task->status==TASK_LOAD)task->status=TASK_READY;
     if(task->next)task=task->next;
     else task=task_head;
   }while(task!=task_begin);
@@ -275,7 +276,7 @@ sem_task_delete(sem_t *sem){
   else sem->sem_tasks=NULL;
   
   //spin_lock(&task_lock);
-  sem_task_node->task->status=TASK_READY;
+  sem_task_node->task->status=TASK_LOAD;
   //spin_unlock(&task_lock);
 
   pmm->free(sem_task_node);
