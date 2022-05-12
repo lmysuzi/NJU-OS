@@ -89,12 +89,12 @@ kmt_schedule(Event ev,Context *context){
     temp=temp->next;
   }printf("\n");*/
 
-  if(current!=idle){
+  /*if(current!=idle){
     if(current->status!=TASK_SLEEP)last=current;
     else last=NULL;
     current=idle;
     return current->context;
-  }
+  }*/
   spin_lock(&task_lock);
 
   if(task_head==NULL){
@@ -107,16 +107,10 @@ kmt_schedule(Event ev,Context *context){
     last->status=TASK_READY;
     last=NULL;
   }
-  last=NULL;
-  //task_t *task=current->next;//if current == idle , then task is NULL too
+  last=current;
+  task_t *task=current->next;//if current == idle , then task is NULL too
 
   //if(task==NULL)task=task_head;
-  task_t *task=task_head;
-  int round=rand()%8;
-  for(int i=0;i<round;i++){
-    if(task->next)task=task->next;
-    else task=task_head;
-  }
 
   /*while(task->status!=TASK_READY){
     if(task->next)task=task->next;
