@@ -206,7 +206,6 @@ static int
 create(task_t *task, const char *name, void (*entry)(void *arg), void *arg){
   panic_on(task==NULL,"task is NULL");
 
-  mark;
 
   task->name=name;
   task->status=TASK_READY;
