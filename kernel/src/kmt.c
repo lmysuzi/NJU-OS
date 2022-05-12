@@ -107,6 +107,7 @@ kmt_schedule(Event ev,Context *context){
     last->status=TASK_READY;
     last=NULL;
   }
+  last=NULL;
   //task_t *task=current->next;//if current == idle , then task is NULL too
 
   //if(task==NULL)task=task_head;
@@ -135,7 +136,7 @@ kmt_schedule(Event ev,Context *context){
   if(current->status!=TASK_READY){
     current=idle;
   }
-  last=current;
+  //last=current;
   current->status=TASK_RUNNING;
 
   spin_unlock(&task_lock);
