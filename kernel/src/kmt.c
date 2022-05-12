@@ -102,7 +102,7 @@ kmt_schedule(Event ev,Context *context){
     return current->context;
   }
 
-  if(last!=NULL&&last->status==TASK_RUNNING){
+  if(last!=NULL&&last->status!=TASK_SLEEP){
     last->status=TASK_READY;
     last=NULL;
   }
@@ -110,7 +110,7 @@ kmt_schedule(Event ev,Context *context){
 
   //if(task==NULL)task=task_head;
   task_t *task=task_head;
-  int round=rand()%8;
+  int round=rand()%64;
   for(int i=0;i<round;i++){
     if(task->next)task=task->next;
     else task=task_head;
