@@ -83,11 +83,11 @@ kmt_context_save(Event ev,Context *context){
 static Context *
 kmt_schedule(Event ev,Context *context){
   //panic_on(current==NULL,"current is null");
-  task_t *temp=task_head;
+ /* task_t *temp=task_head;
   while(temp){
     printf("%d ",temp->status);
     temp=temp->next;
-  }printf("\n");
+  }printf("\n");*/
 
   /*if(current!=idle){
     if(current->status!=TASK_SLEEP)last=current;
@@ -147,7 +147,7 @@ static void
 spin_lock(spinlock_t *lk){
   bool prev_status=ienabled();
   iset(false);
-  while(atomic_xchg(&lk->flag,1)==1);//printf("%s\n",lk->name);
+  while(atomic_xchg(&lk->flag,1)==1)printf("%s\n",lk->name);
   lk->status=prev_status;
 }
 
