@@ -136,6 +136,7 @@ kmt_schedule(Event ev,Context *context){
 
   }while(task_begin!=task);
   
+  printf("shit\n");
   current=idle;
   current->status=TASK_RUNNING;
   
