@@ -84,11 +84,11 @@ static Context *
 kmt_schedule(Event ev,Context *context){
   //panic_on(current!=idle&&current->status==TASK_READY,"status ready");
   //panic_on(current!=idle&&current->status==TASK_LOAD,"status load");
-  task_t *temp=task_head;
+  /*task_t *temp=task_head;
   while(temp){
     printf("%d ",temp->status);
     temp=temp->next;
-  }printf("\n");
+  }printf("\n");*/
 
   spin_lock(&task_lock);
   if(current!=idle){
@@ -133,28 +133,7 @@ kmt_schedule(Event ev,Context *context){
   }
   current=idle;
   current->status=TASK_RUNNING;
-  /*if(task->status==TASK_READY)current=task;
-  else {
-    if(task->status==TASK_LOAD)task->status=TASK_READY;
-    current=idle;
-  };*/
-  /*task_t *task_begin=current;
-  do{
-    if(task->status==TASK_READY){
-      panic_on(current==task,"fuck");
-      if(current->status==TASK_RUNNING)current->status=TASK_LOAD;
-      current=task;
-      current->status=TASK_RUNNING;
-      spin_unlock(&task_lock);
-      return current->context;
-    }
-    if(task->status==TASK_LOAD)task->status=TASK_FUCK;
-    else if(task->status==TASK_FUCK)task->status=TASK_SHIT;
-    else if(task->status==TASK_SHIT)task->status=TASK_READY;
-    if(task->next!=NULL)task=task->next;
-    else task=task_head;
-  }while(task!=task_begin);*/
-
+  
 
 
   spin_unlock(&task_lock);
