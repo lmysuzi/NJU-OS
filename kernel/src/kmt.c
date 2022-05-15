@@ -82,8 +82,8 @@ kmt_context_save(Event ev,Context *context){
 
 static Context *
 kmt_schedule(Event ev,Context *context){
- // panic_on(current!=idle&&current->status==TASK_READY,"status ready");
-  //panic_on(current!=idle&&current->status==TASK_LOAD,"status load");
+  panic_on(current!=idle&&current->status==TASK_READY,"status ready");
+  panic_on(current!=idle&&current->status==TASK_LOAD,"status load");
   /*task_t *temp=task_head;
   while(temp){
     printf("%d ",temp->status);
@@ -300,9 +300,9 @@ sem_task_delete(sem_t *sem){
   if(sem_task_node->prev!=NULL)sem_task_node->prev->next=NULL;
   else sem->sem_tasks=NULL;
   
-  spin_lock(&task_lock);
+  //spin_lock(&task_lock);
   sem_task_node->task->status=TASK_LOAD;
-  spin_unlock(&task_lock);
+  //spin_unlock(&task_lock);
 
   pmm->free(sem_task_node);
 }
