@@ -170,7 +170,7 @@ spin_unlock(spinlock_t *lk){
 
 static void 
 idle_task(){
-  while(1){yield();printf("fuck\n");}
+  while(1){printf("fuck\n");yield();}
   panic("should not reach");
 }
 
