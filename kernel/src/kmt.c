@@ -127,6 +127,8 @@ kmt_schedule(Event ev,Context *context){
     else task=task_head;
   }while(task!=task_begin);
 
+  if(current->status==TASK_RUNNING)current->status=TASK_LOAD;
+
   current=task;
   if(current->status!=TASK_READY){
     current=idle;
