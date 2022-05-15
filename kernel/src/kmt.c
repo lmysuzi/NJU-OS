@@ -94,6 +94,7 @@ kmt_schedule(Event ev,Context *context){
   if(current!=idle&&current->status==TASK_RUNNING){
     last=current;
     current=idle;
+    spin_unlock(&task_lock);
     return current->context;
   }
 
