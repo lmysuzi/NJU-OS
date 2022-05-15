@@ -119,7 +119,8 @@ kmt_schedule(Event ev,Context *context){
 
   current=task;
   if(task->status!=TASK_READY){
-    if(task->status==TASK_LOAD)task->status=TASK_READY;
+    if(task->status==TASK_LOAD)task->status=TASK_FUCK;
+    else if(task->status==TASK_FUCK)task->status=TASK_READY;
     current=idle;
   }
   current->status=TASK_RUNNING;
