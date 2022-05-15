@@ -90,12 +90,12 @@ kmt_schedule(Event ev,Context *context){
     temp=temp->next;
   }printf("\n");*/
 
+  spin_lock(&task_lock);
   if(current!=idle&&current->status==TASK_RUNNING){
     last=current;
     current=idle;
     return current->context;
   }
-  spin_lock(&task_lock);
 
   if(task_head==NULL){
    // panic_on(current!=idle,"wrong current");
