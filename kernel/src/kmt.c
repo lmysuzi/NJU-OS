@@ -99,6 +99,7 @@ kmt_schedule(Event ev,Context *context){
 
   if(task_head==NULL){
    // panic_on(current!=idle,"wrong current");
+    current=idle;
     spin_unlock(&task_lock);
     return current->context;
   }
@@ -109,7 +110,7 @@ kmt_schedule(Event ev,Context *context){
   }
   task_t *task=current->next;//if current == idle , then task is NULL too
 
-  int round=rand()%6;
+  int round=rand()%64;
   task=task_head;
   for(int i=0;i<round;i++){
     if(task->next!=NULL)task=task->next;
