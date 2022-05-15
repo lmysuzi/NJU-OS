@@ -14,7 +14,6 @@ void producer(void *arg) { while (1) { P(&empty); printf(" %d",(size_t)arg);putc
 void consumer(void *arg) { while (1) { P(&fill);  printf(" %d",(size_t)arg);putch(')'); V(&empty); } }
 
 void f(){
-  printf("fuck\n");
   for (int i = 0; i < 2; i++) // 4 个生产者
     kmt->create(pmm->alloc(sizeof(task_t)), "producer", producer, (void*)(size_t)i);
   while(1)yield();
