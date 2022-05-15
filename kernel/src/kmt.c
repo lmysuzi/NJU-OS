@@ -104,6 +104,7 @@ kmt_schedule(Event ev,Context *context){
     return current->context;
   }
 
+  if(current->status==TASK_RUNNING)current->status=TASK_READY;
   /*if(last!=NULL&&last->status!=TASK_SLEEP){
     last->status=TASK_READY;
     last=NULL;
@@ -113,7 +114,6 @@ kmt_schedule(Event ev,Context *context){
 
   if(task==NULL)task=task_head;
 
-  if(current->status==TASK_RUNNING)current->status=TASK_LOAD;
   if(task->status==TASK_READY)current=task;
   else {
     if(task->status==TASK_LOAD)task->status=TASK_READY;
