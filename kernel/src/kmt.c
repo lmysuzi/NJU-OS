@@ -90,12 +90,11 @@ kmt_schedule(Event ev,Context *context){
     temp=temp->next;
   }printf("\n");*/
 
-  /*if(current!=idle){
-    if(current->status!=TASK_SLEEP)last=current;
-    else last=NULL;
+  if(current!=idle&&current->status==TASK_RUNNING){
+    last=current;
     current=idle;
     return current->context;
-  }*/
+  }
   spin_lock(&task_lock);
 
   if(task_head==NULL){
@@ -104,21 +103,32 @@ kmt_schedule(Event ev,Context *context){
     return current->context;
   }
 
-  /*if(last!=NULL&&last->status!=TASK_SLEEP){
+  if(last!=NULL){
     last->status=TASK_READY;
     last=NULL;
   }
-  last=current;*/
   task_t *task=current->next;//if current == idle , then task is NULL too
 
-  if(task==NULL)task=task_head;
+  int round=rand()%6;
+  task=task_head;
+  for(int i=0;i<round;i++){
+    if(task->next!=NULL)task=task->next;
+    else task=task_head;
+  }
 
+
+  current=task;
+  if(task->status!=TASK_READY){
+    if(task->status==TASK_LOAD)task->status=TASK_READY;
+    current=idle;
+  }
+  current->status=TASK_RUNNING;
   /*if(task->status==TASK_READY)current=task;
   else {
     if(task->status==TASK_LOAD)task->status=TASK_READY;
     current=idle;
   };*/
-  task_t *task_begin=current;
+  /*task_t *task_begin=current;
   do{
     if(task->status==TASK_READY){
       panic_on(current==task,"fuck");
@@ -133,12 +143,9 @@ kmt_schedule(Event ev,Context *context){
     else if(task->status==TASK_SHIT)task->status=TASK_READY;
     if(task->next!=NULL)task=task->next;
     else task=task_head;
-  }while(task!=task_begin);
+  }while(task!=task_begin);*/
 
 
-  if(current->status==TASK_RUNNING)current->status=TASK_LOAD;
-  current=idle;
-  current->status=TASK_RUNNING;
 
   spin_unlock(&task_lock);
   return current->context;
