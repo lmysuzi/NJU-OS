@@ -130,7 +130,7 @@ kmt_schedule(Event ev,Context *context){
 
     if(task->next!=NULL)task=task->next;
     else task=task_head;
-    
+    mark;
   }while(task_begin!=task);
 
   current=idle;
