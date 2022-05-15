@@ -36,7 +36,7 @@ static task_t *task_head;
 #define last lasts[cpu_current()]
 
 enum{
-  TASK_READY=1,TASK_RUNNING,TASK_SLEEP,TASK_LOAD,TASK_READY_TO_WAKE,TASK_WAKED,
+  TASK_READY=1,TASK_RUNNING,TASK_SLEEP,TASK_READY_TO_WAKE,TASK_WAKED,
 };
 
 
