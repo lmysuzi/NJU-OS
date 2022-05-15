@@ -117,13 +117,23 @@ kmt_schedule(Event ev,Context *context){
     else task=task_head;
   }
 
-
-  current=task;
-  if(task->status!=TASK_READY){
+  task_t *task_begin=task;
+  do{
+    if(task->status==TASK_READY){
+      current=task;
+      current->status=TASK_RUNNING;
+      spin_unlock(&task_lock);
+      return current->context;
+    }
     if(task->status==TASK_LOAD)task->status=TASK_FUCK;
     else if(task->status==TASK_FUCK)task->status=TASK_READY;
-    current=idle;
-  }
+
+    if(task->next!=NULL)task=task->next;
+    else task=task_head;
+    
+  }while(task_begin!=task);
+
+  current=idle;
   current->status=TASK_RUNNING;
   /*if(task->status==TASK_READY)current=task;
   else {
