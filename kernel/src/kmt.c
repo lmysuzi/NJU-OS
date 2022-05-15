@@ -36,7 +36,7 @@ static task_t *task_head;
 #define last lasts[cpu_current()]
 
 enum{
-  TASK_READY=1,TASK_RUNNING,TASK_SLEEP,TASK_LOAD,TASK_FUCK,TASK_SHIT,
+  TASK_READY=1,TASK_RUNNING,TASK_SLEEP,TASK_LOAD,TASK_READY_TO_WAKE,TASK_WAKED,
 };
 
 
@@ -82,8 +82,8 @@ kmt_context_save(Event ev,Context *context){
 
 static Context *
 kmt_schedule(Event ev,Context *context){
-  panic_on(current!=idle&&current->status==TASK_READY,"status ready");
-  panic_on(current!=idle&&current->status==TASK_LOAD,"status load");
+  //panic_on(current!=idle&&current->status==TASK_READY,"status ready");
+  //panic_on(current!=idle&&current->status==TASK_LOAD,"status load");
   /*task_t *temp=task_head;
   while(temp){
     printf("%d ",temp->status);
@@ -91,12 +91,28 @@ kmt_schedule(Event ev,Context *context){
   }printf("\n");*/
 
   spin_lock(&task_lock);
-  if(current!=idle&&current->status==TASK_RUNNING){
+  if(current!=idle){
     last=current;
     current=idle;
     spin_unlock(&task_lock);
     return current->context;
   }
+
+ /* if(current!=idle){
+    switch (current->status)
+    {
+    case TASK_RUNNING:
+    case TASK_SLEEP:
+      last=current;
+      current=idle;
+      spin_unlock(&task_lock);
+      return current->context;
+      break;
+
+    default:
+      break;
+    }
+  }*/
 
   if(task_head==NULL){
    // panic_on(current!=idle,"wrong current");
@@ -106,7 +122,8 @@ kmt_schedule(Event ev,Context *context){
   }
 
   if(last!=NULL){
-    last->status=TASK_LOAD;
+    if(last->status==TASK_RUNNING||last->status==TASK_WAKED)last->status=TASK_READY;
+    else if(last->status==TASK_SLEEP)last->status=TASK_READY_TO_WAKE;
     last=NULL;
   }
   task_t *task=task_head;//if current == idle , then task is NULL too
@@ -125,8 +142,6 @@ kmt_schedule(Event ev,Context *context){
       spin_unlock(&task_lock);
       return current->context;
     }
-    if(task->status==TASK_FUCK)task->status=TASK_READY;
-    else if(task->status==TASK_LOAD)task->status=TASK_FUCK;
 
     if(task->next!=NULL)task=task->next;
     else task=task_head;
@@ -301,7 +316,11 @@ sem_task_delete(sem_t *sem){
   else sem->sem_tasks=NULL;
   
   spin_lock(&task_lock);
-  sem_task_node->task->status=TASK_LOAD;
+  if(sem_task_node->task->status==TASK_SLEEP)
+    sem_task_node->task->status=TASK_WAKED;
+  else if(sem_task_node->task->status==TASK_READY_TO_WAKE)
+    sem_task_node->task->status=TASK_READY;
+  else panic("fuck");
   spin_unlock(&task_lock);
 
   pmm->free(sem_task_node);
