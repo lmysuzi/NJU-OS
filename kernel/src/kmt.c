@@ -36,7 +36,7 @@ static task_t *task_head;
 #define last lasts[cpu_current()]
 
 enum{
-  TASK_READY=1,TASK_RUNNING,TASK_SLEEP,TASK_LOAD,TASK_FUCK,
+  TASK_READY=1,TASK_RUNNING,TASK_SLEEP,TASK_LOAD,TASK_FUCK,TASK_SHIT,
 };
 
 
@@ -129,7 +129,8 @@ kmt_schedule(Event ev,Context *context){
       return current->context;
     }
     if(task->status==TASK_LOAD)task->status=TASK_FUCK;
-    else if(task->status==TASK_FUCK)task->status=TASK_READY;
+    else if(task->status==TASK_FUCK)task->status=TASK_SHIT;
+    else if(task->status==TASK_SHIT)task->status=TASK_READY;
     if(task->next)task=task->next;
     else task=task_head;
   }while(task!=task_begin);
