@@ -113,15 +113,13 @@ kmt_schedule(Event ev,Context *context){
 
   if(task==NULL)task=task_head;
 
-  /*while(task->status!=TASK_READY){
-    if(task->next)task=task->next;
-    else task=head;
-  }*/
-
   if(current->status==TASK_RUNNING)current->status=TASK_LOAD;
-  //if(task->status==TASK_READY)current=task;
-  //else current=idle;
-  task_t *task_begin=current;
+  if(task->status==TASK_READY)current=task;
+  else {
+    if(task->status==TASK_LOAD)task->status=TASK_READY;
+    current=idle;
+  };
+  /*task_t *task_begin=current;
   do{
     if(task->status==TASK_READY){
       current=task;
@@ -135,8 +133,7 @@ kmt_schedule(Event ev,Context *context){
   }while(task!=task_begin);
 
 
-  current=idle;
-  //last=current;
+  current=idle;*/
   current->status=TASK_RUNNING;
 
   spin_unlock(&task_lock);
