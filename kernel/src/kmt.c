@@ -43,7 +43,7 @@ enum{
 
 static void inline 
 task_insert(task_t *task){
-  //panic_on(lock_for(task).flag==0,"wrong lock");
+  panic_on(task_lock.flag==0,"wrong lock");
 
 
   task->prev=NULL,task->next=task_head;
@@ -213,7 +213,7 @@ create(task_t *task, const char *name, void (*entry)(void *arg), void *arg){
   task->name=name;
   task->status=TASK_READY;
   task->kstack=pmm->alloc(KSTACK_SIZE);
-  //panic_on(task->kstack==NULL,"not enough space for kstack");
+  panic_on(task->kstack==NULL,"not enough space for kstack");
 
   Area kstack={
     .start=(void *)task->kstack,
