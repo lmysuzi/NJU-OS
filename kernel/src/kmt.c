@@ -176,6 +176,7 @@ idle_task(){
 static void 
 init(){
   spin_init(&task_lock,"task_lock");
+  task_head=NULL;
 
   for(int cpu=0;cpu<cpu_count();cpu++){
     currents[cpu]=NULL;
