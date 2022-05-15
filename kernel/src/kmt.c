@@ -115,6 +115,7 @@ kmt_schedule(Event ev,Context *context){
     else if(last->status==TASK_SLEEP)last->status=TASK_READY_TO_WAKE;
     last=NULL;
   }
+  else printf("wuwuwu\n");
 
   /*int round=rand()%task_total;
   for(int i=0;i<round;i++){
