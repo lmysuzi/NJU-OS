@@ -303,9 +303,7 @@ sem_task_delete(sem_t *sem){
   if(sem_task_node->task->status==TASK_SLEEP)
     sem_task_node->task->status=TASK_WAKED;
   else if(sem_task_node->task->status==TASK_READY_TO_WAKE){
-    mark;
     sem_task_node->task->status=TASK_READY;
-    panic("...");
   }
   else panic("fuck");
   spin_unlock(&task_lock);
