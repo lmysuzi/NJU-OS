@@ -108,6 +108,7 @@ kmt_schedule(Event ev,Context *context){
   }
 
   task_t *task;//if current == idle , then task is NULL too
+
   if(last==NULL)task=task_head;
   else task=last->next;
   
@@ -118,7 +119,6 @@ kmt_schedule(Event ev,Context *context){
     else if(last->status==TASK_SLEEP)last->status=TASK_READY_TO_WAKE;
     last=NULL;
   }
-  else printf("wuwuwu\n");
 
   /*int round=rand()%task_total;
   for(int i=0;i<round;i++){
@@ -140,7 +140,6 @@ kmt_schedule(Event ev,Context *context){
 
   }while(task_begin!=task);
   
-  printf("shit\n");
   current=idle;
   current->status=TASK_RUNNING;
   
