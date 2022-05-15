@@ -31,6 +31,7 @@ static task_t *currents[MAX_CPU];
 static task_t *idles[MAX_CPU];
 static task_t *lasts[MAX_CPU];
 static task_t *task_head;
+static int task_total=0;
 #define current currents[cpu_current()]
 #define idle idles[cpu_current()]
 #define last lasts[cpu_current()]
@@ -45,7 +46,7 @@ static void inline
 task_insert(task_t *task){
   panic_on(task_lock.flag==0,"wrong lock");
 
-
+  task_total++;
   task->prev=NULL,task->next=task_head;
   if(task_head!=NULL)task_head->prev=task;
   task_head=task;
@@ -57,6 +58,7 @@ task_delete(task_t *task){
   //panic_on(lock_for(task).flag==0,"wrong lock");
   
 
+  task_total--;
   if(task->next)task->next->prev=task->prev;
   if(task->prev)task->prev->next=task->next;
   else task_head=task->next;
@@ -112,14 +114,14 @@ kmt_schedule(Event ev,Context *context){
   }
   task_t *task=task_head;//if current == idle , then task is NULL too
 
-  int round=rand()%6;
+  int round=rand()%task_total;
   for(int i=0;i<round;i++){
     if(task->next!=NULL)task=task->next;
     else task=task_head;
   }
 
   //task_t *task_begin=task;
-  for(int i=0;i<6;i++){
+  for(int i=0;i<task_total;i++){
     if(task->status==TASK_READY){
       current=task;
       current->status=TASK_RUNNING;
