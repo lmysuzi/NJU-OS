@@ -86,11 +86,11 @@ static Context *
 kmt_schedule(Event ev,Context *context){
   //panic_on(current!=idle&&current->status==TASK_READY,"status ready");
   //panic_on(current!=idle&&current->status==TASK_LOAD,"status load");
-  task_t *temp=task_head;
+  /*task_t *temp=task_head;
   while(temp){
     printf("%d ",temp->status);
     temp=temp->next;
-  }printf("\n");
+  }printf("\n");*/
 
   if(current!=idle){
     last=current;
@@ -174,7 +174,7 @@ spin_unlock(spinlock_t *lk){
 
 static void 
 idle_task(){
-  while(1){printf("fuck\n");yield();}
+  while(1){yield();}
   panic("should not reach");
 }
 
