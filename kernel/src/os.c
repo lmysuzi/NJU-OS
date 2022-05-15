@@ -32,8 +32,8 @@ static void os_init() {
   //dev->init();
   kmt->sem_init(&empty, "empty", 1);  // 缓冲区大小为 5
   kmt->sem_init(&fill,  "fill",  0);
-  kmt->create(pmm->alloc(sizeof(task_t)),"fuck",f,NULL);
-  kmt->create(pmm->alloc(sizeof(task_t)),"fuck",g,NULL);
+  kmt->create(pmm->alloc(sizeof(task_t)),"fuck",producer,NULL);
+  kmt->create(pmm->alloc(sizeof(task_t)),"fuck",consumer,NULL);
 }
 
 
