@@ -84,11 +84,11 @@ static Context *
 kmt_schedule(Event ev,Context *context){
   //panic_on(current!=idle&&current->status==TASK_READY,"status ready");
   //panic_on(current!=idle&&current->status==TASK_LOAD,"status load");
-  /*task_t *temp=task_head;
+  task_t *temp=task_head;
   while(temp){
     printf("%d ",temp->status);
     temp=temp->next;
-  }printf("\n");*/
+  }printf("\n");
 
   spin_lock(&task_lock);
   if(current!=idle){
@@ -112,7 +112,7 @@ kmt_schedule(Event ev,Context *context){
   }
   task_t *task=task_head;//if current == idle , then task is NULL too
 
-  int round=rand()%4;
+  int round=rand()%2;
   for(int i=0;i<round;i++){
     if(task->next!=NULL)task=task->next;
     else task=task_head;
@@ -316,7 +316,6 @@ sem_wait(sem_t *sem){
   if(sem->count<0){
     sem_task_insert(sem,current);
     spin_unlock(&sem->lock);
-    current->status=TASK_SLEEP;
     yield();
   }
   else spin_unlock(&sem->lock);
