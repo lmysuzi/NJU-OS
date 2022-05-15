@@ -116,6 +116,7 @@ kmt_schedule(Event ev,Context *context){
     else task=task_head;
   }
 
+  panic_on(task==NULL,"??");
   task_t *task_begin=task;
   do{
     if(task->status==TASK_READY){
