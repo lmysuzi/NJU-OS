@@ -104,7 +104,7 @@ kmt_schedule(Event ev,Context *context){
     return current->context;
   }
 
-  if(current->status==TASK_RUNNING)current->status=TASK_READY;
+  if(current->status==TASK_RUNNING)current->status=TASK_LOAD;
   /*if(last!=NULL&&last->status!=TASK_SLEEP){
     last->status=TASK_READY;
     last=NULL;
@@ -150,7 +150,7 @@ static void
 spin_lock(spinlock_t *lk){
   bool prev_status=ienabled();
   iset(false);
-  while(atomic_xchg(&lk->flag,1)==1);//printf("%s\n",lk->name);
+  while(atomic_xchg(&lk->flag,1)==1)printf("%s\n",lk->name);
   lk->status=prev_status;
 }
 
