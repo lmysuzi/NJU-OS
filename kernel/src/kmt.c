@@ -84,11 +84,11 @@ static Context *
 kmt_schedule(Event ev,Context *context){
   panic_on(current!=idle&&current->status==TASK_READY,"status ready");
   panic_on(current!=idle&&current->status==TASK_LOAD,"status load");
-  task_t *temp=task_head;
+ /* task_t *temp=task_head;
   while(temp){
     printf("%d ",temp->status);
     temp=temp->next;
-  }printf("\n");
+  }printf("\n");*/
 
   /*if(current!=idle){
     if(current->status!=TASK_SLEEP)last=current;
@@ -226,7 +226,7 @@ create(task_t *task, const char *name, void (*entry)(void *arg), void *arg){
   task_insert(task);
   spin_unlock(&task_lock);
 
-  //printf("Task %s has been created on the cpu \n",name);
+  printf("Task %s has been created on the cpu \n",name);
 
   return 0;
 }
