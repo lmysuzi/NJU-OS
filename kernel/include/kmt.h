@@ -3,7 +3,7 @@
 
 #include <common.h>
 
-#define KSTACK_SIZE 4096
+#define KSTACK_SIZE 8192 
 
 
 
