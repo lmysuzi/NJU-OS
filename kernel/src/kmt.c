@@ -98,22 +98,6 @@ kmt_schedule(Event ev,Context *context){
     return current->context;
   }
 
- /* if(current!=idle){
-    switch (current->status)
-    {
-    case TASK_RUNNING:
-    case TASK_SLEEP:
-      last=current;
-      current=idle;
-      spin_unlock(&task_lock);
-      return current->context;
-      break;
-
-    default:
-      break;
-    }
-  }*/
-
   if(task_head==NULL){
    // panic_on(current!=idle,"wrong current");
     current=idle;
@@ -128,14 +112,14 @@ kmt_schedule(Event ev,Context *context){
   }
   task_t *task=task_head;//if current == idle , then task is NULL too
 
-  int round=rand()%6;
+  int round=rand()%4;
   for(int i=0;i<round;i++){
     if(task->next!=NULL)task=task->next;
     else task=task_head;
   }
 
   //task_t *task_begin=task;
-  for(int i=0;i<6;i++){
+  for(int i=0;i<4;i++){
     if(task->status==TASK_READY){
       current=task;
       current->status=TASK_RUNNING;
