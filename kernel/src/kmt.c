@@ -272,7 +272,7 @@ sem_task_insert(sem_t *sem, task_t *task){
   //panic_on(task==NULL,"task is null");
 
   sem_tasks_t *sem_task_node=pmm->alloc(sizeof(sem_tasks_t));
-  //panic_on(sem_task_node==NULL,"alloc fail");
+  panic_on(sem_task_node==NULL,"alloc fail");
 
   sem_task_node->task=task;
   sem_task_node->prev=NULL;
