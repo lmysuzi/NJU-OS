@@ -84,11 +84,11 @@ static Context *
 kmt_schedule(Event ev,Context *context){
  // panic_on(current!=idle&&current->status==TASK_READY,"status ready");
   //panic_on(current!=idle&&current->status==TASK_LOAD,"status load");
-  task_t *temp=task_head;
+  /*task_t *temp=task_head;
   while(temp){
-    printf("%s ",temp->name);
+    printf("%d ",temp->status);
     temp=temp->next;
-  }printf("\n");
+  }printf("\n");*/
 
   if(current!=idle&&current->status==TASK_RUNNING){
     last=current;
@@ -116,8 +116,8 @@ kmt_schedule(Event ev,Context *context){
     else task=task_head;
   }
 
-  task_t *task_begin=task;
-  do{
+  //task_t *task_begin=task;
+  for(int i=0;i<6;i++){
     if(task->status==TASK_READY){
       current=task;
       current->status=TASK_RUNNING;
@@ -126,12 +126,12 @@ kmt_schedule(Event ev,Context *context){
     }
     if(task->status==TASK_LOAD)task->status=TASK_FUCK;
     else if(task->status==TASK_FUCK)task->status=TASK_READY;
+    else;
 
     if(task->next!=NULL)task=task->next;
     else task=task_head;
-    mark;
-  }while(task_begin!=task);
 
+  }
   current=idle;
   current->status=TASK_RUNNING;
   /*if(task->status==TASK_READY)current=task;
