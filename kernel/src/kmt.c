@@ -105,7 +105,7 @@ kmt_schedule(Event ev,Context *context){
   }
 
   if(last!=NULL){
-    last->status=TASK_READY;
+    last->status=TASK_LOAD;
     last=NULL;
   }
   task_t *task=task_head;//if current == idle , then task is NULL too
@@ -124,9 +124,8 @@ kmt_schedule(Event ev,Context *context){
       spin_unlock(&task_lock);
       return current->context;
     }
-    if(task->status==TASK_LOAD)task->status=TASK_FUCK;
-    else if(task->status==TASK_FUCK)task->status=TASK_READY;
-    else;
+    if(task->status==TASK_FUCK)task->status=TASK_READY;
+    else if(task->status==TASK_LOAD)task->status=TASK_FUCK;
 
     if(task->next!=NULL)task=task->next;
     else task=task_head;
@@ -330,6 +329,7 @@ sem_wait(sem_t *sem){
   if(sem->count<0){
     sem_task_insert(sem,current);
     spin_unlock(&sem->lock);
+    current->status=TASK_SLEEP;
     yield();
   }
   else spin_unlock(&sem->lock);
