@@ -283,7 +283,7 @@ sem_task_delete(sem_t *sem){
   if(sem_task_node->prev!=NULL)sem_task_node->prev->next=NULL;
   else sem->sem_tasks=NULL;
   
-  spin_lock(&task_lock);
+ // spin_lock(&task_lock);
   if(sem_task_node->task->status==TASK_SLEEP){
     sem_task_node->task->status=TASK_WAKED;
   }
@@ -291,7 +291,7 @@ sem_task_delete(sem_t *sem){
     sem_task_node->task->status=TASK_READY;
   }
   else panic("fuck");
-  spin_unlock(&task_lock);
+  //spin_unlock(&task_lock);
 
   pmm->free(sem_task_node);
 }
