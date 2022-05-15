@@ -82,7 +82,7 @@ kmt_context_save(Event ev,Context *context){
 
 static Context *
 kmt_schedule(Event ev,Context *context){
-  panic_on(current->status==TASK_READY,"status ready");
+  panic_on(current!=idle&&current->status==TASK_READY,"status ready");
   panic_on(current->status==TASK_LOAD,"status load");
  /* task_t *temp=task_head;
   while(temp){
