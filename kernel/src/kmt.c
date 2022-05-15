@@ -184,7 +184,7 @@ init(){
     //panic_on(idles[cpu]==NULL,"alloc fail");
 
     idles[cpu]->kstack=pmm->alloc(KSTACK_SIZE);
-    //panic_on(idles[cpu]->kstack==NULL,"not enough space for kstack");
+    panic_on(idles[cpu]->kstack==NULL,"not enough space for kstack");
 
     Area kstack={
       .start=(void *)idles[cpu]->kstack,
