@@ -121,6 +121,7 @@ kmt_schedule(Event ev,Context *context){
   task_t *task_begin=current;
   do{
     if(task->status==TASK_READY){
+      panic_on(current==task,"fuck");
       if(current->status==TASK_RUNNING)current->status=TASK_LOAD;
       current=task;
       current->status=TASK_RUNNING;
