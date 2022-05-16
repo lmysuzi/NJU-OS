@@ -97,6 +97,7 @@ kmt_schedule(Event ev,Context *context){
   if(last!=NULL){
     if(last->status==TASK_RUNNING||last->status==TASK_WAKED)last->status=TASK_READY;
     else if(last->status==TASK_SLEEP)last->status=TASK_READY_TO_WAKE;
+    else panic("gi");
     last=NULL;
   }
 
