@@ -122,13 +122,6 @@ kmt_schedule(Event ev,Context *context){
       if(task->next!=NULL)task=task->next;
       else task=task_head;
     }
- // if(last==NULL){
-   /* task=task_head;
-  //} */ 
-  //else task=last->next;
-  
-  if(task==NULL)task=task_head;
-
 
 
   task_t *task_begin=task;
@@ -273,9 +266,9 @@ sem_task_insert(sem_t *sem, task_t *task){
   if(sem->sem_tasks!=NULL)sem->sem_tasks->prev=sem_task_node;
   sem->sem_tasks=sem_task_node;
 
-  spin_lock(&task_lock);
+  //spin_lock(&task_lock);
   task->status=TASK_SLEEP;
-  spin_unlock(&task_lock);
+  //spin_unlock(&task_lock);
 }
 
 
