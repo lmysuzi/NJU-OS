@@ -101,7 +101,6 @@ kmt_schedule(Event ev,Context *context){
 
   task_t *task=task_head;//if current == idle , then task is NULL too
 
-  panic_on(last==NULL,"lasjkf");
   if(last!=NULL){
     task=last->next;
     if(last->status==TASK_RUNNING||last->status==TASK_WAKED)last->status=TASK_READY;
