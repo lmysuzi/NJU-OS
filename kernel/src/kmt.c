@@ -117,7 +117,7 @@ kmt_schedule(Event ev,Context *context){
 
   task_t *task=task_head;//if current == idle , then task is NULL too
 
-    int round=rand()%(task_total) ;
+    int round=rand()%(task_total+1) ;
     for(int i=0;i<round;i++){
       if(task->next!=NULL)task=task->next;
       else task=task_head;
