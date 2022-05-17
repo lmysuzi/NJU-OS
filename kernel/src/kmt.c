@@ -93,10 +93,12 @@ kmt_schedule(Event ev,Context *context){
   spin_lock(&task_lock);
 
   if(current!=idle){
-    last=current;
-    current=idle;
-    spin_unlock(&task_lock);
-    return current->context;
+    if(current->status!=TASK_SLEEP){
+      last=current;
+      current=idle;
+      spin_unlock(&task_lock);
+      return current->context;
+    }
   }
 
   if(last!=NULL){
@@ -106,6 +108,7 @@ kmt_schedule(Event ev,Context *context){
     last=NULL;
   }
 
+  if(current!=idle)last=current;
 
 
   if(task_head==NULL){
