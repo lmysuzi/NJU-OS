@@ -10,7 +10,6 @@ typedef struct irq{
 }irq_t;
 
 struct task{
-  int which_cpu;
   int status;
   const char *name;
   Context *context;
