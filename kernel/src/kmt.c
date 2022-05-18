@@ -108,6 +108,8 @@ kmt_schedule(Event ev,Context *context){
     return current->context;
   }*/
 
+  task_t *task=current->next;//if current == idle , then task is NULL too
+  if(task==NULL)task=task_head;
 
 
   if(task_head==NULL){
@@ -118,8 +120,6 @@ kmt_schedule(Event ev,Context *context){
   }
 
 
-  task_t *task=current->next;//if current == idle , then task is NULL too
-  if(task==NULL)task=task_head;
     /*int round=rand()%(task_total+1) ;
     for(int i=0;i<round;i++){
       if(task->next!=NULL)task=task->next;
@@ -287,7 +287,7 @@ sem_task_delete(sem_t *sem){
   if(sem_task_node->prev!=NULL)sem_task_node->prev->next=NULL;
   else sem->sem_tasks=NULL;
   
-  spin_lock(&task_lock);
+  //spin_lock(&task_lock);
   if(sem_task_node->task->status==TASK_SLEEP){
     sem_task_node->task->status=TASK_WAKED;
   }
@@ -295,7 +295,7 @@ sem_task_delete(sem_t *sem){
     sem_task_node->task->status=TASK_READY;
   }
   else panic("fuck");
-  spin_unlock(&task_lock);
+  //spin_unlock(&task_lock);
 
   pmm->free(sem_task_node);
 }
