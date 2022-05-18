@@ -78,6 +78,15 @@ kmt_context_save(Event ev,Context *context){
   if(!current)current=idle;
   else current->context=context;
 
+  spin_lock(&task_lock);
+  if(last!=NULL&&last!=idle){
+    if(last->status==TASK_RUNNING||last->status==TASK_WAKED)last->status=TASK_READY;
+    else if(last->status==TASK_SLEEP)last->status=TASK_READY_TO_WAKE;
+    else panic("gi");
+  }
+  last=current;
+  spin_unlock(&task_lock);
+
   return NULL;
 }
 
@@ -92,23 +101,14 @@ kmt_schedule(Event ev,Context *context){
 
   spin_lock(&task_lock);
 
-  if(current!=idle){
+  /*if(current!=idle){
     last=current;
     current=idle;
     spin_unlock(&task_lock);
     return current->context;
-  }
+  }*/
 
   task_t *task=task_head;//if current == idle , then task is NULL too
-
-  if(last!=NULL){
-    task=last->next;
-    if(last->status==TASK_RUNNING||last->status==TASK_WAKED)last->status=TASK_READY;
-    else if(last->status==TASK_SLEEP)last->status=TASK_READY_TO_WAKE;
-    else panic("gi");
-    last=NULL;
-  }
-
 
 
   if(task_head==NULL){
@@ -144,7 +144,6 @@ kmt_schedule(Event ev,Context *context){
   current=idle;
   current->status=TASK_RUNNING;
   
-
 
   spin_unlock(&task_lock);
   return current->context;
@@ -206,7 +205,7 @@ init(){
     idles[cpu]->next=idles[cpu]->prev=NULL;
     idles[cpu]->status=TASK_RUNNING;
 
-    lasts[cpu]=idles[cpu];
+    lasts[cpu]=NULL;
   }
 
   os->on_irq(INT_MIN,EVENT_NULL,kmt_context_save);
@@ -357,3 +356,4 @@ MODULE_DEF(kmt)={
   .sem_wait=sem_wait,
   .sem_signal=sem_signal,
 };
+
