@@ -10,6 +10,7 @@ typedef struct irq{
 }irq_t;
 
 struct task{
+  int id;
   int status;
   const char *name;
   Context *context;
