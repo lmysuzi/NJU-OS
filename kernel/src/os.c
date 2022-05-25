@@ -25,6 +25,13 @@ void g(){
   while(1)yield();
 }*/
 
+void time(){
+  while(1){
+    printf("%d\n",uproc->uptime);
+    yield();
+  }
+}
+
 static void os_init() {
   irq_head=NULL;kmt->spin_init(&irq_lock,"irq_lock");
   pmm->init();
@@ -35,6 +42,7 @@ static void os_init() {
   kmt->sem_init(&fill,  "fill",  0);
   kmt->create(pmm->alloc(sizeof(task_t)),"fuck",f,NULL);
   kmt->create(pmm->alloc(sizeof(task_t)),"fuck",g,NULL);*/
+  kmt->create(pmm->alloc(sizeof(task_t)),"time",time,NULL);
 }
 
 
