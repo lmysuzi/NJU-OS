@@ -3,8 +3,10 @@
 
 #include "initcode.inc"
 
-static void init(){
+typedef void *(*pgalloc_type)(int);
 
+static void init(){
+  vme_init((pgalloc_type)pmm->alloc,pmm->free);
 }
 
 static int kputc(task_t *task, char ch){
