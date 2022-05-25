@@ -13,7 +13,6 @@ static void
 init(){
   vme_init((pgalloc_type)pmm->alloc,pmm->free);
 
-  debug;
 }
 
 
@@ -60,7 +59,7 @@ static int sleep(task_t *task, int seconds){
 static int64_t 
 uptime(task_t *task){
   int us=io_read(AM_TIMER_UPTIME).us;
-  return us/1000;
+  return us/1000000;
 }
 
 
