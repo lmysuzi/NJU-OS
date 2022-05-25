@@ -62,8 +62,8 @@ task_delete(task_t *task){
   if(task->next)task->next->prev=task->prev;
   if(task->prev)task->prev->next=task->next;
   if(task_head==task)task_head=task->next;
-  //pmm->free(task->kstack);
-  //pmm->free(task);
+  pmm->free(task->kstack);
+  pmm->free(task);
 }
 
 
@@ -101,15 +101,14 @@ kmt_schedule(Event ev,Context *context){
 
   spin_lock(&task_lock);
 
-  /*if(current!=idle){
+  if(current!=idle){
     last=current;
     current=idle;
     spin_unlock(&task_lock);
     return current->context;
-  }*/
+  }
 
-  task_t *task=current->next;//if current == idle , then task is NULL too
-  if(task==NULL)task=task_head;
+  task_t *task=task_head;//if current == idle , then task is NULL too
 
 
   if(task_head==NULL){
@@ -120,11 +119,11 @@ kmt_schedule(Event ev,Context *context){
   }
 
 
-    /*int round=rand()%(task_total+1) ;
+    int round=rand()%(task_total+1) ;
     for(int i=0;i<round;i++){
       if(task->next!=NULL)task=task->next;
       else task=task_head;
-    }*/
+    }
 
 
   task_t *task_begin=task;
