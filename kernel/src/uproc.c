@@ -3,6 +3,8 @@
 
 #include "initcode.inc"
 
+#define debug printf("shit\n")
+
 typedef void *(*pgalloc_type)(int);
 
 AM_TIMER_UPTIME_T time;
@@ -10,6 +12,8 @@ AM_TIMER_UPTIME_T time;
 static void 
 init(){
   vme_init((pgalloc_type)pmm->alloc,pmm->free);
+
+  debug;
 }
 
 
