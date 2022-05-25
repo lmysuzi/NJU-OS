@@ -78,14 +78,14 @@ kmt_context_save(Event ev,Context *context){
   if(!current)current=idle;
   else current->context=context;
 
-  spin_lock(&task_lock);
+  /*spin_lock(&task_lock);
   if(last!=NULL&&last!=idle){
     if(last->status==TASK_RUNNING||last->status==TASK_WAKED)last->status=TASK_READY;
     else if(last->status==TASK_SLEEP)last->status=TASK_READY_TO_WAKE;
     else panic("gi");
   }
   last=current;
-  spin_unlock(&task_lock);
+  spin_unlock(&task_lock);*/
 
   return NULL;
 }
@@ -107,6 +107,14 @@ kmt_schedule(Event ev,Context *context){
     spin_unlock(&task_lock);
     return current->context;
   }
+
+  if(last!=NULL&&last!=idle){
+    if(last->status==TASK_RUNNING||last->status==TASK_WAKED)last->status=TASK_READY;
+    else if(last->status==TASK_SLEEP)last->status=TASK_READY_TO_WAKE;
+    else panic("gi");
+  }
+
+  last=NULL;
 
   task_t *task=task_head;//if current == idle , then task is NULL too
 
