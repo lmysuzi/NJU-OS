@@ -5,6 +5,7 @@
 
 typedef void *(*pgalloc_type)(int);
 
+AM_TIMER_UPTIME_T time;
 
 static void 
 init(){
