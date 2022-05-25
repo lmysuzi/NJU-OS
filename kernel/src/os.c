@@ -27,7 +27,7 @@ void g(){
 
 void time(){
   while(1){
-    printf("%d\n",uproc->uptime);
+    printf("%d\n",uproc->uptime(NULL));
     yield();
   }
 }
