@@ -7,7 +7,6 @@
 
 typedef void *(*pgalloc_type)(int);
 
-AM_TIMER_UPTIME_T time;
 
 static void 
 init(){
@@ -29,19 +28,27 @@ fork(task_t *task){
 }
 
 
-static int wait(task_t *task, int *status){
+static int 
+wait(task_t *task, int *status){
+  return 0;
+}
+
+
+static int
+exit(task_t *task, int status){
+  return 0;
+}
+
+
+static int 
+kill(task_t *task, int pid){
   return 0;
 
 }
 
-static int exit(task_t *task, int status){
-  return 0;
-}
-static int kill(task_t *task, int pid){
-  return 0;
 
-}
-static void *mmap(task_t *task, void *addr, int length, int prot, int flags){
+static void *
+mmap(task_t *task, void *addr, int length, int prot, int flags){
   return NULL;
 }
 
@@ -51,7 +58,9 @@ getpid(task_t *task){
   return task->id;
 }
 
-static int sleep(task_t *task, int seconds){
+
+static int 
+sleep(task_t *task, int seconds){
   return 0;
 }
 

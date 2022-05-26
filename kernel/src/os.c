@@ -25,24 +25,23 @@ void g(){
   while(1)yield();
 }*/
 
-void time(){
+/*void time(){
   while(1){
     printf("%d\n",uproc->uptime(NULL));
     yield();
   }
-}
+}*/
 
 static void os_init() {
   irq_head=NULL;kmt->spin_init(&irq_lock,"irq_lock");
   pmm->init();
   kmt->init();
   uproc->init();
-  //dev->init();
+  dev->init();
   /*kmt->sem_init(&empty, "empty", 5);  // 缓冲区大小为 5
   kmt->sem_init(&fill,  "fill",  0);
   kmt->create(pmm->alloc(sizeof(task_t)),"fuck",f,NULL);
   kmt->create(pmm->alloc(sizeof(task_t)),"fuck",g,NULL);*/
-  kmt->create(pmm->alloc(sizeof(task_t)),"time",time,NULL);
 }
 
 
