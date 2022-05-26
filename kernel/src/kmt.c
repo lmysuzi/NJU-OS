@@ -82,6 +82,7 @@ sleep_delete(sleep_tasks_t *node){
   if(node->prev)node->prev->next=node->next;
   if(node->next)node->next->prev=node->prev;
   if(node==task_sleep)task_sleep=node->next;
+  if(task_sleep==NULL)mark;
   pmm->free(node);
 }
 
