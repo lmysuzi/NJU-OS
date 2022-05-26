@@ -1,6 +1,8 @@
 #include <os.h>
 #include <syscall.h>
 
+#include <kmt.h>
+
 #include "initcode.inc"
 
 #define debug printf("shit\n")
@@ -61,6 +63,8 @@ getpid(task_t *task){
 
 static int 
 sleep(task_t *task, int seconds){
+  int us=io_read(AM_TIMER_UPTIME).us+seconds*1000000;
+  sleep_insert(task,us);
   return 0;
 }
 

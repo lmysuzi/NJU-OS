@@ -26,20 +26,77 @@ static int task_nums[MAX_CPU];
 #define lock_for(_) task_locks[_->which_cpu]
 #define task_num_for(_) task_nums[_->which_cpu]*/
 
-static spinlock_t task_lock;
 static task_t *currents[MAX_CPU];
 static task_t *idles[MAX_CPU];
 static task_t *lasts[MAX_CPU];
 static task_t *task_head;
+static spinlock_t task_lock;
 static int task_total=0;
 #define current currents[cpu_current()]
 #define idle idles[cpu_current()]
 #define last lasts[cpu_current()]
 
+static sleep_tasks_t *task_sleep;
+static spinlock_t sleep_lock;
+
 enum{
   TASK_READY=1,TASK_RUNNING,TASK_SLEEP,TASK_READY_TO_WAKE,TASK_WAKED,
 };
 
+static void spin_lock(spinlock_t *lk);
+static void spin_unlock(spinlock_t *lk);
+
+
+void 
+sleep_insert(task_t *task,uint64_t end_time){
+  sleep_tasks_t *node=pmm->alloc(sizeof(sleep_tasks_t));
+  panic_on(node==NULL,"alloc fail");
+
+  spin_lock(&sleep_lock);
+  node->time=end_time;
+  node->prev=NULL;
+  node->next=task_sleep;
+  if(task_sleep!=NULL)task_sleep->prev=node;
+  task_sleep=node;
+  task->status=TASK_SLEEP;
+  spin_unlock(&sleep_lock);
+}
+
+
+static void
+sleep_delete(sleep_tasks_t *node){
+  panic_on(sleep_lock.flag==0,"wrong lock");
+
+  spin_lock(&task_lock);
+  if(node->task->status==TASK_SLEEP)node->task->status=TASK_WAKED;
+  else if(node->task->status==TASK_READY_TO_WAKE)node->task->status=TASK_READY;
+  else panic("g");
+  spin_unlock(&task_lock);
+
+  if(node->prev)node->prev->next=node->next;
+  if(node->next)node->next->prev=node->prev;
+  if(node==task_sleep)task_sleep=node->next;
+  pmm->free(node);
+}
+
+
+static Context *
+kmt_task_wake(Event ev,Context *context){
+  if(cpu_current()!=0)return NULL;
+
+  spin_lock(&sleep_lock);
+  sleep_tasks_t *node=task_sleep;
+  while(node!=NULL){
+    sleep_tasks_t *temp=node->next;
+    if(io_read(AM_TIMER_UPTIME).us>=node->time){
+      sleep_delete(node);
+    }
+    node=temp;
+  }
+  spin_unlock(&sleep_lock);
+
+  return NULL;
+}
 
 
 static void inline 
@@ -67,8 +124,6 @@ task_delete(task_t *task){
 }
 
 
-static void spin_lock(spinlock_t *lk);
-static void spin_unlock(spinlock_t *lk);
 static int create(task_t *task, const char *name, void (*entry)(void *arg), void *arg);
 static void teardown(task_t *task);
 
@@ -151,10 +206,10 @@ kmt_schedule(Event ev,Context *context){
   current=idle;
   current->status=TASK_RUNNING;
   
-
   spin_unlock(&task_lock);
   return current->context;
 }
+
 
 
 static void 
@@ -191,7 +246,8 @@ idle_task(){
 static void 
 init(){
   spin_init(&task_lock,"task_lock");
-  task_head=NULL;
+  spin_init(&sleep_lock,"sleep_lock");
+  task_head=NULL;task_sleep=NULL;
 
   for(int cpu=0;cpu<cpu_count();cpu++){
     currents[cpu]=NULL;
@@ -216,6 +272,7 @@ init(){
   }
 
   os->on_irq(INT_MIN,EVENT_NULL,kmt_context_save);
+  os->on_irq(INT_MIN+1,EVENT_NULL,kmt_task_wake);
   os->on_irq(INT_MAX,EVENT_NULL,kmt_schedule);
 }
     

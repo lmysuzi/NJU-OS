@@ -35,4 +35,10 @@ struct semaphore{
   const char *name;
   sem_tasks_t *sem_tasks;
 };
+
+typedef struct sleep_tasks{
+  task_t *task;
+  uint64_t time;
+  struct sleep_tasks *prev,*next;
+}sleep_tasks_t;
 #endif
