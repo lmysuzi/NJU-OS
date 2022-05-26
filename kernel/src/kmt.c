@@ -47,6 +47,12 @@ static void spin_lock(spinlock_t *lk);
 static void spin_unlock(spinlock_t *lk);
 
 
+task_t *
+task_now(){
+  return current;
+}
+
+
 void 
 sleep_insert(task_t *task,uint64_t end_time){
   sleep_tasks_t *node=pmm->alloc(sizeof(sleep_tasks_t));
