@@ -7,7 +7,7 @@ static spinlock_t irq_lock;
 
 
 
-/*sem_t empty, fill;
+sem_t empty, fill;
 #define P kmt->sem_wait
 #define V kmt->sem_signal
 
@@ -24,7 +24,7 @@ void g(){
   for (int i = 0; i < 5; i++) // 5 个消费者
     kmt->create(pmm->alloc(sizeof(task_t)), "consumer", consumer, (void*)(size_t)i);
   while(1)yield();
-}*/
+}
 
 /*void time(){
   uproc->sleep(task_now(),2);
@@ -39,11 +39,11 @@ static void os_init() {
   pmm->init();
   kmt->init();
   uproc->init();
-  dev->init();
-  /*kmt->sem_init(&empty, "empty", 5);  // 缓冲区大小为 5
+  //dev->init();
+  kmt->sem_init(&empty, "empty", 5);  // 缓冲区大小为 5
   kmt->sem_init(&fill,  "fill",  0);
   kmt->create(pmm->alloc(sizeof(task_t)),"fuck",f,NULL);
-  kmt->create(pmm->alloc(sizeof(task_t)),"fuck",g,NULL);*/
+  kmt->create(pmm->alloc(sizeof(task_t)),"fuck",g,NULL);
   //kmt->create(pmm->alloc(sizeof(task_t)),"time",time,NULL);
 }
 
