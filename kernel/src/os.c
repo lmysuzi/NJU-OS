@@ -29,7 +29,7 @@ void g(){
 void time(){
   uproc->sleep(task_now(),1);
   while(1){
-    printf("%d\n",uproc->uptime(NULL));
+    //printf("%d\n",uproc->uptime(NULL));
     yield();
   }
 }
