@@ -74,6 +74,7 @@ sleep_delete(sleep_tasks_t *node){
   panic_on(sleep_lock.flag==0,"wrong lock");
 
   spin_lock(&task_lock);
+  printf("%d\n",node->task->status);
   if(node->task->status==TASK_SLEEP)node->task->status=TASK_WAKED;
   else if(node->task->status==TASK_READY_TO_WAKE)node->task->status=TASK_READY;
   else panic("g");
