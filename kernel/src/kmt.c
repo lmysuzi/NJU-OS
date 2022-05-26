@@ -59,6 +59,7 @@ sleep_insert(task_t *task,uint64_t end_time){
   panic_on(node==NULL,"alloc fail");
 
   spin_lock(&sleep_lock);
+  node->task=task;
   node->time=end_time;
   node->prev=NULL;
   node->next=task_sleep;
@@ -74,7 +75,6 @@ sleep_delete(sleep_tasks_t *node){
   panic_on(sleep_lock.flag==0,"wrong lock");
 
   spin_lock(&task_lock);
-  printf("%d\n",node->task->status);
   if(node->task->status==TASK_SLEEP)node->task->status=TASK_WAKED;
   else if(node->task->status==TASK_READY_TO_WAKE)node->task->status=TASK_READY;
   else panic("g");
@@ -156,11 +156,11 @@ kmt_context_save(Event ev,Context *context){
 
 static Context *
 kmt_schedule(Event ev,Context *context){
-  task_t *temp=task_head;
+  /*task_t *temp=task_head;
   while(temp){
     printf("%d ",temp->status);
     temp=temp->next;
-  }printf("\n");
+  }printf("\n");*/
 
   spin_lock(&task_lock);
 
