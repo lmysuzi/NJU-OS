@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
   struct fat32hdr *hdr = map_disk(argv[1]);
 
   // TODO: frecov
-  printf("%d\n",hdr->BPB_NumFATs);
+  printf("%d\n",hdr->BPB_TotSec16);
 
   // file system traversal
   munmap(hdr, hdr->BPB_TotSec32 * hdr->BPB_BytsPerSec);
