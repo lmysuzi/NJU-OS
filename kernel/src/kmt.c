@@ -115,8 +115,9 @@ task_insert(task_t *task){
   for(int i=0;i<32767;i++){
     if((id_now+i)%32768&&!ids[(i+id_now)%32768]){
       id_now=(id_now+i)%32768;
-      ids[(id_now+i)%32768]=1;
+      ids[id_now]=1;
       task->id=id_now;
+      id_now++;
       break;
     }
   }
