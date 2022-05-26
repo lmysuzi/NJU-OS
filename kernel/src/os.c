@@ -27,9 +27,9 @@ void g(){
 }*/
 
 void time(){
-  uproc->sleep(task_now(),5);
+  uproc->sleep(task_now(),2);
   while(1){
-    //printf("%d\n",uproc->uptime(NULL));
+    printf("%d\n",uproc->uptime(NULL));
     yield();
   }
 }
