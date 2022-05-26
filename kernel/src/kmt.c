@@ -117,6 +117,7 @@ task_insert(task_t *task){
       id_now=(id_now+i)%32768;
       ids[(id_now+i)%32768]=1;
       task->id=id_now;
+      break;
     }
   }
   task_total++;
