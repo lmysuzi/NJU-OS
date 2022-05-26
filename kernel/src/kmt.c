@@ -36,6 +36,9 @@ static int task_total=0;
 #define idle idles[cpu_current()]
 #define last lasts[cpu_current()]
 
+static bool ids[32768];
+static int id_now=1;
+
 static sleep_tasks_t *task_sleep;
 static spinlock_t sleep_lock;
 
@@ -109,7 +112,13 @@ kmt_task_wake(Event ev,Context *context){
 static void inline 
 task_insert(task_t *task){
   panic_on(task_lock.flag==0,"wrong lock");
-
+  for(int i=0;i<32767;i++){
+    if((id_now+i)%32768&&!ids[(i+id_now)%32768]){
+      id_now=(id_now+i)%32768;
+      ids[(id_now+i)%32768]=1;
+      task->id=id_now;
+    }
+  }
   task_total++;
   task->prev=NULL,task->next=task_head;
   if(task_head!=NULL)task_head->prev=task;
