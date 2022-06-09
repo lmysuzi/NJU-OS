@@ -62,6 +62,8 @@ struct fat32dent {
 
 struct fat32hdr *hdr;
 u32 *data_region_addr;
+u8 file_size;
+u32 *end_addr;
 
 
 void *map_disk(const char *fname);
@@ -80,9 +82,11 @@ int main(int argc, char *argv[]) {
   hdr = map_disk(argv[1]);
 
   data_region_addr=(u32 *)((u8 *)hdr+(hdr->BPB_RsvdSecCnt+hdr->BPB_NumFATs*hdr->BPB_FATSz32)*hdr->BPB_BytsPerSec);
+  end_addr=(u32*)((u8*)hdr+file_size);
 
   // TODO: frecov
   printf("%p\n",data_region_addr);
+  printf("%p\n",end_addr);
 
   // file system traversal
   munmap(hdr, hdr->BPB_TotSec32 * hdr->BPB_BytsPerSec);
@@ -103,6 +107,9 @@ void *map_disk(const char *fname) {
   }
 
   struct fat32hdr *hdr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
+
+  file_size=size;
+
   if (hdr == (void *)-1) {
     goto release;
   }
