@@ -82,7 +82,7 @@ int main(int argc, char *argv[]) {
   data_region_addr=(u32 *)((u8 *)hdr+(hdr->BPB_RsvdSecCnt+hdr->BPB_NumFATs*hdr->BPB_FATSz32)*hdr->BPB_BytsPerSec);
 
   // TODO: frecov
-  printf("%d\n",data_region_addr);
+  printf("%p\n",data_region_addr);
 
   // file system traversal
   munmap(hdr, hdr->BPB_TotSec32 * hdr->BPB_BytsPerSec);
