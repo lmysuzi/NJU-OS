@@ -44,6 +44,25 @@ struct fat32hdr {
   u16 Signature_word;
 } __attribute__((packed));
 
+struct fat32dent {
+  u8  DIR_Name[11];
+  u8  DIR_Attr;
+  u8  DIR_NTRes;
+  u8  DIR_CrtTimeTenth;
+  u16 DIR_CrtTime;
+  u16 DIR_CrtDate;
+  u16 DIR_LastAccDate;
+  u16 DIR_FstClusHI;
+  u16 DIR_WrtTime;
+  u16 DIR_WrtDate;
+  u16 DIR_FstClusLO;
+  u32 DIR_FileSize;
+} __attribute__((packed));
+
+
+struct fat32hdr *hdr;
+
+
 
 void *map_disk(const char *fname);
 
@@ -58,10 +77,10 @@ int main(int argc, char *argv[]) {
   assert(sizeof(struct fat32hdr) == 512); // defensive
 
   // map disk image to memory
-  struct fat32hdr *hdr = map_disk(argv[1]);
+  hdr = map_disk(argv[1]);
 
   // TODO: frecov
-  printf("%d\n",hdr->BPB_TotSec16);
+  printf("%d\n",hdr->BPB_BytsPerSec);
 
   // file system traversal
   munmap(hdr, hdr->BPB_TotSec32 * hdr->BPB_BytsPerSec);
