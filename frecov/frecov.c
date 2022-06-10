@@ -74,8 +74,8 @@ typedef struct fat32dent SDIR;
 typedef struct fat32longdent LDIR;
 
 typedef union{
-  SDIR;
-  LDIR;
+  SDIR sdir;
+  LDIR ldir;
 }DIR;
 
 struct fat32hdr *hdr;
