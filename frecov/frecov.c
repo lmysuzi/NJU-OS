@@ -86,13 +86,13 @@ int main(int argc, char *argv[]) {
   end_addr=((u8*)hdr+file_size);
   bytes_per_clus=hdr->BPB_BytsPerSec*hdr->BPB_SecPerClus;
 
+  printf("%p\n",data_region_addr);
+  printf("%p\n",end_addr);
   for(u8 *addr=data_region_addr;addr<end_addr;addr+=bytes_per_clus){
     struct fat32dent *clus=(struct fat32dent *)addr;
    // printf("%x ",clus->DIR_Attr);
   }
   // TODO: frecov
-  printf("%p\n",data_region_addr);
-  printf("%p\n",end_addr);
 
   // file system traversal
   munmap(hdr, hdr->BPB_TotSec32 * hdr->BPB_BytsPerSec);
