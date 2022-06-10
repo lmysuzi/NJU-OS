@@ -70,6 +70,14 @@ struct fat32longdent{
     u8  LDIR_Name3[4];
 }__attribute__((packed));
 
+typedef struct fat32dent SDIR;
+typedef struct fat32longdent LDIR;
+
+typedef union{
+  SDIR;
+  LDIR;
+}DIR;
+
 struct fat32hdr *hdr;
 size_t bytes_per_clus;
 u8 *data_region_addr;
@@ -99,7 +107,7 @@ int main(int argc, char *argv[]) {
   printf("%u\n",(u32)sizeof(struct fat32dent));
   printf("%u\n",(u32)sizeof(struct fat32longdent));
   for(u8 *addr=data_region_addr;addr<end_addr;addr+=bytes_per_clus){
-    struct fat32dent *clus=(struct fat32dent *)addr;
+    DIR *clus=(DIR *)addr;
     //printf("%s\n",clus->DIR_Name);
   }
   // TODO: frecov
