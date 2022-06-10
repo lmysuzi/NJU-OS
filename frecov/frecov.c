@@ -90,7 +90,7 @@ int main(int argc, char *argv[]) {
   printf("%p\n",end_addr);
   for(u8 *addr=data_region_addr;addr<end_addr;addr+=bytes_per_clus){
     struct fat32dent *clus=(struct fat32dent *)addr;
-    printf("%x ",clus->DIR_Attr);
+    printf("%s ",clus->DIR_Name);
   }
   // TODO: frecov
 
