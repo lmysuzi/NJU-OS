@@ -97,6 +97,7 @@ int main(int argc, char *argv[]) {
   bytes_per_clus=hdr->BPB_BytsPerSec*hdr->BPB_SecPerClus;
 
   printf("%u\n",(u32)sizeof(struct fat32dent));
+  printf("%u\n",(u32)sizeof(struct fat32longdent));
   for(u8 *addr=data_region_addr;addr<end_addr;addr+=bytes_per_clus){
     struct fat32dent *clus=(struct fat32dent *)addr;
     //printf("%s\n",clus->DIR_Name);
