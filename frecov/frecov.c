@@ -92,7 +92,7 @@ int main(int argc, char *argv[]) {
     printf("fuck");
   }
   // TODO: frecov
-  printf("%x\n",file_size);
+  printf("%lx\n",file_size);
   printf("%p\n",data_region_addr);
   printf("%p\n",end_addr);
 
@@ -116,7 +116,6 @@ void *map_disk(const char *fname) {
 
   struct fat32hdr *hdr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
 
-  printf("%lx\n",size);
   file_size=size;
 
   if (hdr == (void *)-1) {
