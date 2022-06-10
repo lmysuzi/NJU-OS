@@ -59,6 +59,16 @@ struct fat32dent {
   u32 DIR_FileSize;
 } __attribute__((packed));
 
+struct fat32longdent{
+    u8  LDIR_Ord;
+    u8  LDIR_Name1[10];
+    u8  LDIR_Attr;
+    u8  LDIR_Type;
+    u8  LDIR_Chksum;
+    u8  LDIR_Name2[12];
+    u16 LDIR_FstClusLO;
+    u8  LDIR_Name3[4];
+}__attribute__((packed));
 
 struct fat32hdr *hdr;
 size_t bytes_per_clus;
@@ -86,8 +96,7 @@ int main(int argc, char *argv[]) {
   end_addr=((u8*)hdr+file_size);
   bytes_per_clus=hdr->BPB_BytsPerSec*hdr->BPB_SecPerClus;
 
-  printf("%p\n",data_region_addr);
-  printf("%p\n",end_addr);
+  printf("%d\n",sizeof(struct fat32dent));
   for(u8 *addr=data_region_addr;addr<end_addr;addr+=bytes_per_clus){
     struct fat32dent *clus=(struct fat32dent *)addr;
     //printf("%s\n",clus->DIR_Name);
