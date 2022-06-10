@@ -78,14 +78,66 @@ typedef union{
   LDIR ldir;
 }DIR;
 
+#define LAST_LONG_ENTRY         (0x40)
+#define ATTR_READ_ONLY          (0x01)
+#define ATTR_HIDDEN             (0x02)
+#define ATTR_SYSTEM             (0x04)
+#define ATTR_VOLUME_ID          (0x08)
+#define ATTR_DIRECTORY          (0x10)
+#define ATTR_ARCHIVE            (0x20)
+#define ATTR_LONG_NAME          (ATTR_READ_ONLY | ATTR_HIDDEN | ATTR_SYSTEM | ATTR_VOLUME_ID)
+#define ATTR_NUL                (0x0)
+#define ATTR_DIR                (0x1)
+#define ATTR_FIL                (0x2)
+
 struct fat32hdr *hdr;
-size_t bytes_per_clus;
 u8 *data_region_addr;
-size_t file_size;
 u8 *end_addr;
+size_t bytes_per_clus;
+size_t file_size;
+size_t entry_size;
 
 
 void *map_disk(const char *fname);
+
+int is_dir(DIR *dir){
+  if(dir->sdir.DIR_Name[0] == 0)return 0;//未使用过
+
+  for(int i=0;i<entry_size;){
+
+    if(dir[i].sdir.DIR_Name[0]=='\xe5')i++; //无效
+    else if(dir[i].ldir.LDIR_Attr==ATTR_LONG_NAME) {
+      
+      size_t size = dir[i].ldir.LDIR_Ord;
+      if(dir[i].ldir.LDIR_Ord>LAST_LONG_ENTRY){size^=LAST_LONG_ENTRY;}
+
+      size=size<=(entry_size-1-i)?size:(entry_size-1-i);
+
+      if(dir[i].ldir.LDIR_Type!=0||dir[i].ldir.LDIR_FstClusLO!=0)return 0;
+      for(int j=1;j<size;j++){
+        if(dir[i+j].ldir.LDIR_Ord!=(size-j)||dir[i+j].ldir.LDIR_Type!=0||dir[i+j].ldir.LDIR_FstClusLO!=0){return 0;}
+      }
+
+      if(i+size<entry_size&&(dir[size].sdir.DIR_NTRes!=0||dir[size].sdir.DIR_Name[0]==0)){return 0;}
+
+      i+=size+1;
+
+      }
+      else if(dir[i].sdir.DIR_Name[0]){
+        if(dir[i].sdir.DIR_NTRes!=0||dir[i].sdir.DIR_Name[0]==0){return 0;}
+        i++;
+      }
+      else{
+        u8 *begin = (uint8_t*)(&dir[i]), *end = (uint8_t*)(&dir[entry_size]);
+        for(u8 *iter=begin;iter<end;++iter){
+          if(*iter){return 0;}
+        }
+        break;
+      }
+    }
+
+    return 1;
+}
 
 int main(int argc, char *argv[]) {
   if (argc < 2) {
@@ -103,12 +155,13 @@ int main(int argc, char *argv[]) {
   data_region_addr=((u8 *)hdr+(hdr->BPB_RsvdSecCnt+hdr->BPB_NumFATs*hdr->BPB_FATSz32)*hdr->BPB_BytsPerSec);
   end_addr=((u8*)hdr+file_size);
   bytes_per_clus=hdr->BPB_BytsPerSec*hdr->BPB_SecPerClus;
+  entry_size = bytes_per_clus/sizeof(DIR);
 
-  printf("%u\n",(u32)sizeof(struct fat32dent));
-  printf("%u\n",(u32)sizeof(struct fat32longdent));
   for(u8 *addr=data_region_addr;addr<end_addr;addr+=bytes_per_clus){
     DIR *clus=(DIR *)addr;
-    //printf("%s\n",clus->DIR_Name);
+    if(is_dir(clus)){
+      printf("fuck\n");
+    }
   }
   // TODO: frecov
 
