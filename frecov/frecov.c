@@ -92,7 +92,7 @@ int main(int argc, char *argv[]) {
     printf("fuck");
   }
   // TODO: frecov
-  printf("%p\n",file_size);
+  printf("%x\n",file_size);
   printf("%p\n",data_region_addr);
   printf("%p\n",end_addr);
 
