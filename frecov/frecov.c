@@ -86,6 +86,7 @@ int main(int argc, char *argv[]) {
   end_addr=((u8*)hdr+file_size);
   bytes_per_clus=hdr->BPB_BytsPerSec*hdr->BPB_SecPerClus;
 
+  printf("%x\n",bytes_per_clus);
   printf("%p\n",data_region_addr);
   printf("%p\n",end_addr);
   for(u8 *addr=data_region_addr;addr<end_addr;addr+=bytes_per_clus){
@@ -115,6 +116,7 @@ void *map_disk(const char *fname) {
   struct fat32hdr *hdr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
 
   file_size=size;
+  
 
   if (hdr == (void *)-1) {
     goto release;
