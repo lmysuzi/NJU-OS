@@ -61,7 +61,7 @@ struct fat32dent {
 
 
 struct fat32hdr *hdr;
-u8 bytes_per_clus;
+size_t bytes_per_clus;
 u8 *data_region_addr;
 size_t file_size;
 u8 *end_addr;
