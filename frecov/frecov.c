@@ -61,9 +61,10 @@ struct fat32dent {
 
 
 struct fat32hdr *hdr;
-u32 *data_region_addr;
+u8 bytes_per_clus;
+u8*data_region_addr;
 u8 file_size;
-u32 *end_addr;
+u8 *end_addr;
 
 
 void *map_disk(const char *fname);
@@ -81,9 +82,14 @@ int main(int argc, char *argv[]) {
   // map disk image to memory
   hdr = map_disk(argv[1]);
 
-  data_region_addr=(u32 *)((u8 *)hdr+(hdr->BPB_RsvdSecCnt+hdr->BPB_NumFATs*hdr->BPB_FATSz32)*hdr->BPB_BytsPerSec);
-  end_addr=(u32*)((u8*)hdr+file_size);
+  data_region_addr=((u8 *)hdr+(hdr->BPB_RsvdSecCnt+hdr->BPB_NumFATs*hdr->BPB_FATSz32)*hdr->BPB_BytsPerSec);
+  end_addr=((u8*)hdr+file_size);
+  bytes_per_clus=hdr->BPB_BytsPerSec*hdr->BPB_SecPerClus;
 
+  for(u8 *addr=data_region_addr;addr<end_addr;addr+=bytes_per_clus){
+    struct fat32dent *clus=(struct fat32dent *)addr;
+    printf("%x ",clus->DIR_Attr);
+  }
   // TODO: frecov
   printf("%p\n",data_region_addr);
   printf("%p\n",end_addr);
