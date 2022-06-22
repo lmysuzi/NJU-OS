@@ -210,6 +210,7 @@ int main(int argc, char *argv[]) {
         char str[8];
         sprintf(str,"%d",++count);
         strcat(path,str);
+        strcat(path,".bmp");
         printf("%s\n",path);
 
       } 
