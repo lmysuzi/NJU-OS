@@ -205,20 +205,20 @@ int main(int argc, char *argv[]) {
         int base = 0;
         while (dent->DIR_Attr== 0xF && l_ptr->LDIR_FstClusLO==0) {
             for (int i=0;i<10;++i) name[base+i] = l_ptr->LDIR_Name1[i];
-            for (int i=0;i<12;++i) name[base+i+5] = l_ptr->LDIR_Name2[i];
-            for (int i=0;i<4;++i) name[base+i+11] = l_ptr->LDIR_Name3[i];
+            for (int i=0;i<12;++i) name[base+i] = l_ptr->LDIR_Name2[i];
+            for (int i=0;i<4;++i) name[base+i] = l_ptr->LDIR_Name3[i];
         }
         printf("%s\n",name);
         u32 Clusid = dent->DIR_FstClusLO | (dent->DIR_FstClusHI << 16);
         u8 *addr=data_region_addr+(Clusid-hdr->BPB_RootClus)*bytes_per_clus;
         bmp_t *bmp=(bmp_t *)addr;
         if(!isbmp(bmp,dent->DIR_FileSize))continue;
-        char picturePath[40]="../../Pictures/";
+        char picturePath[100]="../../Pictures/";
         strcat(picturePath,name);
         FILE *f=fopen(picturePath,"w");
         fwrite(addr,4,bmp->size,f);
         fclose(f);
-        char path[40]="sha1sum ../../Pictures/";
+        char path[100]="sha1sum ../../Pictures/";
         strcat(path,name);
         char buf[100];
         FILE *fp=popen(path,"r");
