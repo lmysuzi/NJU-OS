@@ -165,8 +165,8 @@ int is_dir(DIR *dir){
 
 int isbmp(bmp_t *bmp,uint32_t size){
   //printf("%c%c\n",bmp->id[0],bmp->id[1]);
-  //if(bmp->id[0]!=0x42||bmp->id[1]!=0x4d)return 0;
-  //if(bmp->size!=size)return 0;
+  if(bmp->id[0]!=0x42||bmp->id[1]!=0x4d)return 0;
+  if(bmp->size!=size)return 0;
   return 1;
 }
 
@@ -191,9 +191,11 @@ int main(int argc, char *argv[]) {
   for(u8 *addr=data_region_addr;addr<end_addr;addr+=bytes_per_clus){
     DIR *clus=(DIR *)addr;
     if(is_dir(clus)){
+      
        int ndents = hdr->BPB_BytsPerSec * hdr->BPB_SecPerClus / sizeof(struct fat32dent);
 
       for (int d = 0; d < ndents; d++) {
+        if(d<=1)continue;
         struct fat32dent *dent = (struct fat32dent *)clus + d;
         if (dent->DIR_Name[0] == 0x00 ||
             dent->DIR_Name[0] == 0xe5 ||
