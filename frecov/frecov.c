@@ -160,7 +160,7 @@ parse_dir_entry(const DIR *dir, char *name, uint8_t *attr, uint64_t *fst_clus, u
          * 如果检测到异常，则直接终止
          */
         for(int i = 1; i < size; ++i) {
-            if(dir[i].ldir.Ord != (size - i) || dir[i].ldir.LDIR_Attr != ATTR_LONG_NAME || dir[i].ldir.LDIR_Type != 0 || dir[i].ldir.LDIR_FstClusLO != 0) {
+            if(dir[i].ldir.LDIR_Ord != (size - i) || dir[i].ldir.LDIR_Attr != ATTR_LONG_NAME || dir[i].ldir.LDIR_Type != 0 || dir[i].ldir.LDIR_FstClusLO != 0) {
                 attr = ATTR_NUL;
                 return NULL;
             }
@@ -295,7 +295,7 @@ int main(int argc, char *argv[]) {
         char fname[32];
         get_filename(dent, fname);
         printf("%s\n",fname);
-
+      }
         
     }
   }
