@@ -217,7 +217,8 @@ int main(int argc, char *argv[]) {
         FILE *fp=popen(path,"r");
         fscanf(fp,"%s",buf);
         pclose(fp);
-        printf("%s\n",buf);
+        printf("%s ",buf);
+        printf("%s\n",name);
 
       } 
         
