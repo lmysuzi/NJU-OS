@@ -218,7 +218,6 @@ int main(int argc, char *argv[]) {
             base += 13;
             l_ptr --;
         }
-  printf("fuck\n");
 
         u32 Clusid = dent->DIR_FstClusLO | (dent->DIR_FstClusHI << 16);
         u8 *addr=data_region_addr+(Clusid-hdr->BPB_RootClus)*bytes_per_clus;
@@ -239,6 +238,7 @@ int main(int argc, char *argv[]) {
         printf("%s ",buf);
         printf("%s\n",name);
 
+  printf("fuck\n");
       } 
         
     }
