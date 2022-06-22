@@ -181,7 +181,6 @@ int main(int argc, char *argv[]) {
 
   // map disk image to memory
   hdr = map_disk(argv[1]);
-  printf("%d\n",hdr->BPB_RootClus);
 
   data_region_addr=((u8 *)hdr+(hdr->BPB_RsvdSecCnt+hdr->BPB_NumFATs*hdr->BPB_FATSz32)*hdr->BPB_BytsPerSec);
   end_addr=((u8*)hdr+file_size);
@@ -206,12 +205,12 @@ int main(int argc, char *argv[]) {
         u8 *addr=data_region_addr+(Clusid-hdr->BPB_RootClus)*bytes_per_clus;
         bmp_t *bmp=(bmp_t *)addr;
         if(!isbmp(bmp,dent->DIR_FileSize))continue;
-        char picturePath[1000]="../../Pictures/";
+        char picturePath[1000]="/tmp/";
         strcat(picturePath,name);
         FILE *f=fopen(picturePath,"w");
         fwrite(addr,4,bmp->size,f);
         fclose(f);
-        char path[1000]="sha1sum ../../Pictures/";
+        char path[1000]="sha1sum /tmp/";
         strcat(path,name);
         char buf[1000];
         FILE *fp=popen(path,"r");
