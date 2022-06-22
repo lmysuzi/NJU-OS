@@ -105,7 +105,7 @@ u8 *end_addr;
 size_t bytes_per_clus;
 size_t file_size;
 size_t entry_size;
-int count=0;
+u8 count=0;
 
 void get_filename(struct fat32dent *dent, char *buf) {
   // RTFM: Sec 6.1
