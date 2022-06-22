@@ -62,13 +62,13 @@ struct fat32dent {
 
 struct fat32longdent{
     u8  LDIR_Ord;
-    u8  LDIR_Name1[10];
+    u16 LDIR_Name1[5];
     u8  LDIR_Attr;
     u8  LDIR_Type;
     u8  LDIR_Chksum;
-    u8  LDIR_Name2[12];
+    u16 LDIR_Name2[6];
     u16 LDIR_FstClusLO;
-    u8  LDIR_Name3[4];
+    u16  LDIR_Name3[2];
 }__attribute__((packed));
 
 struct bmp_t {
@@ -201,15 +201,15 @@ int main(int argc, char *argv[]) {
 
         char name[128];
         bzero(name, sizeof(name));
-        struct fat32longdent *ldir=(struct fat32longdent *)dent;
-        int size = ldir->LDIR_Ord ^ LAST_LONG_ENTRY;
-        int name_size = 0;
-        for(int i = 0; i < size; ++i) {
-            for(int j = 0; j < 10; j += 2) { name[name_size++] = ldir->LDIR_Name1[j]; }
-            for(int j = 0; j < 12; j += 2) { name[name_size++] = ldir->LDIR_Name2[j]; }
-            for(int j = 0; j < 4; j += 2) { name[name_size++] = ldir->LDIR_Name3[j]; }
+        struct fat32longdent *l_ptr=(struct fat32longdent *)dent;
+        int base = 0;
+        while (dent->DIR_Attr== 0xF && l_ptr->LDIR_FstClusLO==0) {
+            for (int i=0;i<5;++i) name[base+i] = l_ptr->LDIR_Name1[i];
+            for (int i=0;i<6;++i) name[base+i+5] = l_ptr->LDIR_Name2[i];
+            for (int i=0;i<4;++i) name[base+i+11] = l_ptr->LDIR_Name3[i];
+            base += 13;
+            l_ptr --;
         }
-        name[name_size] = 0;
         printf("%s\n",name);
         u32 Clusid = dent->DIR_FstClusLO | (dent->DIR_FstClusHI << 16);
         u8 *addr=data_region_addr+(Clusid-hdr->BPB_RootClus)*bytes_per_clus;
