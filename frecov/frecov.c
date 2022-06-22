@@ -213,7 +213,7 @@ int main(int argc, char *argv[]) {
         strcat(path,".bmp");
         
         FILE *fp=fopen(path,"w");
-        fwrite(addr,4,dent->DIR_FileSize,fp);
+        fwrite(addr,4,bmp->size,fp);
         fclose(fp);
 
       } 
