@@ -207,8 +207,8 @@ int main(int argc, char *argv[]) {
         bmp_t *bmp=(bmp_t *)addr;
         if(!isbmp(bmp,dent->DIR_FileSize))continue;
         char path[40]="../../Pictures/";
-        char str[3];
-        sprintf(str,"%d",count++);
+        char str[8];
+        sprintf(str,"%d",++count);
         strcat(path,str);
         printf("%s\n",path);
 
