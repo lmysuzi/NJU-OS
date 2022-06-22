@@ -103,9 +103,9 @@ typedef union{
 struct fat32hdr *hdr;
 u8 *data_region_addr;
 u8 *end_addr;
-size_t bytes_per_clus;
-size_t file_size;
-size_t entry_size;
+u32 bytes_per_clus;
+u32 file_size;
+u32 entry_size;
 u8 count=0;
 
 void get_filename(struct fat32dent *dent, char *buf) {
