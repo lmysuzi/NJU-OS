@@ -206,15 +206,13 @@ int main(int argc, char *argv[]) {
         u8 *addr=data_region_addr+(Clusid-hdr->BPB_RootClus)*bytes_per_clus;
         bmp_t *bmp=(bmp_t *)addr;
         if(!isbmp(bmp,dent->DIR_FileSize))continue;
-        char path[40]="../../Pictures/picture";
-        char str[8];
-        sprintf(str,"%d",++count);
-        strcat(path,str);
-        strcat(path,".bmp");
-        
-        FILE *fp=fopen(path,"w");
-        fwrite(addr,4,bmp->size,fp);
+        char path[40]="sha1sum ../../Pictures/";
+        strcat(path,fname);
+        char buf[100];
+        FILE *fp=fopen(path,"r");
+        fscanf(fp,"%s",buf);
         fclose(fp);
+        printf("%s\n",buf);
 
       } 
         
