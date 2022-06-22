@@ -160,7 +160,7 @@ int main(int argc, char *argv[]) {
   for(u8 *addr=data_region_addr;addr<end_addr;addr+=bytes_per_clus){
     DIR *clus=(DIR *)addr;
     if(is_dir(clus)){
-      printf("fuck\n");
+      printf("%s\n",clus->sdir.DIR_Name);
     }
   }
   // TODO: frecov
