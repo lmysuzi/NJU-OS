@@ -163,7 +163,7 @@ int is_dir(DIR *dir){
     return 1;
 }
 
-int inline isbmp(bmp_t *bmp,int size){
+int inline isbmp(bmp_t *bmp,u32 size){
   if(bmp->id[0]!='B'||bmp->id[1]!='M')return 0;
   if(bmp->size!=size)return 0;
   return 1;
@@ -223,7 +223,6 @@ int main(int argc, char *argv[]) {
         u8 *addr=data_region_addr+(Clusid-hdr->BPB_RootClus)*bytes_per_clus;
         bmp_t *bmp=(bmp_t *)addr;
 
-  printf("fuck\n");
         if(!isbmp(bmp,dent->DIR_FileSize))continue;
         char picturePath[1000]="/tmp/";
         strcat(picturePath,name);
