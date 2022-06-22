@@ -200,16 +200,16 @@ int main(int argc, char *argv[]) {
 
         char name[128];
         bzero(name, sizeof(name));
-        LDIR *l_ptr = (LDIR*)dent- 1;
+        DIR *dir= (DIR*)dent;
         bzero(name, sizeof(name));
-        int base = 0;
-        while (l_ptr->LDIR_Attr== 0xF && l_ptr->LDIR_Ord==0) {
-            for (int i=0;i<5;++i) name[base+i] = l_ptr->LDIR_Name1[i];
-            for (int i=0;i<6;++i) name[base+i+5] = l_ptr->LDIR_Name2[i];
-            for (int i=0;i<2;++i) name[base+i+11] = l_ptr->LDIR_Name3[i];
-            base += 13;
-            l_ptr --;
+        int name_size = 0;
+         int size = dir->ldir.LDIR_Ord ^ LAST_LONG_ENTRY;
+        for(int i = 0; i < size; ++i) {
+            for(int j = 0; j < 10; j += 2) { name[name_size++] = dir[size - 1 - i].ldir.LDIR_Name1[j]; }
+            for(int j = 0; j < 12; j += 2) { name[name_size++] = dir[size - 1 - i].ldir.LDIR_Name2[j]; }
+            for(int j = 0; j < 4; j += 2) { name[name_size++] = dir[size - 1 - i].ldir.LDIR_Name3[j]; }
         }
+        name[name_size] = 0;
         printf("%s\n",name);
         u32 Clusid = dent->DIR_FstClusLO | (dent->DIR_FstClusHI << 16);
         u8 *addr=data_region_addr+(Clusid-hdr->BPB_RootClus)*bytes_per_clus;
