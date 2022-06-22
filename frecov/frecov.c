@@ -97,6 +97,17 @@ size_t bytes_per_clus;
 size_t file_size;
 size_t entry_size;
 
+void get_filename(struct fat32dent *dent, char *buf) {
+  // RTFM: Sec 6.1
+  int len = 0;
+  for (int i = 0; i < sizeof(dent->DIR_Name); i++) {
+    if (dent->DIR_Name[i] != ' ') {
+      if (i == 8) buf[len++] = '.';
+      buf[len++] = dent->DIR_Name[i];
+    }
+  }
+  buf[len] = '\0';
+}
 
 void *map_disk(const char *fname);
 
@@ -160,7 +171,9 @@ int main(int argc, char *argv[]) {
   for(u8 *addr=data_region_addr;addr<end_addr;addr+=bytes_per_clus){
     DIR *clus=(DIR *)addr;
     if(is_dir(clus)){
-      printf("%s\n",clus->sdir.DIR_Name);
+      char name[32];
+      get_filename((struct fat32dent*)clus,name);
+      printf("%s\n",name);
     }
   }
   // TODO: frecov
