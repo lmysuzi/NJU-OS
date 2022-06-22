@@ -211,7 +211,10 @@ int main(int argc, char *argv[]) {
         sprintf(str,"%d",++count);
         strcat(path,str);
         strcat(path,".bmp");
-        printf("%s\n",path);
+        
+        FILE *fp=fopen(path,"w");
+        fwrite(bmp->offset,1,dent->DIR_FileSize,fp);
+        fclose(fp);
 
       } 
         
