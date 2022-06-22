@@ -163,9 +163,9 @@ int is_dir(DIR *dir){
     return 1;
 }
 
-int isbmp(bmp_t *bmp,uint64_t size){
+int isbmp(bmp_t *bmp,uint32_t size){
+  printf("%c%c\n",bmp->id[0],bmp->id[1]);
   if(bmp->id[0]!=0x42||bmp->id[1]!=0x4d)return 0;
-  printf("fuck\n");
   if(bmp->size!=size)return 0;
   return 1;
 }
