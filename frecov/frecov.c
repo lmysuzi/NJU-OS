@@ -70,13 +70,22 @@ struct fat32longdent{
     u8  LDIR_Name3[4];
 }__attribute__((packed));
 
+struct bmp_t {
+  char id[2];
+  u32 size;
+  u32 res;
+  u32 offset;
+}__attribute__((packed));
+
 typedef struct fat32dent SDIR;
 typedef struct fat32longdent LDIR;
+typedef struct bmp_t bmp_t;
 
 typedef union{
   SDIR sdir;
   LDIR ldir;
 }DIR;
+
 
 #define LAST_LONG_ENTRY         (0x40)
 #define ATTR_READ_ONLY          (0x01)
@@ -184,6 +193,8 @@ int main(int argc, char *argv[]) {
         char fname[32];
         get_filename(dent, fname);
         printf("%s\n",fname);
+        u32 dataClus = dent->DIR_FstClusLO | (dent->DIR_FstClusHI << 16);
+        printf("%x\n",dataClus);
       }
         
     }
