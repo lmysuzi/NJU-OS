@@ -208,9 +208,8 @@ int main(int argc, char *argv[]) {
         if(!isbmp(bmp,dent->DIR_FileSize))continue;
         char path[40]="../../Pictures/";
         char str[3];
-        itoa(count,str,10);
+        sprintf(str,"%d",count++);
         strcat(path,str);
-        count++;
         printf("%s\n",path);
 
       } 
