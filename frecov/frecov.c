@@ -200,7 +200,17 @@ int main(int argc, char *argv[]) {
 
         char name[128];
         bzero(name, sizeof(name));
-        get_filename(dent,name);
+        LDIR *l_ptr = (LDIR*)dent- 1;
+        bzero(name, sizeof(name));
+        int base = 0;
+        while (l_ptr->LDIR_Attr== 0xF && l_ptr->LDIR_Ord==0) {
+            for (int i=0;i<5;++i) name[base+i] = l_ptr->LDIR_Name1[i];
+            for (int i=0;i<6;++i) name[base+i+5] = l_ptr->LDIR_Name2[i];
+            for (int i=0;i<2;++i) name[base+i+11] = l_ptr->LDIR_Name3[i];
+            base += 13;
+            l_ptr --;
+        }
+        printf("%s\n",name);
         u32 Clusid = dent->DIR_FstClusLO | (dent->DIR_FstClusHI << 16);
         u8 *addr=data_region_addr+(Clusid-hdr->BPB_RootClus)*bytes_per_clus;
         bmp_t *bmp=(bmp_t *)addr;
