@@ -197,7 +197,8 @@ int main(int argc, char *argv[]) {
         u32 Clusid = dent->DIR_FstClusLO | (dent->DIR_FstClusHI << 16);
         u8 *addr=data_region_addr+(Clusid-hdr->BPB_RootClus)*bytes_per_clus;
         bmp_t *bmp=(bmp_t *)addr;
-        printf("%c %c\n",bmp->id[0],bmp->id[1]);
+        printf("%c%c\n",bmp->id[0],bmp->id[1]);
+        printf("%d %d\n",dent->DIR_FileSize,bmp->size);
       }
         
     }
