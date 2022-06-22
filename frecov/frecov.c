@@ -223,8 +223,8 @@ int main(int argc, char *argv[]) {
         u8 *addr=data_region_addr+(Clusid-hdr->BPB_RootClus)*bytes_per_clus;
         bmp_t *bmp=(bmp_t *)addr;
 
-        if(!isbmp(bmp,dent->DIR_FileSize))continue;
   printf("fuck\n");
+        if(!isbmp(bmp,dent->DIR_FileSize))continue;
         char picturePath[1000]="/tmp/";
         strcat(picturePath,name);
         FILE *f=fopen(picturePath,"w");
