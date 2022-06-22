@@ -181,13 +181,13 @@ int main(int argc, char *argv[]) {
 
   // map disk image to memory
   hdr = map_disk(argv[1]);
-  printf("fuck\n");
 
   data_region_addr=((u8 *)hdr+(hdr->BPB_RsvdSecCnt+hdr->BPB_NumFATs*hdr->BPB_FATSz32)*hdr->BPB_BytsPerSec);
   end_addr=((u8*)hdr+file_size);
   bytes_per_clus=hdr->BPB_BytsPerSec*hdr->BPB_SecPerClus;
   entry_size = bytes_per_clus/sizeof(DIR);
 
+  printf("fuck\n");
   for(u8 *addr=data_region_addr;addr<end_addr;addr+=bytes_per_clus){
     DIR *clus=(DIR *)addr;
     if(is_dir(clus)){
