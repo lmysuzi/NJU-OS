@@ -202,13 +202,14 @@ int main(int argc, char *argv[]) {
         char name[128];
         bzero(name, sizeof(name));
         struct fat32longdent *l_ptr=(struct fat32longdent *)dent;
-        int base = 0;
-        while (dent->DIR_Attr== 0xF && l_ptr->LDIR_FstClusLO==0) {
-            for (int i=0;i<10;++i) name[base+i] = l_ptr->LDIR_Name1[i];
-            for (int i=0;i<12;++i) name[base+i+10] = l_ptr->LDIR_Name2[i];
-            for (int i=0;i<4;++i) name[base+i+22] = l_ptr->LDIR_Name3[i];
-            name[26]='\0';
+        int size = clus->ldir.LDIR_Ord ^ LAST_LONG_ENTRY;
+        int name_size = 0;
+        for(int i = 0; i < size; ++i) {
+            for(int j = 0; j < 10; j += 2) { name[name_size++] = clus[size - 1 - i].ldir.LDIR_Name1[j]; }
+            for(int j = 0; j < 12; j += 2) { name[name_size++] = clus[size - 1 - i].ldir.LDIR_Name2[j]; }
+            for(int j = 0; j < 4; j += 2) { name[name_size++] = clus[size - 1 - i].ldir.LDIR_Name3[j]; }
         }
+        name[name_size] = 0;
         printf("%s\n",name);
         u32 Clusid = dent->DIR_FstClusLO | (dent->DIR_FstClusHI << 16);
         u8 *addr=data_region_addr+(Clusid-hdr->BPB_RootClus)*bytes_per_clus;
