@@ -105,6 +105,7 @@ u8 *end_addr;
 size_t bytes_per_clus;
 size_t file_size;
 size_t entry_size;
+int count=0;
 
 void get_filename(struct fat32dent *dent, char *buf) {
   // RTFM: Sec 6.1
@@ -161,6 +162,12 @@ int is_dir(DIR *dir){
     return 1;
 }
 
+int inline isbmp(bmp_t *bmp,int size){
+  if(bmp->id[0]!='B'||bmp->id[1]!='M')return 0;
+  if(bmp->size!=size)return 0;
+  return 1;
+}
+
 int main(int argc, char *argv[]) {
   if (argc < 2) {
     fprintf(stderr, "Usage: %s fs-image\n", argv[0]);
@@ -197,9 +204,14 @@ int main(int argc, char *argv[]) {
         u32 Clusid = dent->DIR_FstClusLO | (dent->DIR_FstClusHI << 16);
         u8 *addr=data_region_addr+(Clusid-hdr->BPB_RootClus)*bytes_per_clus;
         bmp_t *bmp=(bmp_t *)addr;
-        printf("%c%c\n",bmp->id[0],bmp->id[1]);
-        printf("%d %d\n",dent->DIR_FileSize,bmp->size);
-      }
+        if(!isbmp(bmp,dent->DIR_FileSize))continue;
+        char path[40]="../../Pictures/";
+        int length=strlen(path);
+        strcat(path,count);
+        count++;
+        printf("%s\n",path);
+
+      } 
         
     }
   }
