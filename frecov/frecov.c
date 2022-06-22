@@ -222,6 +222,7 @@ int main(int argc, char *argv[]) {
         u32 Clusid = dent->DIR_FstClusLO | (dent->DIR_FstClusHI << 16);
         u8 *addr=data_region_addr+(Clusid-hdr->BPB_RootClus)*bytes_per_clus;
         bmp_t *bmp=(bmp_t *)addr;
+
         if(!isbmp(bmp,dent->DIR_FileSize))continue;
         char picturePath[1000]="/tmp/";
         strcat(picturePath,name);
