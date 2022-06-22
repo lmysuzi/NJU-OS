@@ -62,13 +62,13 @@ struct fat32dent {
 
 struct fat32longdent{
     u8  LDIR_Ord;
-    u16 LDIR_Name1[5];
+    u8  LDIR_Name1[10];
     u8  LDIR_Attr;
     u8  LDIR_Type;
     u8  LDIR_Chksum;
-    u16 LDIR_Name2[6];
+    u8  LDIR_Name2[12];
     u16 LDIR_FstClusLO;
-    u16  LDIR_Name3[2];
+    u8  LDIR_Name3[4];
 }__attribute__((packed));
 
 struct bmp_t {
