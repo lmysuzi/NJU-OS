@@ -206,6 +206,11 @@ int main(int argc, char *argv[]) {
         u8 *addr=data_region_addr+(Clusid-hdr->BPB_RootClus)*bytes_per_clus;
         bmp_t *bmp=(bmp_t *)addr;
         if(!isbmp(bmp,dent->DIR_FileSize))continue;
+        char picturePath[40]="../../Pictures/";
+        strcat(picturePath,fname);
+        FILE *f=fopen(picturePath,"w");
+        fwrite(addr,4,bmp->size,f);
+        fclose(f);
         char path[40]="sha1sum ../../Pictures/";
         strcat(path,fname);
         char buf[100];
