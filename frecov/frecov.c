@@ -215,14 +215,14 @@ int main(int argc, char *argv[]) {
         u8 *addr=data_region_addr+(Clusid-hdr->BPB_RootClus)*bytes_per_clus;
         bmp_t *bmp=(bmp_t *)addr;
         if(!isbmp(bmp,dent->DIR_FileSize))continue;
-        char picturePath[100]="../../Pictures/";
+        char picturePath[1000]="../../Pictures/";
         strcat(picturePath,name);
         FILE *f=fopen(picturePath,"w");
         fwrite(addr,4,bmp->size,f);
         fclose(f);
-        char path[100]="sha1sum ../../Pictures/";
+        char path[1000]="sha1sum ../../Pictures/";
         strcat(path,name);
-        char buf[100];
+        char buf[1000];
         FILE *fp=popen(path,"r");
         fscanf(fp,"%s",buf);
         pclose(fp);
