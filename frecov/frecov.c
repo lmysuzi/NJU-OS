@@ -208,7 +208,7 @@ int main(int argc, char *argv[]) {
         char path[40]="../../Pictures/";
         char str[3];
         itoa(count,str,10);
-        strcat(path,(char)count);
+        strcat(path,str);
         count++;
         printf("%s\n",path);
 
