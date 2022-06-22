@@ -111,6 +111,119 @@ void get_filename(struct fat32dent *dent, char *buf) {
 
 void *map_disk(const char *fname);
 
+static const DIR*
+parse_dir_entry(const DIR *dir, char *name, uint8_t *attr, uint64_t *fst_clus, uint64_t *file_size)
+{
+    assert(dir != NULL && name != NULL && attr != NULL && fst_clus != NULL && file_size != NULL);
+
+
+    if(dir->sdir.DIR_Name[0] == '\xe5') {
+
+        /*
+         * 该目录项被FREE了
+         */
+        *attr = ATTR_NUL;
+        return &dir[1];
+
+    }else if(dir->sdir.DIR_Name[0] == 0){
+
+        /*
+         * 该目录项和以后的目录项都是空目录项
+         */
+        *attr = ATTR_NUL;
+        return NULL;
+
+    }else if(dir->sdir.DIR_Attr == ATTR_LONG_NAME) {
+
+        /*
+         * 如果Attr为ATTR_LONG_NAME，则为长名称
+         * 
+         * 这里做简单处理，认为任何一个目录项的ldir个数小于0x40个，
+         * 
+         * 如果ord小于LAST_LONG_ENTRY，则说明为跨簇的长名称，直接返回到下一个即可
+         * 否则，获取LDIR的个数，可以简单的通过ord ^ 0x40获取
+         */
+
+        //跨簇，则直接返回到下一个即可
+        if(dir->ldir.LDIR_Ord < LAST_LONG_ENTRY) {
+            attr = ATTR_NUL;
+            return &dir[dir->ldir.LDIR_Ord + 1];
+        }
+
+
+        int size = dir->ldir.LDIR_Ord ^ LAST_LONG_ENTRY;
+
+        /*
+         * 根据前面的分析
+         * 解析到跨cluster的目录项，会出现错误
+         * 则这里不解析即可
+         * 如果检测到异常，则直接终止
+         */
+        for(int i = 1; i < size; ++i) {
+            if(dir[i].ldir.Ord != (size - i) || dir[i].ldir.LDIR_Attr != ATTR_LONG_NAME || dir[i].ldir.LDIR_Type != 0 || dir[i].ldir.LDIR_FstClusLO != 0) {
+                attr = ATTR_NUL;
+                return NULL;
+            }
+        }
+        if(dir[size].sdir.DIR_Attr == LAST_LONG_ENTRY || dir[size].sdir.DIR_NTRes != 0) {
+            attr = ATTR_NUL;
+            return NULL;
+        }
+
+        //解析目录名称，这里默认全英文名称
+        int name_size = 0;
+        for(int i = 0; i < size; ++i) {
+            for(int j = 0; j < 10; j += 2) { name[name_size++] = dir[size - 1 - i].ldir.LDIR_Name1[j]; }
+            for(int j = 0; j < 12; j += 2) { name[name_size++] = dir[size - 1 - i].ldir.LDIR_Name2[j]; }
+            for(int j = 0; j < 4; j += 2) { name[name_size++] = dir[size - 1 - i].ldir.LDIR_Name3[j]; }
+        }
+        name[name_size] = 0;
+
+
+        //解析其余信息
+        if(dir[size].sdir.DIR_Attr == ATTR_DIRECTORY) { *attr = ATTR_DIR; }
+        else { *attr = ATTR_FIL; }
+        *fst_clus = (dir[size].sdir.DIR_FstClusLO) | (((uint64_t)dir[size].sdir.DIR_FstClusHI) << 16);
+        *file_size = dir[size].sdir.DIR_FileSize;
+
+        if(dir[size + 1].sdir.DIR_Name[0] == 0) { return NULL; }
+
+        return &dir[size + 1];
+
+    }else {
+
+        /*
+         * 当前为正常的短目录项
+         * 则解析其名称即可
+         * 
+         * 也就是分别判断前8字符和后3字符即可
+         * 这里需用通过iconv，将其转换为unicode
+         */
+        int name_size = 0, idx = 0;
+        for(; idx < 8 && dir->sdir.DIR_Name[idx] != ' '; ++idx) { name[name_size++] = dir->sdir.DIR_Name[idx]; }
+
+        if(name_size == 8 && dir->sdir.DIR_Name[idx] != ' ') {
+            name[name_size++] = '.';
+            for(; idx < 11 && dir->sdir.DIR_Name[idx] != ' '; ++idx) { name[name_size++] = dir->sdir.DIR_Name[idx]; }
+            name[name_size++] = 0;
+        }
+
+
+        //解析其余信息
+        if(dir[0].sdir.DIR_Attr == ATTR_DIRECTORY) { *attr = ATTR_DIR; }
+        else { *attr = ATTR_FIL; }
+        *fst_clus = (dir[0].sdir.DIR_FstClusLO) | (((uint64_t)dir[0].sdir.DIR_FstClusHI) << 16);
+        *file_size = dir[0].sdir.DIR_FileSize;
+
+        if(dir[1].sdir.DIR_Name[0] == 0) { return NULL; }
+        return &dir[1];
+
+    }
+
+
+    return NULL;
+}
+
 int is_dir(DIR *dir){
   if(dir->sdir.DIR_Name[0] == 0)return 0;//未使用过
 
@@ -171,9 +284,19 @@ int main(int argc, char *argv[]) {
   for(u8 *addr=data_region_addr;addr<end_addr;addr+=bytes_per_clus){
     DIR *clus=(DIR *)addr;
     if(is_dir(clus)){
-      char name[32];
-      get_filename((struct fat32dent*)clus,name);
-      printf("%s\n",name);
+       int ndents = hdr->BPB_BytsPerSec * hdr->BPB_SecPerClus / sizeof(struct fat32dent);
+
+      for (int d = 0; d < ndents; d++) {
+        struct fat32dent *dent = (struct fat32dent *)clus + d;
+        if (dent->DIR_Name[0] == 0x00 ||
+            dent->DIR_Name[0] == 0xe5 ||
+            dent->DIR_Attr & ATTR_HIDDEN) continue;
+
+        char fname[32];
+        get_filename(dent, fname);
+        printf("%s\n",fname);
+
+        
     }
   }
   // TODO: frecov
