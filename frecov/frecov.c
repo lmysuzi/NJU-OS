@@ -209,9 +209,9 @@ int main(int argc, char *argv[]) {
         char path[40]="sha1sum ../../Pictures/";
         strcat(path,fname);
         char buf[100];
-        FILE *fp=fopen(path,"r");
+        FILE *fp=popen(path,"r");
         fscanf(fp,"%s",buf);
-        fclose(fp);
+        pclose(fp);
         printf("%s\n",buf);
 
       } 
