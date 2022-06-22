@@ -201,13 +201,13 @@ int main(int argc, char *argv[]) {
 
         char name[128];
         bzero(name, sizeof(name));
-        struct fat32longdent *l_ptr=(struct fat32longdent *)dent;
-        int size = clus->ldir.LDIR_Ord ^ LAST_LONG_ENTRY;
+        struct fat32longdent *ldir=(struct fat32longdent *)dent;
+        int size = ldir->LDIR_Ord ^ LAST_LONG_ENTRY;
         int name_size = 0;
         for(int i = 0; i < size; ++i) {
-            for(int j = 0; j < 10; j += 2) { name[name_size++] = clus[size - 1 - i].ldir.LDIR_Name1[j]; }
-            for(int j = 0; j < 12; j += 2) { name[name_size++] = clus[size - 1 - i].ldir.LDIR_Name2[j]; }
-            for(int j = 0; j < 4; j += 2) { name[name_size++] = clus[size - 1 - i].ldir.LDIR_Name3[j]; }
+            for(int j = 0; j < 10; j += 2) { name[name_size++] = ldir->LDIR_Name1[j]; }
+            for(int j = 0; j < 12; j += 2) { name[name_size++] = ldir->LDIR_Name2[j]; }
+            for(int j = 0; j < 4; j += 2) { name[name_size++] = ldir->LDIR_Name3[j]; }
         }
         name[name_size] = 0;
         printf("%s\n",name);
