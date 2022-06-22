@@ -224,6 +224,7 @@ int main(int argc, char *argv[]) {
         bmp_t *bmp=(bmp_t *)addr;
 
         if(!isbmp(bmp,dent->DIR_FileSize))continue;
+  printf("fuck\n");
         char picturePath[1000]="/tmp/";
         strcat(picturePath,name);
         FILE *f=fopen(picturePath,"w");
@@ -238,7 +239,6 @@ int main(int argc, char *argv[]) {
         printf("%s ",buf);
         printf("%s\n",name);
 
-  printf("fuck\n");
       } 
         
     }
