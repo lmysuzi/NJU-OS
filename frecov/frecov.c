@@ -198,10 +198,9 @@ int main(int argc, char *argv[]) {
             dent->DIR_Name[0] == 0xe5 ||
             dent->DIR_Attr & ATTR_HIDDEN) continue;
 
-        char name[128];
+        char name[1280];
         bzero(name, sizeof(name));
-        DIR *dir= (DIR*)dent;
-        bzero(name, sizeof(name));
+        DIR *dir= clus;
         int name_size = 0;
          int size = dir->ldir.LDIR_Ord ^ LAST_LONG_ENTRY;
         for(int i = 0; i < size; ++i) {
