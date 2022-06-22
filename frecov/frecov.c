@@ -181,6 +181,7 @@ int main(int argc, char *argv[]) {
 
   // map disk image to memory
   hdr = map_disk(argv[1]);
+  printf("fuck\n");
 
   data_region_addr=((u8 *)hdr+(hdr->BPB_RsvdSecCnt+hdr->BPB_NumFATs*hdr->BPB_FATSz32)*hdr->BPB_BytsPerSec);
   end_addr=((u8*)hdr+file_size);
