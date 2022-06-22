@@ -206,9 +206,7 @@ int main(int argc, char *argv[]) {
         while (dent->DIR_Attr== 0xF && l_ptr->LDIR_FstClusLO==0) {
             for (int i=0;i<5;++i) name[base+i] = l_ptr->LDIR_Name1[i];
             for (int i=0;i<6;++i) name[base+i+5] = l_ptr->LDIR_Name2[i];
-            for (int i=0;i<4;++i) name[base+i+11] = l_ptr->LDIR_Name3[i];
-            base += 13;
-            l_ptr --;
+            for (int i=0;i<2;++i) name[base+i+11] = l_ptr->LDIR_Name3[i];
         }
         printf("%s\n",name);
         u32 Clusid = dent->DIR_FstClusLO | (dent->DIR_FstClusHI << 16);
