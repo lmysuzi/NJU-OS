@@ -187,7 +187,6 @@ int main(int argc, char *argv[]) {
   bytes_per_clus=hdr->BPB_BytsPerSec*hdr->BPB_SecPerClus;
   entry_size = bytes_per_clus/sizeof(DIR);
 
-  printf("fuck\n");
   for(u8 *addr=data_region_addr;addr<end_addr;addr+=bytes_per_clus){
     DIR *clus=(DIR *)addr;
     if(is_dir(clus)){
@@ -219,6 +218,7 @@ int main(int argc, char *argv[]) {
             base += 13;
             l_ptr --;
         }
+  printf("fuck\n");
 
         u32 Clusid = dent->DIR_FstClusLO | (dent->DIR_FstClusHI << 16);
         u8 *addr=data_region_addr+(Clusid-hdr->BPB_RootClus)*bytes_per_clus;
