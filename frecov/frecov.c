@@ -173,6 +173,7 @@ int main(int argc, char *argv[]) {
 
   // map disk image to memory
   hdr = map_disk(argv[1]);
+  printf("%d\n",hdr->BPB_RootClus);
 
   data_region_addr=((u8 *)hdr+(hdr->BPB_RsvdSecCnt+hdr->BPB_NumFATs*hdr->BPB_FATSz32)*hdr->BPB_BytsPerSec);
   end_addr=((u8*)hdr+file_size);
@@ -194,7 +195,6 @@ int main(int argc, char *argv[]) {
         get_filename(dent, fname);
         printf("%s\n",fname);
         u32 dataClus = dent->DIR_FstClusLO | (dent->DIR_FstClusHI << 16);
-        printf("%x\n",dataClus);
       }
         
     }
