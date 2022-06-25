@@ -302,6 +302,7 @@ ucreate(task_t *task, const char *name){
   task->name=name;
   task->status=TASK_READY;
   task->kstack=pmm->alloc(KSTACK_SIZE);
+  task->np=0;
 
   panic_on(task->kstack==NULL,"not enough space for kstack");
 
