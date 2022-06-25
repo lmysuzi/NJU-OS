@@ -63,8 +63,12 @@ syscall(Context *context){
     case SYS_sleep:{
       ret=uproc->sleep(NULL,context->GPR1);
     }break;
+
+    case SYS_uptime:{
+      ret=uproc->uptime(NULL);
+    }break;
       
-    default :printf("%d\n",context->GPRx);panic("wrong event");
+    //default :printf("%d\n",context->GPRx);panic("wrong event");
   }
 
   iset(false);
