@@ -52,6 +52,11 @@ syscall(Context *context){
       ret=uproc->kputc(NULL,(char)context->GPR1);
     }break;
 
+    case SYS_fork:{
+      ret=uproc->fork(NULL);
+      ret=1;
+    }break;
+
     case SYS_exit :{
       ret=uproc->exit(NULL,context->GPR1);
     }break;
@@ -114,6 +119,7 @@ fork(task_t *task){
     memcpy(npa,pa,task_now()->as.pgsize);
     pgmap(child_task,va,npa);
   }
+
   iset(true);
   return 0;
 }
