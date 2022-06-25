@@ -59,6 +59,10 @@ syscall(Context *context){
     case SYS_getpid:{
       ret=uproc->getpid(NULL);
     }break;
+
+    case SYS_sleep:{
+      ret=uproc->sleep(NULL,context->GPR1);
+    }break;
       
     default :printf("%d\n",context->GPRx);panic("wrong event");
   }
