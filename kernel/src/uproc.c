@@ -95,6 +95,26 @@ kputc(task_t *task, char ch){
 
 static int 
 fork(task_t *task){
+  iset(false);
+  task_t *child_task=pmm->alloc(sizeof(task_t));
+  ucreate(child_task,NULL);
+
+  uintptr_t rsp0=child_task->context->rsp0;
+  void *cr3=child_task->context->cr3;
+
+  child_task->context=task_now()->context;
+  child_task->context->rsp0=rsp0;
+  child_task->context->cr3=cr3;
+  child_task->context->GPRx=0;
+
+  for(int i=0;i<task_now()->np;i++){
+    void *va=task_now()->va;
+    void *pa=task_now()->pa;
+    void *npa=pmm->alloc(task_now()->as.pgsize);
+    memcpy(npa,pa,task_now()->as.pgsize);
+    pgmap(child_task,va,npa);
+  }
+  iset(true);
   return 0;
 }
 
