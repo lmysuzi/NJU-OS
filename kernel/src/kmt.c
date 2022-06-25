@@ -163,7 +163,7 @@ static Context *
 kmt_schedule(Event ev,Context *context){
   task_t *temp=task_head;
   while(temp){
-    printf("%d ",temp->id);
+    printf("%d ",temp->status);
     temp=temp->next;
   }printf("\n");
 
