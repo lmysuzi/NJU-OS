@@ -39,6 +39,23 @@ pgfault(Event ev,Context *context){
   kmt->spin_unlock(&pglock);
 }
 
+
+int
+syscall(Context *context){
+  int ret=0;
+  iset(true);
+
+  printf("%d\n",context->GPRx);
+
+  switch(context->GPRx){
+    case SYS_kputc:break;
+      
+  }
+
+  iset(false);
+  return ret;
+}
+
 static void 
 init(){
   vme_init((pgalloc_type)pmm->alloc,pmm->free);
