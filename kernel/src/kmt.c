@@ -132,7 +132,7 @@ static void inline
 task_delete(task_t *task){
   //panic_on(lock_for(task).flag==0,"wrong lock");
   
-
+  ids[task->id]=0;
   task_total--;
   if(task->next)task->next->prev=task->prev;
   if(task->prev)task->prev->next=task->next;
