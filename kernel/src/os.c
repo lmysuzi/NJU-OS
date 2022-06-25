@@ -26,15 +26,15 @@ void g(){
   while(1)yield();
 }*/
 
-/*void time(){
+void time(){
   uproc->sleep(task_now(),5);
   while(1){
     //printf("%d\n",uproc->uptime(NULL));
-    uproc->kputc(NULL,'a');
+    uproc->getpid(NULL);
     uproc->sleep(NULL,1);
     yield();
   }
-}*/
+}
 
 static void os_init() {
   irq_head=NULL;kmt->spin_init(&irq_lock,"irq_lock");

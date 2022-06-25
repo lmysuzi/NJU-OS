@@ -13,6 +13,7 @@ struct task{
   int id;
   int status;
   const char *name;
+  AddrSpace as;
   Context *context;
   struct task *next,*prev;
   uint8_t *kstack;

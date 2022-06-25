@@ -58,7 +58,7 @@ mmap(task_t *task, void *addr, int length, int prot, int flags){
 
 static int 
 getpid(task_t *task){
-  return task->id;
+  return task_now()->id;
 }
 
 

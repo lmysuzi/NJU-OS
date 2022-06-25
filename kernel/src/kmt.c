@@ -5,6 +5,7 @@
 #define INT_MAX 2147483647
 #define INT_MIN (-INT_MAX-1)
 #define MAX_CPU 8
+#define MAX_TASK 32678
 
 #define mark printf("fuck\n")
 
@@ -29,6 +30,7 @@ static int task_nums[MAX_CPU];
 static task_t *currents[MAX_CPU];
 static task_t *idles[MAX_CPU];
 static task_t *lasts[MAX_CPU];
+static task_t *tasks[MAX_TASK];
 static task_t *task_head;
 static spinlock_t task_lock;
 static int task_total=0;
@@ -36,14 +38,12 @@ static int task_total=0;
 #define idle idles[cpu_current()]
 #define last lasts[cpu_current()]
 
-static bool ids[32768];
-static int id_now=1;
 
 static sleep_tasks_t *task_sleep;
 static spinlock_t sleep_lock;
 
 enum{
-  TASK_READY=1,TASK_RUNNING,TASK_SLEEP,TASK_READY_TO_WAKE,TASK_WAKED,
+  TASK_READY=1,TASK_RUNNING,TASK_SLEEP,TASK_READY_TO_WAKE,TASK_WAKED,TASK_DEAD,
 };
 
 static void spin_lock(spinlock_t *lk);
@@ -112,13 +112,10 @@ kmt_task_wake(Event ev,Context *context){
 static void inline 
 task_insert(task_t *task){
   panic_on(task_lock.flag==0,"wrong lock");
-  for(int i=0;i<32767;i++){
-    if((id_now+i)%32768&&!ids[(i+id_now)%32768]){
-      id_now=(id_now+i)%32768;
-      ids[id_now]=1;
-      task->id=id_now;
-      id_now++;
-      break;
+  for(int i=1;i<MAX_TASK;i++){
+    if(tasks[i]==NULL||tasks[i]->status==TASK_DEAD){
+      tasks[i]=task;
+      task->id=i;
     }
   }
   task_total++;
@@ -132,11 +129,11 @@ static void inline
 task_delete(task_t *task){
   //panic_on(lock_for(task).flag==0,"wrong lock");
   
-  ids[task->id]=0;
   task_total--;
   if(task->next)task->next->prev=task->prev;
   if(task->prev)task->prev->next=task->next;
   if(task_head==task)task_head=task->next;
+  tasks[task->id]=NULL;
   pmm->free(task->kstack);
   pmm->free(task);
 }
