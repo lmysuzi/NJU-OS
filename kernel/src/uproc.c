@@ -64,7 +64,7 @@ getpid(task_t *task){
 static int 
 sleep(task_t *task, int seconds){
   int us=io_read(AM_TIMER_UPTIME).us+seconds*1000000;
-  sleep_insert(task,us);
+  sleep_insert(task_now(),us);
   yield();
   return 0;
 }

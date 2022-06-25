@@ -31,7 +31,7 @@ void time(){
   while(1){
     //printf("%d\n",uproc->uptime(NULL));
     uproc->kputc(NULL,'a');
-    uproc->sleep(task_now(),1);
+    uproc->sleep(NULL,1);
     yield();
   }
 }
