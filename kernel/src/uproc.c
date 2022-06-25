@@ -45,7 +45,7 @@ init(){
 
   kmt->init(&pglock);
 
-  ucreate(pmm->alloc(sizeof(task_t)),"u");
+  //ucreate(pmm->alloc(sizeof(task_t)),"u");
 
 }
 
