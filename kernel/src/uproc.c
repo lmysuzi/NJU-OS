@@ -13,7 +13,7 @@ typedef void *(*pgalloc_type)(int);
 static void 
 init(){
   vme_init((pgalloc_type)pmm->alloc,pmm->free);
-  printf("%x\n",_init[0]);
+  printf("%d\n",_init_len);
 
 }
 
