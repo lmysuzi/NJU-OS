@@ -30,7 +30,7 @@ void time(){
   uproc->sleep(task_now(),5);
   while(1){
     //printf("%d\n",uproc->uptime(NULL));
-    uproc->getpid(NULL);
+    printf("%d\n",uproc->getpid(NULL));
     uproc->sleep(NULL,1);
     yield();
   }
