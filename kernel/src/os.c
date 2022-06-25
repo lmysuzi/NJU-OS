@@ -46,7 +46,7 @@ static void os_init() {
   kmt->sem_init(&fill,  "fill",  0);
   kmt->create(pmm->alloc(sizeof(task_t)),"fuck",f,NULL);
   kmt->create(pmm->alloc(sizeof(task_t)),"fuck",g,NULL);*/
- // kmt->create(pmm->alloc(sizeof(task_t)),"time",time,NULL);
+  kmt->create(pmm->alloc(sizeof(task_t)),"time",time,NULL);
 }
 
 
