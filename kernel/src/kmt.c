@@ -322,6 +322,8 @@ ucreate(task_t *task, const char *name){
   task_insert(task);
   spin_unlock(&task_lock);
 
+  printf("%s\n",task_head->name);
+
   return task;
 }
 
