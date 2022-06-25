@@ -116,6 +116,7 @@ task_insert(task_t *task){
     if(tasks[i]==NULL||tasks[i]->status==TASK_DEAD){
       tasks[i]=task;
       task->id=i;
+      break;
     }
   }
   task_total++;
