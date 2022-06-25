@@ -51,10 +51,16 @@ syscall(Context *context){
     case SYS_kputc:{
       ret=uproc->kputc(NULL,context->GPR1);
     }break;
+
     case SYS_exit :{
       ret=uproc->exit(NULL,context->GPR1);
     }break;
+
+    case SYS_getpid:{
+      ret=uproc->getpid(NULL);
+    }break;
       
+    default :panic("wrong event");
   }
 
   iset(false);
