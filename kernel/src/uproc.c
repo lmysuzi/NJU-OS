@@ -43,9 +43,9 @@ static void
 init(){
   vme_init((pgalloc_type)pmm->alloc,pmm->free);
 
-  kmt->init(&pglock);
+  kmt->spin_init(&pglock,"pglock");
 
-  //ucreate(pmm->alloc(sizeof(task_t)),"u");
+  ucreate(pmm->alloc(sizeof(task_t)),"u");
 
 }
 
