@@ -264,6 +264,8 @@ init(){
   spin_init(&sleep_lock,"sleep_lock");
   task_head=NULL;task_sleep=NULL;
 
+  for(int i=0;i<MAX_TASK;i++)tasks[i]=NULL;
+
   for(int cpu=0;cpu<cpu_count();cpu++){
     currents[cpu]=NULL;
 
