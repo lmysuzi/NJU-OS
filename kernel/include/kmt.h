@@ -5,6 +5,10 @@
 
 #define KSTACK_SIZE 4096
 
+enum{
+  TASK_READY=1,TASK_RUNNING,TASK_SLEEP,TASK_READY_TO_WAKE,TASK_WAKED,TASK_DEAD,
+};
+
 void sleep_insert(task_t *task,uint64_t end_time);
 task_t *task_now();
 task_t *ucreate(task_t *task, const char *name);

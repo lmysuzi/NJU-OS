@@ -42,9 +42,6 @@ static int task_total=0;
 static sleep_tasks_t *task_sleep;
 static spinlock_t sleep_lock;
 
-enum{
-  TASK_READY=1,TASK_RUNNING,TASK_SLEEP,TASK_READY_TO_WAKE,TASK_WAKED,TASK_DEAD,
-};
 
 static void spin_lock(spinlock_t *lk);
 static void spin_unlock(spinlock_t *lk);

@@ -49,6 +49,9 @@ syscall(Context *context){
 
   switch(context->GPRx){
     case SYS_kputc:break;
+    case SYS_exit :{
+
+    }
       
   }
 
@@ -88,6 +91,7 @@ wait(task_t *task, int *status){
 
 static int
 exit(task_t *task, int status){
+  task_now()->status=TASK_DEAD;
   return 0;
 }
 
