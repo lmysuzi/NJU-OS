@@ -301,7 +301,6 @@ ucreate(task_t *task, const char *name){
   panic_on(task==NULL,"task is NULL");
 
 
-  mark;
   task->name=name;
   task->status=TASK_READY;
   task->kstack=pmm->alloc(KSTACK_SIZE);

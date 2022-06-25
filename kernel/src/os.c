@@ -70,7 +70,6 @@ static Context *os_trap(Event ev, Context *context){
 
   switch(ev.event){
     case EVENT_PAGEFAULT:{
-      printf("shit\n");
       pgfault(ev,context);
       break;
     }
