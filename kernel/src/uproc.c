@@ -20,7 +20,7 @@ pgmap(task_t *task,void *va, void *pa){
   task->np++;
 
   map(&task->as,va,pa,MMAP_READ|MMAP_WRITE);
-
+  printf("map: %p -> %p\n",va,pa);
 }
 
 
