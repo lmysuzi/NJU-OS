@@ -19,7 +19,6 @@ pgmap(task_t *task,void *va, void *pa){
   task->va[task->np]=va;
   task->np++;
 
-  printf("np=%d\n",task_now()->np);
   printf("map: %p -> %p\n",va,pa);
   map(&task->as,va,pa,MMAP_READ|MMAP_WRITE);
 }
@@ -113,10 +112,9 @@ fork(task_t *task){
   child_task->context->cr3=cr3;
   child_task->context->GPRx=0;
 
-  printf("np=%d\n",task_now()->np);
   for(int i=0;i<task_now()->np;i++){
-    void *va=task_now()->va;
-    void *pa=task_now()->pa;
+    void *va=task_now()->va[i];
+    void *pa=task_now()->pa[i];
     void *npa=pmm->alloc(task_now()->as.pgsize);
     memcpy(npa,pa,task_now()->as.pgsize);
     pgmap(child_task,va,npa);
