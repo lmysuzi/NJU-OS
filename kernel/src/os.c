@@ -1,6 +1,7 @@
 #include <common.h>
 #include <os.h>
 #include <kmt.h>
+#include <uproc.h>
 
 static irq_t *irq_head;
 static spinlock_t irq_lock;
@@ -45,12 +46,7 @@ static void os_init() {
   kmt->sem_init(&fill,  "fill",  0);
   kmt->create(pmm->alloc(sizeof(task_t)),"fuck",f,NULL);
   kmt->create(pmm->alloc(sizeof(task_t)),"fuck",g,NULL);*/
-  kmt->create(pmm->alloc(sizeof(task_t)),"time",time,NULL);
-  kmt->create(pmm->alloc(sizeof(task_t)),"time",time,NULL);
-  kmt->create(pmm->alloc(sizeof(task_t)),"time",time,NULL);
-  kmt->create(pmm->alloc(sizeof(task_t)),"time",time,NULL);
-  kmt->create(pmm->alloc(sizeof(task_t)),"time",time,NULL);
-  kmt->create(pmm->alloc(sizeof(task_t)),"time",time,NULL);
+ // kmt->create(pmm->alloc(sizeof(task_t)),"time",time,NULL);
 }
 
 
@@ -70,6 +66,24 @@ static Context *os_trap(Event ev, Context *context){
   //panic_on(ienabled(),"wrong status");
   //panic_on(context==NULL,"context is null");
   iset(false);
+
+  switch(ev.event){
+    case EVENT_PAGEFAULT:{
+      printf("shit\n");
+      pgfault(ev,context);
+      break;
+    }
+    case EVENT_SYSCALL:{
+
+      printf("ssshit\n");
+      break;
+    }
+    case EVENT_ERROR:{
+      assert(0);break;
+    }
+    default: break;
+  }
+
   Context *next=NULL;
   //kmt->spin_lock(&irq_lock);
   irq_t *irq=irq_head;

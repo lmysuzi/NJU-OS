@@ -12,6 +12,8 @@ typedef struct irq{
 struct task{
   int id;
   int status;
+  int np;
+  void *va[60],*pa[60];
   const char *name;
   AddrSpace as;
   Context *context;

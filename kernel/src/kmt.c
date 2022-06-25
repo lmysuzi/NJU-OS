@@ -296,6 +296,35 @@ init(){
     
 
 
+task_t *
+ucreate(task_t *task, const char *name){
+  panic_on(task==NULL,"task is NULL");
+
+
+  task->name=name;
+  task->status=TASK_READY;
+  task->kstack=pmm->alloc(KSTACK_SIZE);
+
+  panic_on(task->kstack==NULL,"not enough space for kstack");
+
+  Area kstack={
+    .start=(void *)task->kstack,
+    .end=((void *)task->kstack)+KSTACK_SIZE,
+  };
+  protect(&task->as);
+
+
+  task->context=ucontext(&task->as,kstack,task->as.area.start);
+
+
+  spin_lock(&task_lock);
+  task_insert(task);
+  spin_unlock(&task_lock);
+
+  return task;
+}
+
+
 
 static int 
 create(task_t *task, const char *name, void (*entry)(void *arg), void *arg){

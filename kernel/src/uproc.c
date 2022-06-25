@@ -2,6 +2,7 @@
 #include <syscall.h>
 
 #include <kmt.h>
+#include <uproc.h>
 
 #include "initcode.inc"
 
@@ -10,9 +11,41 @@
 typedef void *(*pgalloc_type)(int);
 
 
+spinlock_t pglock;
+
+static void
+pgmap(task_t *task,void *va, void *pa){
+  task->pa[task->np]=pa;
+  task->va[task->np]=va;
+  task->np++;
+
+  map(&task->as,va,pa,MMAP_READ|MMAP_WRITE);
+
+}
+
+
+void
+pgfault(Event ev,Context *context){
+  kmt->spin_lock(&pglock);
+
+  AddrSpace *as=&(task_now()->as);
+  void *pa=pmm->alloc(as->pgsize);
+  void *va=(void*)(ev.ref&~(as->pgsize-1L));
+
+  if(va==as->area.start)memcpy(pa,_init,_init_len);
+
+  pgmap(task_now(),va,pa);
+
+  kmt->spin_unlock(&pglock);
+}
+
 static void 
 init(){
   vme_init((pgalloc_type)pmm->alloc,pmm->free);
+
+  kmt->init(&pglock);
+
+  ucreate(pmm->alloc(sizeof(task_t)),NULL);
 
 }
 
