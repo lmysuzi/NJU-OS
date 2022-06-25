@@ -65,6 +65,7 @@ static void os_run() {
 static Context *os_trap(Event ev, Context *context){
   //panic_on(ienabled(),"wrong status");
   //panic_on(context==NULL,"context is null");
+
   iset(false);
 
   switch(ev.event){
@@ -88,6 +89,7 @@ static Context *os_trap(Event ev, Context *context){
   //kmt->spin_lock(&irq_lock);
   irq_t *irq=irq_head;
   while(irq!=NULL){
+    printf("1");
     if(irq->event==EVENT_NULL||irq->event==ev.event){
       Context *r=irq->handler(ev,context);
       panic_on(r&&next, "returning multiple contexts");
