@@ -80,6 +80,7 @@ init(){
 
 static int 
 kputc(task_t *task, char ch){
+  printf("fuck\n");
   putch(ch);
   return 0;
 }
