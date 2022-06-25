@@ -60,7 +60,7 @@ syscall(Context *context){
       ret=uproc->getpid(NULL);
     }break;
       
-    default :panic("wrong event");
+    default :printf("%d\n",context->GPRx);panic("wrong event");
   }
 
   iset(false);
