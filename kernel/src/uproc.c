@@ -112,6 +112,7 @@ fork(task_t *task){
   child_task->context->cr3=cr3;
   child_task->context->GPRx=0;
 
+  printf("np=%d\n",task_now()->np);
   for(int i=0;i<task_now()->np;i++){
     void *va=task_now()->va;
     void *pa=task_now()->pa;
