@@ -74,9 +74,7 @@ static Context *os_trap(Event ev, Context *context){
       break;
     }
     case EVENT_SYSCALL:{
-
       task_now()->context->GPRx=syscall(context);
-      printf("ssshit\n");
       break;
     }
     case EVENT_ERROR:{
