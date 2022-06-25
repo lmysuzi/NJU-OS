@@ -48,11 +48,12 @@ syscall(Context *context){
   printf("%d\n",context->GPRx);
 
   switch(context->GPRx){
-    case SYS_kputc:break;
+    case SYS_kputc:{
+      ret=uproc->kputc(NULL,context->GPR1);
+    }break;
     case SYS_exit :{
-      ret=uproc->exit(NULL,-1);
-
-    }
+      ret=uproc->exit(NULL,context->GPR1);
+    }break;
       
   }
 
