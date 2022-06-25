@@ -45,7 +45,7 @@ syscall(Context *context){
   int ret=0;
   iset(true);
 
-  printf("%d\n",context->GPRx);
+  //printf("%d\n",context->GPRx);
 
   switch(context->GPRx){
     case SYS_kputc:{
