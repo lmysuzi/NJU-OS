@@ -252,7 +252,7 @@ spin_unlock(spinlock_t *lk){
 
 static void 
 idle_task(){
-  while(1){yield();}
+  while(1){}
   panic("should not reach");
 }
 
