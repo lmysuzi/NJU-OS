@@ -78,7 +78,7 @@ static Context *os_trap(Event ev, Context *context){
     printf("en");
     yield();
   }
-  if(con==context)printf("yes\n");
+ // if(con==context)printf("yes\n");*/
   
   //iset(false);
  /* while(1){
@@ -107,7 +107,7 @@ static Context *os_trap(Event ev, Context *context){
     default: break;
   }*/
 
- /* Context *next=NULL;
+  Context *next=NULL;
   //kmt->spin_lock(&irq_lock);
   irq_t *irq=irq_head;
   while(irq!=NULL){
@@ -119,9 +119,8 @@ static Context *os_trap(Event ev, Context *context){
     irq=irq->next;
   }
   //kmt->spin_unlock(&irq_lock);
-  panic_on(!next, "returning NULL context");*/
-  //return next;
-  return con;
+  panic_on(!next, "returning NULL context");
+  return next;
 }
 
 

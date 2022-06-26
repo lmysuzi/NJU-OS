@@ -141,6 +141,7 @@ static void teardown(task_t *task);
 
 static Context *
 kmt_context_save(Event ev,Context *context){
+  if(ev.event==EVENT_YIELD)return NULL;
   if(!current)current=idle;
   else current->context=context;
 
