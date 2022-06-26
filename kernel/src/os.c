@@ -63,7 +63,6 @@ static void os_run() {
 
 
 static int test=0;
-Context *con;
 
 static Context *os_trap(Event ev, Context *context){
   //panic_on(ienabled(),"wrong status");
@@ -76,8 +75,11 @@ static Context *os_trap(Event ev, Context *context){
     yield();
   }
   
-  con=context;
-  iset(false);
+  //iset(false);
+  while(1){
+    printf("fuci");
+    yield();
+  }
 
  /* irq_t *temp=irq_head;
   while(temp){
@@ -114,7 +116,7 @@ static Context *os_trap(Event ev, Context *context){
   //kmt->spin_unlock(&irq_lock);
   panic_on(!next, "returning NULL context");*/
   //return next;
-  return con;
+  return context;
 }
 
 
