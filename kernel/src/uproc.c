@@ -95,7 +95,7 @@ uproc_syscall(Event ev,Context *context){
 
 static Context *
 uproc_error(Event ev,Context *context){
-  //assert(0);
+  assert(0);
   return NULL;
 }
 
