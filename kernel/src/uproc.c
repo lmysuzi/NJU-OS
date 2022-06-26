@@ -139,7 +139,8 @@ fork(task_t *task){
     pgmap(child_task,va,npa);
   }
 
-  child_task->context=task_now()->context;
+  memcpy((void*)child_task->context,(void*)task_now()->context,sizeof(Context));
+  //child_task->context=task_now()->context;
   child_task->context->rsp0=rsp0;
   child_task->context->cr3=cr3;
   child_task->context->GPRx=0;
