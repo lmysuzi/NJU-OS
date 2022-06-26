@@ -45,7 +45,7 @@ pgfault(Event ev,Context *context){
 int
 syscall(Context *context){
   int ret=0;
-  iset(true);
+  //iset(true);
 
   //printf("%d\n",context->GPRx);
 
@@ -81,7 +81,7 @@ syscall(Context *context){
     //default :printf("%d\n",context->GPRx);panic("wrong event");
   }
 
-  iset(false);
+  //iset(false);
   return ret;
 }
 

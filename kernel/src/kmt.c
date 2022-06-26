@@ -95,7 +95,6 @@ kmt_task_wake(Event ev,Context *context){
     sleep_tasks_t *temp=node->next;
     if(io_read(AM_TIMER_UPTIME).us>=node->time){
       sleep_delete(node);
-      mark;
     }
     node=temp;
   }
