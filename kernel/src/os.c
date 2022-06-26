@@ -68,6 +68,12 @@ static Context *os_trap(Event ev, Context *context){
 
   iset(false);
 
+  irq_t *temp=irq_head;
+  while(temp){
+    printf("%d ",temp->event);
+    temp=temp->next;
+  }printf("\n");
+
   /*switch(ev.event){
     case EVENT_PAGEFAULT:{
       pgfault(ev,context);
