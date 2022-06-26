@@ -24,7 +24,7 @@ pgmap(task_t *task,void *va, void *pa){
 }
 
 
-static Context*
+Context*
 pgfault(Event ev,Context *context){
   kmt->spin_lock(&pglock);
 
@@ -86,7 +86,7 @@ syscall(Context *context){
 }
 
 
-static Context *
+/*static Context *
 uproc_syscall(Event ev,Context *context){
   task_now()->context->GPRx=syscall(context);
   return NULL;
@@ -97,7 +97,7 @@ static Context *
 uproc_error(Event ev,Context *context){
   assert(0);
   return NULL;
-}
+}*/
 
 static void 
 init(){
@@ -105,9 +105,9 @@ init(){
 
   kmt->spin_init(&pglock,"pglock");
 
-  os->on_irq(INT_MIN+1,EVENT_ERROR,uproc_error);
+  /*os->on_irq(INT_MIN+1,EVENT_ERROR,uproc_error);
   os->on_irq(INT_MIN+2,EVENT_PAGEFAULT,pgfault);
-  os->on_irq(INT_MIN+3,EVENT_SYSCALL,uproc_syscall);
+  os->on_irq(INT_MIN+3,EVENT_SYSCALL,uproc_syscall);*/
 
   ucreate(pmm->alloc(sizeof(task_t)),"u",0);
 
