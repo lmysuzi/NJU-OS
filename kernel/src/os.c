@@ -61,6 +61,8 @@ static void os_run() {
 }
 
 
+static int test=0;
+Context *con;
 
 static Context *os_trap(Event ev, Context *context){
   //panic_on(ienabled(),"wrong status");
@@ -68,6 +70,9 @@ static Context *os_trap(Event ev, Context *context){
 
   //printf("%d\n",ev.event);
   //yield();
+  if(!test)test++,yield();
+  
+  con=context;
   iset(false);
 
  /* irq_t *temp=irq_head;
@@ -91,7 +96,7 @@ static Context *os_trap(Event ev, Context *context){
     default: break;
   }*/
 
-  Context *next=NULL;
+ /* Context *next=NULL;
   //kmt->spin_lock(&irq_lock);
   irq_t *irq=irq_head;
   while(irq!=NULL){
@@ -103,8 +108,9 @@ static Context *os_trap(Event ev, Context *context){
     irq=irq->next;
   }
   //kmt->spin_unlock(&irq_lock);
-  panic_on(!next, "returning NULL context");
-  return next;
+  panic_on(!next, "returning NULL context");*/
+  //return next;
+  return con;
 }
 
 
