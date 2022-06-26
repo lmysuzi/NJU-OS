@@ -102,7 +102,6 @@ static Context *os_trap(Event ev, Context *context){
   }
   //kmt->spin_unlock(&irq_lock);
   panic_on(!next, "returning NULL context");
-  iset(true);
   return next;
 }
 
