@@ -71,10 +71,10 @@ static Context *os_trap(Event ev, Context *context){
   //printf("%d\n",ev.event);
 
   printf("fuck%d\n",ev.event);
-  con=context;
   //yield();
   if(!test){
     test++;
+    con=context;
     printf("en");
     yield();
   }
