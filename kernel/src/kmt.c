@@ -302,8 +302,8 @@ ucreate(task_t *task, const char *name,int pid){
   task->np=0;
   task->pid=pid;
 
-  if(pid==0)task->status=TASK_RUNNING;
-  else task->status=TASK_READY;
+  if(pid==0)task->status=TASK_READY;
+  else task->status=TASK_RUNNING;
 
   panic_on(task->kstack==NULL,"not enough space for kstack");
 
