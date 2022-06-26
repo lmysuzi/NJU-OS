@@ -71,6 +71,7 @@ syscall(Context *context){
     }break;
 
     case SYS_sleep:{
+      printf("shit\n");
       ret=uproc->sleep(NULL,context->GPR1);
     }break;
 
