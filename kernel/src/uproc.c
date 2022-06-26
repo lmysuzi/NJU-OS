@@ -56,6 +56,7 @@ syscall(Context *context){
 
     case SYS_fork:{
       ret=uproc->fork(NULL);
+      ret=0;
     }break;
 
     case SYS_exit :{
