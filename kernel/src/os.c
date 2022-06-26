@@ -41,6 +41,7 @@ static void os_init() {
   pmm->init();
   kmt->init();
   uproc->init();
+  while(1)printf("a");
   //dev->init();
   /*kmt->sem_init(&empty, "empty", 5);  // 缓冲区大小为 5
   kmt->sem_init(&fill,  "fill",  0);
