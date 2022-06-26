@@ -72,6 +72,7 @@ static Context *os_trap(Event ev, Context *context){
   //yield();
   if(!test){
     test++;
+    printf("en");
     yield();
   }
   con=context;
