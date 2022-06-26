@@ -66,8 +66,8 @@ static Context *os_trap(Event ev, Context *context){
   //panic_on(ienabled(),"wrong status");
   //panic_on(context==NULL,"context is null");
 
-  printf("%d\n",ev.event);
-  yield();
+  //printf("%d\n",ev.event);
+  //yield();
   iset(false);
 
  /* irq_t *temp=irq_head;
