@@ -70,7 +70,7 @@ static Context *os_trap(Event ev, Context *context){
 
   irq_t *temp=irq_head;
   while(temp){
-    printf("%d ",temp->event);
+    printf("%d ",temp->seq);
     temp=temp->next;
   }printf("\n");
 
