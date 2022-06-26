@@ -57,7 +57,7 @@ static void os_run() {
   }*/
 
   iset(true);
-  while (1)printf("a");
+  while (1);//printf("a");
 }
 
 
@@ -69,13 +69,15 @@ static Context *os_trap(Event ev, Context *context){
   //panic_on(context==NULL,"context is null");
 
   //printf("%d\n",ev.event);
+
+  con=context;
   //yield();
   if(!test){
     test++;
     printf("en");
     yield();
   }
-  con=context;
+  if(con==context)printf("yes\n");
   
   //iset(false);
  /* while(1){
