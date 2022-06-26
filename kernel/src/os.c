@@ -71,7 +71,10 @@ static Context *os_trap(Event ev, Context *context){
 
   //printf("%d\n",ev.event);
   //yield();
-  if(!test)test++,yield();
+  if(!test){
+    test++;
+    yield();
+  }
   
   con=context;
   iset(false);
