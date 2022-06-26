@@ -300,6 +300,7 @@ ucreate(task_t *task, const char *name,int pid){
   task->name=name;
   task->kstack=pmm->alloc(KSTACK_SIZE);
   task->np=0;
+  task->child_count=0;
   task->pid=pid;
 
  /* if(pid==0)task->status=TASK_READY;
@@ -337,6 +338,7 @@ create(task_t *task, const char *name, void (*entry)(void *arg), void *arg){
   task->status=TASK_READY;
   task->kstack=pmm->alloc(KSTACK_SIZE);
   task->np=0;
+  task->child_count=0;
   panic_on(task->kstack==NULL,"not enough space for kstack");
 
   Area kstack={
