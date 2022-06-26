@@ -27,14 +27,14 @@ void g(){
   while(1)yield();
 }*/
 
-void time(){
+/*void time(){
   while(1){
     //printf("%d\n",uproc->uptime(NULL));
     printf("%d\n",uproc->getpid(NULL));
     uproc->sleep(NULL,1);
     yield();
   }
-}
+}*/
 
 static void os_init() {
   irq_head=NULL;kmt->spin_init(&irq_lock,"irq_lock");

@@ -88,7 +88,7 @@ syscall(Context *context){
 
 static Context *
 uproc_syscall(Event ev,Context *context){
-  context->GPRx=syscall(context);
+  task_now()->context->GPRx=syscall(context);
   return NULL;
 }
 
@@ -147,7 +147,7 @@ fork(task_t *task){
   child_task->np=task_now()->np;
 
  // panic_on(child_task->status!=TASK_RUNNING,"wrong child status");
-  //child_task->status=TASK_READY;
+  child_task->status=TASK_READY;
 
   iset(true);
   return child_task->id;
