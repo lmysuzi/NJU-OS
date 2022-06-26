@@ -109,7 +109,7 @@ init(){
   os->on_irq(INT_MIN+2,EVENT_PAGEFAULT,pgfault);
   os->on_irq(INT_MIN+3,EVENT_SYSCALL,uproc_syscall);
 
-  ucreate(pmm->alloc(sizeof(task_t)),"u");
+  ucreate(pmm->alloc(sizeof(task_t)),"u",0);
 
 }
 
@@ -125,7 +125,7 @@ static int
 fork(task_t *task){
   iset(false);
   task_t *child_task=pmm->alloc(sizeof(task_t));
-  ucreate(child_task,NULL);
+  ucreate(child_task,NULL,task_now()->id);
 
   uintptr_t rsp0=child_task->context->rsp0;
   void *cr3=child_task->context->cr3;
@@ -144,7 +144,12 @@ fork(task_t *task){
   child_task->context->rsp0=rsp0;
   child_task->context->cr3=cr3;
   child_task->context->GPRx=0;
-  //iset(true);
+  child_task->np=task_now()->np;
+
+  panic_on(child_task->status!=TASK_RUNNING,"wrong child status");
+  child_task->status=TASK_READY;
+
+  iset(true);
   return child_task->id;
 }
 

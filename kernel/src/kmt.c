@@ -2,8 +2,6 @@
 #include <kmt.h>
 #include <os.h>
 
-#define INT_MAX 2147483647
-#define INT_MIN (-INT_MAX-1)
 #define MAX_CPU 8
 #define MAX_TASK 32678
 
@@ -295,14 +293,17 @@ init(){
 
 
 task_t *
-ucreate(task_t *task, const char *name){
+ucreate(task_t *task, const char *name,int pid){
   panic_on(task==NULL,"task is NULL");
 
 
   task->name=name;
-  task->status=TASK_READY;
   task->kstack=pmm->alloc(KSTACK_SIZE);
   task->np=0;
+  task->pid=pid;
+
+  if(pid==0)task->status=TASK_RUNNING;
+  else task->status=TASK_READY;
 
   panic_on(task->kstack==NULL,"not enough space for kstack");
 
