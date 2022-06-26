@@ -190,8 +190,7 @@ static int
 sleep(task_t *task, int seconds){
   int us=io_read(AM_TIMER_UPTIME).us+seconds*1000000;
   sleep_insert(task_now(),us);
-  yield();
-      printf("shit\n");
+  //yield();
   return 0;
 }
 
