@@ -61,18 +61,16 @@ static void os_run() {
 }
 
 
-static int test=0;
-Context *con;
 
 static Context *os_trap(Event ev, Context *context){
   //panic_on(ienabled(),"wrong status");
   //panic_on(context==NULL,"context is null");
 
-  printf("%d\n",ev.event);
+  //printf("%d\n",ev.event);
 
  // printf("fuck%d\n",ev.event);
   //yield();
-  if(!test){
+  /*if(!test){
     test++;
     con=context;
     printf("en");
