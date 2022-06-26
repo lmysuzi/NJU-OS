@@ -130,6 +130,12 @@ fork(task_t *task){
   uintptr_t rsp0=child_task->context->rsp0;
   void *cr3=child_task->context->cr3;
 
+  //memcpy((void*)child_task->context,(void*)task_now()->context,sizeof(Context));
+  child_task->context[0]=*(task_now()->context);
+  child_task->context->rsp0=rsp0;
+  child_task->context->cr3=cr3;
+  child_task->context->GPRx=0;
+  //child_task->np=task_now()->np;
 
   for(int i=0;i<task_now()->np;i++){
     void *va=task_now()->va[i];
@@ -139,15 +145,7 @@ fork(task_t *task){
     pgmap(child_task,va,npa);
   }
 
-  memcpy((void*)child_task->context,(void*)task_now()->context,sizeof(Context));
-  //child_task->context=task_now()->context;
-  child_task->context->rsp0=rsp0;
-  child_task->context->cr3=cr3;
-  child_task->context->GPRx=0;
-  child_task->np=task_now()->np;
-
  // panic_on(child_task->status!=TASK_RUNNING,"wrong child status");
-  child_task->status=TASK_READY;
 
   //iset(true);
   return child_task->id;
