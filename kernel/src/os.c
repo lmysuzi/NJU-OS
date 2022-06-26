@@ -70,6 +70,7 @@ static Context *os_trap(Event ev, Context *context){
 
   //printf("%d\n",ev.event);
 
+  printf("fuck\n");
   con=context;
   //yield();
   if(!test){
