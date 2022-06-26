@@ -65,6 +65,7 @@ sleep_insert(task_t *task,uint64_t end_time){
   task_sleep=node;
   task->status=TASK_SLEEP;
   spin_unlock(&sleep_lock);
+  mark;
 }
 
 
