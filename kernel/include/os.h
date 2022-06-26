@@ -10,7 +10,8 @@ typedef struct irq{
 }irq_t;
 
 struct task{
-  int id;
+  int id,pid;
+  int child_count;
   int status;
   int np;
   void *va[60],*pa[60];
