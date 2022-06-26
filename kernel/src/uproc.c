@@ -54,7 +54,6 @@ syscall(Context *context){
 
     case SYS_fork:{
       ret=uproc->fork(NULL);
-      ret=1;
     }break;
 
     case SYS_exit :{
@@ -121,7 +120,7 @@ fork(task_t *task){
   }
 
   iset(true);
-  return 0;
+  return child_task->id;
 }
 
 
