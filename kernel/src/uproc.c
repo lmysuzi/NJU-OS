@@ -143,7 +143,7 @@ fork(task_t *task){
     pgmap(child_task,va,npa);
   }
 
-  iset(true);
+  //iset(true);
   return child_task->id;
 }
 
