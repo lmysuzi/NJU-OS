@@ -41,7 +41,6 @@ static void os_init() {
   pmm->init();
   kmt->init();
   uproc->init();
-  while(1)printf("a");
   //dev->init();
   /*kmt->sem_init(&empty, "empty", 5);  // 缓冲区大小为 5
   kmt->sem_init(&fill,  "fill",  0);
@@ -58,7 +57,7 @@ static void os_run() {
   }*/
 
   iset(true);
-  while (1);
+  while (1)printf("a");
 }
 
 
@@ -76,10 +75,10 @@ static Context *os_trap(Event ev, Context *context){
   }
   
   //iset(false);
-  while(1){
+ /* while(1){
     printf("fuci");
     yield();
-  }
+  }*/
 
  /* irq_t *temp=irq_head;
   while(temp){
