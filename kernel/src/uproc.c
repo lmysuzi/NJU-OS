@@ -157,7 +157,6 @@ wait(task_t *task, int *status){
 static int
 exit(task_t *task, int status){
   task_now()->status=TASK_DEAD;
-  printf("fuck\n");
   return status;
 }
 
