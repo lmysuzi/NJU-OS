@@ -71,7 +71,6 @@ syscall(Context *context){
     }break;
 
     case SYS_sleep:{
-      printf("shit\n");
       ret=uproc->sleep(NULL,context->GPR1);
     }break;
 
@@ -189,6 +188,7 @@ getpid(task_t *task){
 
 static int 
 sleep(task_t *task, int seconds){
+      printf("shit\n");
   int us=io_read(AM_TIMER_UPTIME).us+seconds*1000000;
   sleep_insert(task_now(),us);
   yield();
