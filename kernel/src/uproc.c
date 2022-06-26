@@ -146,8 +146,8 @@ fork(task_t *task){
   child_task->context->GPRx=0;
   child_task->np=task_now()->np;
 
-  panic_on(child_task->status!=TASK_RUNNING,"wrong child status");
-  child_task->status=TASK_READY;
+ // panic_on(child_task->status!=TASK_RUNNING,"wrong child status");
+  //child_task->status=TASK_READY;
 
   iset(true);
   return child_task->id;
