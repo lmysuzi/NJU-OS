@@ -68,7 +68,7 @@ static Context *os_trap(Event ev, Context *context){
 
   iset(false);
 
-  switch(ev.event){
+  /*switch(ev.event){
     case EVENT_PAGEFAULT:{
       pgfault(ev,context);
       break;
@@ -81,7 +81,7 @@ static Context *os_trap(Event ev, Context *context){
       assert(0);break;
     }
     default: break;
-  }
+  }*/
 
   Context *next=NULL;
   //kmt->spin_lock(&irq_lock);
