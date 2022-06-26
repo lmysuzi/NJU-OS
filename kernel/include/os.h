@@ -11,7 +11,7 @@ typedef struct irq{
 
 struct task{
   int id,pid;
-  int child_count;
+  //int child_count;
   int status;
   int np;
   void *va[60],*pa[60];
