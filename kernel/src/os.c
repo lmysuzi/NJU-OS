@@ -57,7 +57,7 @@ static void os_run() {
   }*/
 
   iset(true);
-  while (1)printf("a");
+  while (1);//printf("a");
 }
 
 
