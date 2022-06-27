@@ -192,8 +192,18 @@ exit(task_t *task, int status){
 
 static int 
 kill(task_t *task, int pid){
-  return 0;
+  iset(false);
+  
+  task_t *t=get_task(pid);
+  panic_on(t==NULL,"task is null");
+  t->status=TASK_DEAD;
+  if(t->parent!=NULL){
+    t->parent->child_count--;
+    t->parent->child_exit_status=0;
+  }
 
+  iset(true);
+  return 0;
 }
 
 

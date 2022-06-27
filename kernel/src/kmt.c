@@ -50,6 +50,11 @@ task_now(){
   return current;
 }
 
+task_t *
+get_task(int id){
+  return tasks[id];
+}
+
 
 void 
 sleep_insert(task_t *task,uint64_t end_time){
