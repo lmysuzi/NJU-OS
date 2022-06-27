@@ -127,7 +127,7 @@ kputc(task_t *task, char ch){
 
 static int 
 fork(task_t *task){
-    iset(false);
+  iset(false);
   task_t *child_task=pmm->alloc(sizeof(task_t));
   ucreate(child_task,NULL);
 
