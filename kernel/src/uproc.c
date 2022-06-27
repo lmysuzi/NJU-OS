@@ -113,7 +113,7 @@ init(){
   os->on_irq(INT_MIN+2,EVENT_PAGEFAULT,pgfault);
   os->on_irq(INT_MIN+3,EVENT_SYSCALL,uproc_syscall);
 
-  ucreate(pmm->alloc(sizeof(task_t)),"u",0);
+  ucreate(pmm->alloc(sizeof(task_t)),"u");
 
 }
 
@@ -127,19 +127,17 @@ kputc(task_t *task, char ch){
 
 static int 
 fork(task_t *task){
-  iset(false);
+    iset(false);
   task_t *child_task=pmm->alloc(sizeof(task_t));
-  ucreate(child_task,NULL,task_now()->id);
+  ucreate(child_task,NULL);
 
   uintptr_t rsp0=child_task->context->rsp0;
   void *cr3=child_task->context->cr3;
 
-  //memcpy((void*)child_task->context,(void*)task_now()->context,sizeof(Context));
-  child_task->context[0]=*(task_now()->context);
+  *(child_task->context)=*(task_now()->context);
   child_task->context->rsp0=rsp0;
   child_task->context->cr3=cr3;
   child_task->context->GPRx=0;
-  //child_task->np=task_now()->np;
 
   for(int i=0;i<task_now()->np;i++){
     void *va=task_now()->va[i];
@@ -148,8 +146,6 @@ fork(task_t *task){
     memcpy(npa,pa,task_now()->as.pgsize);
     pgmap(child_task,va,npa);
   }
-
- // panic_on(child_task->status!=TASK_RUNNING,"wrong child status");
 
   iset(true);
   return child_task->id;

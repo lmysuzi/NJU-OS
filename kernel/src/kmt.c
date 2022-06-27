@@ -315,7 +315,7 @@ init(){
 
 
 task_t *
-ucreate(task_t *task, const char *name,int pid){
+ucreate(task_t *task, const char *name){
   panic_on(task==NULL,"task is NULL");
 
 
@@ -323,7 +323,7 @@ ucreate(task_t *task, const char *name,int pid){
   task->kstack=pmm->alloc(KSTACK_SIZE);
   task->np=0;
   task->child_count=0;
-  task->pid=pid;
+  //task->pid=pid;
 
  /* if(pid==0)task->status=TASK_READY;
   else task->status=TASK_RUNNING;*/
