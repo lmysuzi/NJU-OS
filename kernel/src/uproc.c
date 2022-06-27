@@ -98,6 +98,7 @@ uproc_error(Event ev,Context *context){
   panic_on(task_now()->kcontext!=context,"wrong context");
   panic_on(task_now()->context==NULL,"wrong context");
 
+  printf("lskadjf\n");
   task_now()->kcontext=NULL;
 
   return NULL;
