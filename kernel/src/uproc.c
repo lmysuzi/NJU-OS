@@ -191,6 +191,7 @@ exit(task_t *task, int status){
   if(task_now()->parent!=NULL){
     task_now()->parent->child_count--;
     task_now()->parent->child_exit_status=status;
+    printf("status=%d\n",status);
   }
 
   iset(true);
