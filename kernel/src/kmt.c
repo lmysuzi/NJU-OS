@@ -80,6 +80,7 @@ sleep_delete(sleep_tasks_t *node){
   spin_lock(&task_lock);
   if(node->task->status==TASK_SLEEP)node->task->status=TASK_WAKED;
   else if(node->task->status==TASK_READY_TO_WAKE)node->task->status=TASK_READY;
+  else if(node->task->status==TASK_DEAD);
   else panic("g");
   spin_unlock(&task_lock);
 
