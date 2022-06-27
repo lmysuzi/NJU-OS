@@ -212,6 +212,9 @@ kill(task_t *task, int pid){
   if(t->parent!=NULL){
     t->parent->child_count--;
     t->parent->child_exit_status=0;
+    if(t->parent->status==TASK_WATING){
+      t->parent->status=TASK_READY;
+    }
   }
 
   iset(true);
