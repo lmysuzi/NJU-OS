@@ -66,6 +66,10 @@ syscall(Context *context){
       ret=uproc->wait(NULL,(int*)context->GPR1);
     }break;
 
+    case SYS_kill:{
+      ret=uproc->kill(NULL,context->GPR1);
+    }
+
     case SYS_getpid:{
       ret=uproc->getpid(NULL);
     }break;
@@ -204,7 +208,6 @@ kill(task_t *task, int pid){
   printf("fuck\n");
 
   iset(true);
-  yield();
   return 0;
 }
 
