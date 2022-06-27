@@ -109,7 +109,7 @@ init(){
   os->on_irq(INT_MIN+2,EVENT_PAGEFAULT,pgfault);
   os->on_irq(INT_MIN+3,EVENT_SYSCALL,uproc_syscall);
 
-  ucreate(pmm->alloc(sizeof(task_t)),"u",0);
+ // ucreate(pmm->alloc(sizeof(task_t)),"u",0);
 
 }
 
