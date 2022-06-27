@@ -51,8 +51,7 @@ syscall(Context *context){
 
   switch(context->GPRx){
     case SYS_kputc:{
-      //ret=uproc->kputc(NULL,(char)context->GPR1);
-      ret=0;
+      ret=uproc->kputc(NULL,(char)context->GPR1);
     }break;
 
     case SYS_fork:{
@@ -193,7 +192,6 @@ static int
 sleep(task_t *task, int seconds){
   int us=io_read(AM_TIMER_UPTIME).us+seconds*1000000;
   sleep_insert(task_now(),us);
-  printf("fuck\n");
   yield();
   return 0;
 }
