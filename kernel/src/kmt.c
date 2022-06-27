@@ -218,9 +218,9 @@ kmt_schedule(Event ev,Context *context){
       current=task;
       current->status=TASK_RUNNING;
       spin_unlock(&task_lock);
-  if(current->kcontext)return current->kcontext;
-  else if(current->context)return current->context;
-  else assert(0);
+      if(current->kcontext)return current->kcontext;
+      else if(current->context)return current->context;
+      else assert(0);
       return current->context;
     }
 
