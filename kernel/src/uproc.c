@@ -167,10 +167,14 @@ wait(task_t *task, int *status){
     return -1;
   }
 
-  while(task_now()->child_count>0){
+  int child_count_now=task_now()->child_count;
+
+  while(task_now()->child_count==child_count_now){
     iset(true);
     yield();
   }
+
+  panic_on(child_count_now<=task_now()->child_count,"wrong child count");
 
   *status=task_now()->child_exit_status;
 
@@ -205,7 +209,6 @@ kill(task_t *task, int pid){
     t->parent->child_count--;
     t->parent->child_exit_status=0;
   }
-  printf("fuck\n");
 
   iset(true);
   return 0;
