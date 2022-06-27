@@ -10,8 +10,9 @@ typedef struct irq{
 }irq_t;
 
 struct task{
-  int id,pid;
+  int id;
   int child_count;
+  int child_exit_status;
   int status;
   int np;
   void *va[60],*pa[60];
@@ -19,6 +20,7 @@ struct task{
   AddrSpace as;
   Context *context;
   Context *kcontext;
+  struct task *parent;
   struct task *next,*prev;
   uint8_t *kstack;
 };

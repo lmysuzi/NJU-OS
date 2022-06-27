@@ -8,12 +8,12 @@
 #define INT_MIN (-INT_MAX-1)
 
 enum{
-  TASK_READY=1,TASK_RUNNING,TASK_SLEEP,TASK_READY_TO_WAKE,TASK_WAKED,TASK_DEAD,
+  TASK_READY=1,TASK_RUNNING,TASK_SLEEP,TASK_READY_TO_WAKE,TASK_WAKED,TASK_DEAD,TASK_WATING,
 };
 
 void sleep_insert(task_t *task,uint64_t end_time);
 task_t *task_now();
-task_t *ucreate(task_t *task, const char *name);
+task_t *ucreate(task_t *task, const char *name,task_t *parent);
 
 
 #endif 

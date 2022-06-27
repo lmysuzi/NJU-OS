@@ -113,7 +113,7 @@ init(){
   os->on_irq(INT_MIN+2,EVENT_PAGEFAULT,pgfault);
   os->on_irq(INT_MIN+3,EVENT_SYSCALL,uproc_syscall);
 
-  ucreate(pmm->alloc(sizeof(task_t)),"u");
+  ucreate(pmm->alloc(sizeof(task_t)),"u",NULL);
 
 }
 
@@ -129,7 +129,7 @@ static int
 fork(task_t *task){
   iset(false);
   task_t *child_task=pmm->alloc(sizeof(task_t));
-  ucreate(child_task,NULL);
+  ucreate(child_task,NULL,task_now());
 
   uintptr_t rsp0=child_task->context->rsp0;
   void *cr3=child_task->context->cr3;
@@ -146,6 +146,7 @@ fork(task_t *task){
     memcpy(npa,pa,task_now()->as.pgsize);
     pgmap(child_task,va,npa);
   }
+  
 
   iset(true);
   return child_task->id;
@@ -154,13 +155,36 @@ fork(task_t *task){
 
 static int 
 wait(task_t *task, int *status){
+  iset(false);
+  
+  if(task_now()->child_count==0){
+    iset(true);
+    return -1;
+  }
+
+  while(task_now()->child_count>0){
+    iset(true);
+    yield();
+  }
+
+  *status=task_now()->child_exit_status;
+
+  iset(true);
   return 0;
 }
 
 
 static int
 exit(task_t *task, int status){
+  iset(false);
+
   task_now()->status=TASK_DEAD;
+  if(task_now()->parent!=NULL){
+    task_now()->parent->child_count--;
+    task_now()->parent->child_exit_status=status;
+  }
+
+  iset(true);
   return status;
 }
 
