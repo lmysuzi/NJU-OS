@@ -18,6 +18,7 @@ struct task{
   const char *name;
   AddrSpace as;
   Context *context;
+  Context *kcontext;
   struct task *next,*prev;
   uint8_t *kstack;
 };

@@ -146,7 +146,14 @@ kmt_context_save(Event ev,Context *context){
     return NULL;
   }*/
   if(!current)current=idle;
-  else current->context=context;
+
+  if((3&(context->cs))==0){//kernel
+    current->kcontext=context;
+  }
+  else if((3&(context->cs))==3){//user
+    current->context=context;
+  }
+  else assert(0);
 
   /*spin_lock(&task_lock);
   if(last!=NULL&&last!=idle){
@@ -223,7 +230,9 @@ kmt_schedule(Event ev,Context *context){
   current->status=TASK_RUNNING;
   
   spin_unlock(&task_lock);
-  return current->context;
+  if(current->kcontext)return current->kcontext;
+  else if(current->context)return current->context;
+  else assert(0);
 }
 
 
@@ -322,7 +331,7 @@ ucreate(task_t *task, const char *name,int pid){
 
 
   task->context=ucontext(&task->as,kstack,task->as.area.start);
-
+  task->kcontext=NULL;
 
   spin_lock(&task_lock);
   task_insert(task);
@@ -349,8 +358,8 @@ create(task_t *task, const char *name, void (*entry)(void *arg), void *arg){
     .start=(void *)task->kstack,
     .end=((void *)task->kstack)+KSTACK_SIZE,
   };
-  task->context=kcontext(kstack,entry,arg);
-
+  task->kcontext=kcontext(kstack,entry,arg);
+  task->context=NULL;
 
   spin_lock(&task_lock);
   task_insert(task);

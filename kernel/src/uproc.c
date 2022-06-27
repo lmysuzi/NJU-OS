@@ -45,7 +45,7 @@ pgfault(Event ev,Context *context){
 int
 syscall(Context *context){
   int ret=0;
-  //iset(true);
+  iset(true);
 
   //printf("%d\n",context->GPRx);
 
@@ -95,7 +95,11 @@ uproc_syscall(Event ev,Context *context){
 
 static Context *
 uproc_error(Event ev,Context *context){
-  assert(0);
+  panic_on(task_now()->kcontext!=context,"wrong context");
+  panic_on(task_now()->context==NULL,"wrong context");
+
+  task_now()->kcontext=NULL;
+
   return NULL;
 }
 
