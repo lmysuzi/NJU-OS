@@ -51,7 +51,8 @@ syscall(Context *context){
 
   switch(context->GPRx){
     case SYS_kputc:{
-      ret=uproc->kputc(NULL,(char)context->GPR1);
+      //ret=uproc->kputc(NULL,(char)context->GPR1);
+      ret=0;
     }break;
 
     case SYS_fork:{
