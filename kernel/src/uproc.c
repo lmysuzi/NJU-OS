@@ -201,6 +201,7 @@ kill(task_t *task, int pid){
     t->parent->child_count--;
     t->parent->child_exit_status=0;
   }
+  printf("fuck\n");
 
   iset(true);
   yield();
