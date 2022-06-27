@@ -203,6 +203,7 @@ kill(task_t *task, int pid){
   }
 
   iset(true);
+  yield();
   return 0;
 }
 
