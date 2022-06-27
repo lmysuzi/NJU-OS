@@ -177,6 +177,7 @@ wait(task_t *task, int *status){
   panic_on(child_count_now<=task_now()->child_count,"wrong child count");
 
   *status=task_now()->child_exit_status;
+  printf("fuck\n");
 
   iset(true);
   return 0;
