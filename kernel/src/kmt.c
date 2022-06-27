@@ -182,6 +182,9 @@ kmt_schedule(Event ev,Context *context){
     last=current;
     current=idle;
     spin_unlock(&task_lock);
+      if(current->kcontext)return current->kcontext;
+      else if(current->context)return current->context;
+      else assert(0);
     return current->context;
   }
 
@@ -201,6 +204,9 @@ kmt_schedule(Event ev,Context *context){
    // panic_on(current!=idle,"wrong current");
     current=idle;
     spin_unlock(&task_lock);
+      if(current->kcontext)return current->kcontext;
+      else if(current->context)return current->context;
+      else assert(0);
     return current->context;
   }
 
