@@ -167,17 +167,17 @@ wait(task_t *task, int *status){
     return -1;
   }
 
-  int child_count_now=task_now()->child_count;
 
-  while(task_now()->child_count==child_count_now){
+  if(task_now()->child_count>0){
+    task_now()->status=TASK_WATING;
     iset(true);
     yield();
   }
 
-  panic_on(child_count_now<=task_now()->child_count,"wrong child count");
+
+ // panic_on(child_count_now<=task_now()->child_count,"wrong child count");
 
   *status=task_now()->child_exit_status;
-  printf("\n");
 
   iset(true);
   return 0;
@@ -192,7 +192,9 @@ exit(task_t *task, int status){
   if(task_now()->parent!=NULL){
     task_now()->parent->child_count--;
     task_now()->parent->child_exit_status=status;
-    printf("status=%d\n",status);
+    if(task_now()->parent->status==TASK_WATING){
+      task_now()->parent->status=TASK_READY;
+    }
   }
 
   iset(true);
