@@ -90,20 +90,7 @@ static Context *os_trap(Event ev, Context *context){
     temp=temp->next;
   }printf("\n");*/
 
-  switch(ev.event){
-    case EVENT_PAGEFAULT:{
-      pgfault(ev,context);
-      break;
-    }
-    case EVENT_SYSCALL:{
-      task_now()->context->GPRx=syscall(context);
-      break;
-    }
-    case EVENT_ERROR:{
-      assert(0);break;
-    }
-    default: break;
-  }
+  
 
   Context *next=NULL;
   //kmt->spin_lock(&irq_lock);
