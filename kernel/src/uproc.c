@@ -88,7 +88,7 @@ syscall(Context *context){
 
 static Context *
 uproc_syscall(Event ev,Context *context){
-  task_now()->context->GPRx=syscall(context);
+  context->GPRx=syscall(context);
   return NULL;
 }
 
