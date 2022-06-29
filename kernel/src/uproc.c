@@ -189,11 +189,11 @@ exit(task_t *task, int status){
   iset(false);
 
   task_now()->status=TASK_DEAD;
-  if(task_now()->parent!=NULL){
+  if(task_now()->parent!=NULL&&task_now()->parent->status!=TASK_DEAD){
     task_now()->parent->child_count--;
-    task_now()->parent->child_exit_status=status;
     if(task_now()->parent->status==TASK_WATING){
       task_now()->parent->status=TASK_READY;
+      task_now()->parent->child_exit_status=status;
     }
   }
 
