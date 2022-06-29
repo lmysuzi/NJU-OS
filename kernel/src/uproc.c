@@ -146,6 +146,7 @@ fork(task_t *task){
   child_task->np=task_now()->np;
   printf("np=%d\n",child_task->np);
   printf("pgsize=%d\n",task_now()->as.pgsize);
+  printf("childcount=%d\n",task_now()->child_count);
 
   for(int i=0;i<task_now()->np;i++){
     void *va=task_now()->va[i];
