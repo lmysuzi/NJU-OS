@@ -45,7 +45,7 @@ pgfault(Event ev,Context *context){
 int
 syscall(Context *context){
   int ret=0;
-  iset(true);
+ // iset(true);
 
   //printf("%d\n",context->GPRx);
 
@@ -144,9 +144,6 @@ fork(task_t *task){
   child_task->context->cr3=cr3;
   child_task->context->GPRx=0;
   child_task->np=task_now()->np;
-  printf("np=%d\n",child_task->np);
-  printf("pgsize=%d\n",task_now()->as.pgsize);
-  printf("childcount=%d\n",task_now()->child_count);
 
   for(int i=0;i<task_now()->np;i++){
     void *va=task_now()->va[i];
@@ -157,7 +154,7 @@ fork(task_t *task){
   }
   
 
-  iset(true);
+//  iset(true);
   return child_task->id;
 }
 
@@ -167,14 +164,13 @@ wait(task_t *task, int *status){
   iset(false);
   
   if(task_now()->child_count==0){
-    iset(true);
+    //iset(true);
     return -1;
   }
 
 
   if(task_now()->child_count>0){
     task_now()->status=TASK_WATING;
-    iset(true);
     yield();
   }
 
@@ -183,7 +179,7 @@ wait(task_t *task, int *status){
 
   *status=task_now()->child_exit_status;
 
-  iset(true);
+  //iset(true);
   return 0;
 }
 
@@ -201,7 +197,7 @@ exit(task_t *task, int status){
     }
   }
 
-  iset(true);
+ // iset(true);
   return status;
 }
 
@@ -221,7 +217,7 @@ kill(task_t *task, int pid){
     }
   }
 
-  iset(true);
+ // iset(true);
   return 0;
 }
 
