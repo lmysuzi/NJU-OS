@@ -145,6 +145,7 @@ fork(task_t *task){
   child_task->context->GPRx=0;
   child_task->np=task_now()->np;
   printf("np=%d\n",child_task->np);
+  printf("pgsize=%d\n",task_now()->as.pgsize);
 
   for(int i=0;i<task_now()->np;i++){
     void *va=task_now()->va[i];
