@@ -103,7 +103,7 @@ int main(int argc, char *argv[]) {
     gettimeofday(&prev,NULL);
     gettimeofday(&now,NULL);
     memset(buf,0,1024);
-    while(1){
+   /* while(1){
       int read_result;
       switch(read_result = read(pipefd[0], buf, 1024)) {
 			//子进程当前没有输出，但未终止
@@ -114,11 +114,11 @@ int main(int argc, char *argv[]) {
 				exit(EXIT_SUCCESS);
 				break;
 			//此时子进程和父进程正常通过管道进行通信
-		}
-     /* if(fgets(buf,1024,fp)==NULL){
+		}*/
+      if(fgets(buf,1024,fp)==NULL){
         fprintf(stderr,"done");
         break;
-      }*/
+      }
       if(buf[0]=='\0')goto fuck;
       if(buf[0]<'a'||buf[0]>'z')continue;
       if(strlen(buf)<=2)continue;
