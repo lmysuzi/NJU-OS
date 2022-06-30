@@ -103,8 +103,8 @@ int main(int argc, char *argv[]) {
     gettimeofday(&prev,NULL);
     gettimeofday(&now,NULL);
     memset(buf,0,1024);
-   /* while(1){
-      int read_result;
+    while(1){
+     /* int read_result;
       switch(read_result = read(pipefd[0], buf, 1024)) {
 			//子进程当前没有输出，但未终止
 			case -1:
