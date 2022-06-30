@@ -120,7 +120,8 @@ int main(int argc, char *argv[]) {
 
       if(fgets(buf,1024,fp)==NULL){
         //fprintf(stderr,"done");
-        continue;
+        //continue;
+        break;
       }
       if(buf[0]=='\0')goto fuck;
       if(buf[0]<'a'||buf[0]>'z')continue;
