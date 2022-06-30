@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
   if(pid==0){
     close(pipefd[0]);
     dup2(pipefd[1],STDERR_FILENO);
-    //close(STDOUT_FILENO);
+    close(STDOUT_FILENO);
     char *path=getenv("PATH");int begin=0,end=0;
     for(;end<strlen(path);end++){
       if(path[end]==':'){
