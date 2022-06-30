@@ -119,7 +119,7 @@ int main(int argc, char *argv[]) {
       printf("%s\n",buf);*/
 
       if(fgets(buf,1024,fp)==NULL){
-        fprintf(stderr,"done");
+        //fprintf(stderr,"done");
         continue;
       }
       if(buf[0]=='\0')goto fuck;
