@@ -115,13 +115,13 @@ int main(int argc, char *argv[]) {
 				break;
 			//此时子进程和父进程正常通过管道进行通信
 		}*/
-      int result=read(pipefd[0],buf,1024);
-      printf("%s\n",buf);
+    /*  int result=read(pipefd[0],buf,1024);
+      printf("%s\n",buf);*/
 
-      /*if(fgets(buf,1024,fp)==NULL){
+      if(fgets(buf,1024,fp)==NULL){
         fprintf(stderr,"done");
-        break;
-      }*/
+        continue;
+      }
       if(buf[0]=='\0')goto fuck;
       if(buf[0]<'a'||buf[0]>'z')continue;
       if(strlen(buf)<=2)continue;
