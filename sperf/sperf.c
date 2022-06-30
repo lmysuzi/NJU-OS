@@ -105,7 +105,7 @@ int main(int argc, char *argv[]) {
     memset(buf,0,1024);
     while(1){
       if(fgets(buf,1024,fp)==NULL){
-        printf("done\n");
+        fprintf(stderr,"done");
         break;
       }
       if(buf[0]=='\0')goto fuck;
