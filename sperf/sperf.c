@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
   for(int i=1;i<argc;i++){
     exec_argv[i+1]=argv[i];
   }
-  exec_argv[argc+1]=NULL,exec_argv[argc+2]=NULL,exec_argv[argc+3]=NULL;
+  exec_argv[argc+1]=">",exec_argv[argc+2]="/dev/null",exec_argv[argc+3]=NULL;
   int pipefd[2];
   if(pipe(pipefd)==-1){
     perror("pipe");
