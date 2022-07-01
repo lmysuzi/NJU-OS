@@ -145,7 +145,6 @@ fork(task_t *task){
   child_task->context->rsp0=rsp0;
   child_task->context->cr3=cr3;
   child_task->context->GPRx=0;
-  child_task->np=task_now()->np;
 
   //printf("np=%d\n",task_now()->np);
 
