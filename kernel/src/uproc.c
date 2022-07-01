@@ -185,7 +185,7 @@ wait(task_t *task, int *status){
 
   iset(false);
 
-  panic_on(task_now()->status!=TASK_READY,"wrong status");
+  panic_on(task_now()->status!=TASK_RUNNING,"wrong status");
 
  // panic_on(child_count_now<=task_now()->child_count,"wrong child count");
 
