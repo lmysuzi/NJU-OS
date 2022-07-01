@@ -113,7 +113,7 @@ kmt_task_wake(Event ev,Context *context){
 static void inline 
 task_insert(task_t *task){
   panic_on(task_lock.flag==0,"wrong lock");
-  for(int i=1;i<MAX_TASK;i++){
+  for(int i=task_total+1;i<MAX_TASK;i++){
     if(tasks[i]==NULL||tasks[i]->status==TASK_DEAD){
       tasks[i]=task;
       task->id=i;
