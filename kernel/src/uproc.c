@@ -45,7 +45,7 @@ pgfault(Event ev,Context *context){
 int
 syscall(Context *context){
   int ret=0;
- // iset(true);
+  iset(true);
 
   //printf("%d\n",context->GPRx);
 
@@ -205,7 +205,7 @@ exit(task_t *task, int status){
     }
   }
 
- // iset(true);
+  iset(true);
   return status;
 }
 
@@ -225,7 +225,7 @@ kill(task_t *task, int pid){
     }
   }
 
- // iset(true);
+  iset(true);
   return 0;
 }
 
@@ -246,7 +246,7 @@ static int
 sleep(task_t *task, int seconds){
   int us=io_read(AM_TIMER_UPTIME).us+seconds*1000000;
   sleep_insert(task_now(),us);
-  //yield();
+  yield();
   return 0;
 }
 
