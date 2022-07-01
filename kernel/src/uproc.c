@@ -153,6 +153,7 @@ fork(task_t *task){
 
     void *npa=pmm->alloc(task_now()->as.pgsize);
     panic_on(npa==NULL,"alloc fail");
+    panic_on(pa==NULL,"pa is null");
 
     memcpy(npa,pa,task_now()->as.pgsize);
     pgmap(child_task,va,npa);
