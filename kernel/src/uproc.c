@@ -18,8 +18,8 @@ pgmap(task_t *task,void *va, void *pa){
   task->pa[task->np]=pa;
   task->va[task->np]=va;
   task->np++;
-  printf("id=%d,np=%d\n",task->id,task->np);
-  printf("map: %p -> %p\n",va,pa);
+  //printf("id=%d,np=%d\n",task->id,task->np);
+  //printf("map: %p -> %p\n",va,pa);
   map(&task->as,va,pa,MMAP_READ|MMAP_WRITE);
 }
 
