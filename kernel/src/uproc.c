@@ -134,6 +134,8 @@ static int
 fork(task_t *task){
   iset(false);
   task_t *child_task=pmm->alloc(sizeof(task_t));
+  panic_on(child_task==NULL,"alloc fail");
+
   ucreate(child_task,NULL,task_now());
 
   uintptr_t rsp0=child_task->context->rsp0;
@@ -148,7 +150,10 @@ fork(task_t *task){
   for(int i=0;i<task_now()->np;i++){
     void *va=task_now()->va[i];
     void *pa=task_now()->pa[i];
+
     void *npa=pmm->alloc(task_now()->as.pgsize);
+    panic_on(npa==NULL,"alloc fail");
+
     memcpy(npa,pa,task_now()->as.pgsize);
     pgmap(child_task,va,npa);
   }
