@@ -300,13 +300,14 @@ static void *slab_alloc(size_t size){
 
 
 static void *kkalloc(size_t size) {
+  void *addr=NULL;
   if(size<MINSIZE)size=MINSIZE;
   size=tableSizeFor(size);
   if(size<MINSIZE)size=MINSIZE;
   if(size>MAXSIZE)return NULL;
-  else if(size>=MINSIZE&&size<=PAGESIZE)return slab_alloc(size);
-  else if(size<=MAXSIZE&&size>PAGESIZE)return memory_alloc(size);
-  return NULL;
+  else if(size>=MINSIZE&&size<=PAGESIZE)addr=slab_alloc(size);
+  else if(size<=MAXSIZE&&size>PAGESIZE)addr=memory_alloc(size);
+  return addr;
 }
 
 static void kkfree(void *ptr){
