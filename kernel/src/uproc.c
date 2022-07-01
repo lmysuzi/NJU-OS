@@ -162,7 +162,7 @@ fork(task_t *task){
   }
   
 
-//  iset(true);
+  iset(true);
   return child_task->id;
 }
 
@@ -172,22 +172,24 @@ wait(task_t *task, int *status){
   iset(false);
   
   if(task_now()->child_count==0){
-    //iset(true);
+    iset(true);
     return -1;
   }
 
 
   if(task_now()->child_count>0){
     task_now()->status=TASK_WATING;
+    iset(true);
     yield();
   }
 
+  iset(false);
 
  // panic_on(child_count_now<=task_now()->child_count,"wrong child count");
 
   *status=task_now()->child_exit_status;
 
-  //iset(true);
+  iset(true);
   return 0;
 }
 
