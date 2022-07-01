@@ -307,7 +307,7 @@ static void *kkalloc(size_t size) {
   if(size>MAXSIZE)return NULL;
   else if(size>=MINSIZE&&size<=PAGESIZE)addr=slab_alloc(size);
   else if(size<=MAXSIZE&&size>PAGESIZE)addr=memory_alloc(size);
-  printf("%p %p %x\n",addr,addr+size,size);
+  //printf("%p %p %x\n",addr,addr+size,size);
   return addr;
 }
 
