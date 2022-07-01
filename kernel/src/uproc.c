@@ -147,11 +147,12 @@ fork(task_t *task){
   child_task->context->GPRx=0;
   child_task->np=task_now()->np;
 
+  printf("np=%d\n",task_now()->np);
+
   for(int i=0;i<task_now()->np;i++){
     void *va=task_now()->va[i];
     void *pa=task_now()->pa[i];
 
-    printf("np=%d\n",task_now()->np);
 
     void *npa=pmm->alloc(task_now()->as.pgsize);
     panic_on(npa==NULL,"alloc fail");
