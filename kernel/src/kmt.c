@@ -306,7 +306,7 @@ init(){
       .end=((void *)idles[cpu]->kstack)+KSTACK_SIZE,
     };
 
-    idles[cpu]->context=kcontext(kstack,idle_task,NULL);
+    idles[cpu]->kcontext=kcontext(kstack,idle_task,NULL);
     idles[cpu]->next=idles[cpu]->prev=NULL;
     idles[cpu]->status=TASK_RUNNING;
 
