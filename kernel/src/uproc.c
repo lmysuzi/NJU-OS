@@ -208,7 +208,7 @@ exit(task_t *task, int status){
     }
   }
 
-  printf("task %d exited\n",task_now()->id);
+  //printf("task %d exited\n",task_now()->id);
   kmt->teardown(task_now());
 
   iset(true);

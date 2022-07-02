@@ -138,11 +138,11 @@ task_delete(task_t *task){
   tasks[task->id]=NULL;
   pmm->free(task->kstack);
   pmm->free(task);
-  task_t *temp=task_head;
+ /* task_t *temp=task_head;
   while(temp){
     printf("%d ",temp->id);
     temp=temp->next;
-  }printf("\n");
+  }printf("\n");*/
 }
 
 
