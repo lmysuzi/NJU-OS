@@ -26,7 +26,7 @@ pgmap(task_t *task,void *va, void *pa){
 
 Context*
 pgfault(Event ev,Context *context){
-  kmt->spin_lock(&pglock);
+ // kmt->spin_lock(&pglock);
 
   AddrSpace *as=&(task_now()->as);
   void *pa=pmm->alloc(as->pgsize);
@@ -36,7 +36,7 @@ pgfault(Event ev,Context *context){
 
   pgmap(task_now(),va,pa);
 
-  kmt->spin_unlock(&pglock);
+ // kmt->spin_unlock(&pglock);
 
   return NULL;
 }
@@ -172,7 +172,7 @@ wait(task_t *task, int *status){
   iset(false);
   
   if(task_now()->child_count==0){
-    iset(true);
+   //iset(true);
     return -1;
   }
 
@@ -191,7 +191,7 @@ wait(task_t *task, int *status){
 
   *status=task_now()->child_exit_status;
 
-  iset(true);
+  //iset(true);
   return 0;
 }
 
