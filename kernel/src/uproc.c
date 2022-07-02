@@ -176,7 +176,6 @@ wait(task_t *task, int *status){
     return -1;
   }
 
-
   if(task_now()->child_count>0){
     task_now()->status=TASK_WATING;
     iset(true);
@@ -208,6 +207,8 @@ exit(task_t *task, int status){
       task_now()->parent->child_exit_status=status;
     }
   }
+
+  kmt->teardown(task_now());
 
   iset(true);
   return status;
