@@ -358,7 +358,6 @@ ucreate(task_t *task, const char *name,task_t *parent){
   if(parent)parent->child_count++;
   spin_unlock(&task_lock);
 
-
   return task;
 }
 
